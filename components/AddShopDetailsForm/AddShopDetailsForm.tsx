@@ -184,31 +184,55 @@ const SignupForm = () => {
   }
 
   return (
-    <div className=''>
-      <div className=''>
-        <div className='md:mt-[24px]'>
-          <Typography
-            variant='body2'
-            className='text-white text-[12px] md:text-[14px] uppercase tracking-[1px] p-0'
-          >
-            {' '}
-            joining is quick and easy
-          </Typography>
+    <div className='flex justify-center md:justify-end md:mr-[50px] mt-[-10px] md:mt-[30px] pb-[10px]'>
+      <div
+        style={{
+          borderRadius: '5px',
+          background: 'rgba(0, 0, 0, 0.60)',
+          backdropFilter: 'blur(12.5px)',
+        }}
+        className='w-[80vw] h-[auto] md:w-[50vw] p-[20px] md:pl-[44px] md:pb-[44px] relative'
+      >
+        <div className=''>
+          <div className='md:mt-[24px]'>
+            <Typography
+              sx={{
+                fontSize: '14px !important',
+                fontFamily: 'Josefin Sans',
+                lineHeight: 'normal',
+                fontWeight: '500',
+                letterSpacing: '1px',
+                padding: '0px',
+                textTransform: 'uppercase',
+                color: '#fff',
+                '@media (max-width: 767px)': {
+                  fontSize: '12px !important',
+                },
+              }}
+            >
+              {' '}
+              joining is quick and easy
+            </Typography>
 
-          <Typography
-            variant='h5'
-            sx={{
-              fontFamily: 'Open Sans',
-              lineHeight: 'normal',
-              fontWeight: '800',
-              textTransform: 'capitalize',
-              color: '#7DDEC1',
-            }}
-            className='mt-[10px] p-0'
-          >
-            {' '}
-            Add shop details
-          </Typography>
+            <Typography
+              sx={{
+                marginTop: '10px',
+                padding: '0px',
+                fontSize: '32px !important',
+                fontFamily: 'Open Sans',
+                lineHeight: 'normal',
+                fontWeight: '800 !important',
+                textTransform: 'capitalize',
+                color: '#7DDEC1',
+                '@media (max-width: 767px)': {
+                  fontSize: '24px !important',
+                },
+              }}
+            >
+              {' '}
+              Add shop details
+            </Typography>
+          </div>
         </div>
         <Image
           src='/Images/x-square.svg'
@@ -217,212 +241,211 @@ const SignupForm = () => {
           height={24}
           className='absolute top-[20px] right-[20px] cursor-pointer'
         />
-      </div>
-      <div className='mt-[24px] md:mt-[42px]'>
-        <form onSubmit={handleSubmit}>
-          <div className='w-full flex flex-wrap gap-y-[8px] md:gap-y-[24px] justify-between'>
-            <div className='w-full md:w-[45%]'>
-              <InputField
-                label='shop name'
-                type='text'
-                inputColor='white'
-                name='shopName'
-                value={shopName}
-                errorText={shopNameError}
-                required
-                onChange={handleChange}
-              />
-            </div>
+        {/* </div> */}
+        <div className='mt-[24px] md:mt-[42px]'>
+          <form onSubmit={handleSubmit}>
+            <div className='w-full flex flex-wrap gap-y-[8px] md:gap-y-[24px] justify-between'>
+              <div className='w-full md:w-[45%]'>
+                <InputField
+                  label='shop name'
+                  type='text'
+                  inputColor='white'
+                  name='shopName'
+                  value={shopName}
+                  errorText={shopNameError}
+                  required
+                  onChange={handleChange}
+                />
+              </div>
 
-            <div className='w-full md:w-[45%]'>
-              <DropdownField
-                label='state'
-                required
-                name='state'
-                errorText={stateError}
-                value={state}
-                options={states}
-                inputColor='white'
-                onChange={handleStateChange}
-              />
-            </div>
+              <div className='w-full md:w-[45%]'>
+                <DropdownField
+                  label='state'
+                  required
+                  name='state'
+                  errorText={stateError}
+                  value={state}
+                  options={states}
+                  inputColor='white'
+                  onChange={handleStateChange}
+                />
+              </div>
 
-            <div className='w-full md:w-[45%]'>
-              <DropdownField
-                label='city'
-                required
-                name='city'
-                errorText={cityError}
-                value={city}
-                options={cities}
-                inputColor='white'
-                onChange={handleCityChange}
-              />
-            </div>
+              <div className='w-full md:w-[45%]'>
+                <DropdownField
+                  label='city'
+                  required
+                  name='city'
+                  errorText={cityError}
+                  value={city}
+                  options={cities}
+                  inputColor='white'
+                  onChange={handleCityChange}
+                />
+              </div>
 
-            <div className='w-full md:w-[45%]'>
-              <UploadInputField
-                label='upload logo'
-                inputColor='white'
-                name='logo'
-                value={shopName}
-                errorText={shopNameError}
-                required
-                onChange={handleChange}
-              />
-            </div>
+              <div className='w-full md:w-[45%]'>
+                <UploadInputField
+                  label='upload logo'
+                  inputColor='white'
+                  name='logo'
+                  value={shopName}
+                  errorText={shopNameError}
+                  required
+                  onChange={handleChange}
+                />
+              </div>
 
-            <div className='w-full md:w-[45%]'>
-              <UploadInputField
-                label='featured image'
-                inputColor='white'
-                name='shopName'
-                value={shopName}
-                errorText={shopNameError}
-                required
-                onChange={handleChange}
-              />
-            </div>
+              <div className='w-full md:w-[45%]'>
+                <UploadInputField
+                  label='featured image'
+                  inputColor='white'
+                  name='shopName'
+                  value={shopName}
+                  errorText={shopNameError}
+                  required
+                  onChange={handleChange}
+                />
+              </div>
 
-            <div className='w-full md:w-[45%]'>
-              <div className='flex flex-col capitalize'>
-                <label
-                  style={{
-                    color: 'white',
-                  }}
-                >
-                  <Typography sx={{}} className={`text-[12px]`} variant='body1'>
-                    Pickup service
-                  </Typography>
-                </label>
-
-                <div className='flex gap-x-[33px]'>
-                  <div className='flex items-center gap-x-[18px]'>
-                    <Radio
-                      sx={{
-                        color: '#7DDEC1',
-                        '&.Mui-checked': {
-                          color: '#7DDEC1',
-                        },
-                      }}
-                      checked={PickupService === true}
-                      onChange={handlePickupServiceChange}
-                      value={'yes'}
-                      name='radio-buttons'
-                      inputProps={{ 'aria-label': 'A' }}
-                    />
-                    <Typography
-                      sx={{
-                        color: 'white',
-                      }}
-                      className={`text-[12px]`}
-                      variant='body1'
-                    >
-                      yes
-                    </Typography>
-                  </div>
-                  <div className='flex items-center gap-x-[18px]'>
-                    <Radio
-                      sx={{
-                        color: '#7DDEC1',
-                        '&.Mui-checked': {
-                          color: '#7DDEC1',
-                        },
-                      }}
-                      checked={PickupService === false}
-                      onChange={handlePickupServiceChange}
-                      value={'no'}
-                      name='radio-buttons'
-                      inputProps={{ 'aria-label': 'B' }}
-                    />
-                    <Typography
-                      sx={{
-                        color: 'white',
-                      }}
-                      className={`text-[12px]`}
-                      variant='body1'
-                    >
-                      no
-                    </Typography>
-                  </div>
-                </div>
-
-                {pickupServiceError && (
-                  <Typography
-                    sx={{
-                      color: 'red',
+              <div className='w-full md:w-[45%]'>
+                <div className='flex flex-col capitalize'>
+                  <label
+                    style={{
+                      color: 'white',
                     }}
-                    className={`text-[12px]`}
-                    variant='body1'
                   >
-                    {pickupServiceError}
-                  </Typography>
+                    <Typography sx={{}} className={`text-[12px]`} variant='body1'>
+                      Pickup service
+                    </Typography>
+                  </label>
+
+                  <div className='flex gap-x-[33px]'>
+                    <div className='flex items-center gap-x-[18px]'>
+                      <Radio
+                        sx={{
+                          color: '#7DDEC1',
+                          '&.Mui-checked': {
+                            color: '#7DDEC1',
+                          },
+                        }}
+                        checked={PickupService === true}
+                        onChange={handlePickupServiceChange}
+                        value={'yes'}
+                        name='radio-buttons'
+                        inputProps={{ 'aria-label': 'A' }}
+                      />
+                      <Typography
+                        sx={{
+                          color: 'white',
+                        }}
+                        className={`text-[12px]`}
+                        variant='body1'
+                      >
+                        yes
+                      </Typography>
+                    </div>
+                    <div className='flex items-center gap-x-[18px]'>
+                      <Radio
+                        sx={{
+                          color: '#7DDEC1',
+                          '&.Mui-checked': {
+                            color: '#7DDEC1',
+                          },
+                        }}
+                        checked={PickupService === false}
+                        onChange={handlePickupServiceChange}
+                        value={'no'}
+                        name='radio-buttons'
+                        inputProps={{ 'aria-label': 'B' }}
+                      />
+                      <Typography
+                        sx={{
+                          color: 'white',
+                          fontSize: '12px !important',
+                        }}
+                      >
+                        no
+                      </Typography>
+                    </div>
+                  </div>
+
+                  {pickupServiceError && (
+                    <Typography
+                      sx={{
+                        color: 'red',
+                        fontSize: '12px !important',
+                      }}
+                    >
+                      {pickupServiceError}
+                    </Typography>
+                  )}
+                </div>
+              </div>
+
+              <div className='w-full'>
+                <InputField
+                  label='what we offer'
+                  type='text'
+                  inputColor='white'
+                  name='whatWeOffer'
+                  value={whatWeOffer}
+                  errorText={whatWeOfferError}
+                  required
+                  handleKeyPress={handleAddChip}
+                  onChange={handleChange}
+                />
+
+                {whatWeOfferChips.length > 0 && (
+                  <div className='flex flex-wrap gap-x-[24px] gap-y-[10px] mt-[15px]'>
+                    {whatWeOfferChips.map((chip, index) => (
+                      <Chip
+                        key={index}
+                        label={chip}
+                        deleteIcon={
+                          // <div className='h-full flex items-center'>
+                          <img src='/Images/x.svg' alt='x' className='h-[12px] w-[12px]' />
+                          // </div>
+                        }
+                        sx={{
+                          backgroundColor: '#fff',
+                          padding: '8px 12px',
+                          borderRadius: '16px',
+                          height: '32px',
+                          fontSize: '12px',
+                          lineHeight: 'normal',
+                          fontFamily: 'Open Sans',
+                          fontWeight: '400',
+                          color: '#090909',
+                          textTransform: 'capitalize',
+                        }}
+                        onDelete={() => handleDeleteChip(chip)}
+                      />
+                    ))}
+                  </div>
                 )}
+              </div>
+
+              <div className='w-full'>
+                <InputField
+                  label='shop description'
+                  type='textarea'
+                  inputColor='white'
+                  rows={7}
+                  name='shopDescription'
+                  value={shopDescription}
+                  errorText={shopDescriptionError}
+                  required
+                  onChange={handleChange}
+                />
               </div>
             </div>
 
-            <div className='w-full'>
-              <InputField
-                label='what we offer'
-                type='text'
-                inputColor='white'
-                name='whatWeOffer'
-                value={whatWeOffer}
-                errorText={whatWeOfferError}
-                required
-                handleKeyPress={handleAddChip}
-                onChange={handleChange}
-              />
-
-              {whatWeOfferChips.length > 0 && (
-                <div className='flex flex-wrap gap-x-[24px] gap-y-[10px] mt-[15px]'>
-                  {whatWeOfferChips.map((chip, index) => (
-                    <Chip
-                      key={index}
-                      label={chip}
-                      deleteIcon={
-                        // <div className='h-full flex items-center'>
-                        <img src='/Images/x.svg' alt='x' className='h-[12px] w-[12px]' />
-                        // </div>
-                      }
-                      sx={{
-                        backgroundColor: '#fff',
-                        padding: '8px 12px',
-                        borderRadius: '16px',
-                        height: '32px',
-                        fontSize: '12px',
-                        lineHeight: 'normal',
-                        fontFamily: 'Open Sans',
-                        fontWeight: '400',
-                        color: '#090909',
-                        textTransform: 'capitalize',
-                      }}
-                      onDelete={() => handleDeleteChip(chip)}
-                    />
-                  ))}
-                </div>
-              )}
+            <div className='mt-[24px] md:mt-[23px]'>
+              <PrimaryBtn text='Save and Continue' type='submit' />
             </div>
-
-            <div className='w-full'>
-              <InputField
-                label='shop description'
-                type='textarea'
-                inputColor='white'
-                rows={7}
-                name='shopDescription'
-                value={shopDescription}
-                errorText={shopDescriptionError}
-                required
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          <div className='mt-[24px] md:mt-[23px]'>
-            <PrimaryBtn text='Save and Continue' type='submit' />
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   )
