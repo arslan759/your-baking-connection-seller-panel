@@ -1,0 +1,15 @@
+.formContainer {
+  background: #fff;
+  border-radius: 4px;
+  border: 1px dashed #888;
+  /* box-shadow: 4px 4px 22px 0px rgba(0, 0, 0, 0.2); */
+  padding: 40px;
+  width: 80%;
+}
+
+@media screen and (max-width: 767px) {
+  .formContainer {
+    padding: 24px 12px;
+    width: 100%;
+  }
+}

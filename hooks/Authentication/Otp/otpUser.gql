@@ -1,0 +1,3 @@
+mutation otpUserMutation($user: VerifyUserOtpInput!) {
+  verifyOTPSignUp(user: $user)
+}

@@ -1,0 +1,271 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Russo One';
+  src: local('Russo_One'), url(../public//fonts/Russo_One/RussoOne-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: local('Poppins'), url(../public/fonts/Poppins/Poppins-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: local('Open_Sans'),
+    url(../public/fonts/Open_Sans/static/OpenSans-Regular.ttf) format('truetype'),
+    url(../public/fonts/Open_Sans/static/OpenSans-ExtraBold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: local('Roboto'), url(../public/fonts/Roboto/Roboto-Regular.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  src: local('Rubik'), url(../public/fonts/Rubik/Rubik-VariableFont_wght.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Hind_Guntur';
+  src: local('Hind_Guntur'),
+    url(../public/fonts/Hind_Guntur/HindGuntur-Medium.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Josefin Sans';
+  src: local('Josefin_Sans'),
+    url(../public/fonts/Josefin_Sans/JosefinSans-VariableFont_wght.ttf) format('truetype');
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
+/* MUI Typography */
+
+.css-1wn6apb-MuiTypography-root {
+  line-height: normal;
+}
+
+/* MUI TEXTFIELD AUTOCOMPLETE */
+
+.MuiTextField-root > div input {
+  padding: 0px 5px 0px 5px !important;
+  height: 100% !important;
+  background-color: transparent !important;
+}
+
+/* Swiper Pagination */
+
+.swiper-pagination-bullet {
+  background: transparent !important;
+  position: relative !important;
+  outline: 0.5px solid #000 !important;
+  width: 15px !important;
+  height: 15px !important;
+}
+
+.swiper-pagination-bullet-active {
+  position: relative !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.swiper-pagination-bullet-active::after {
+  position: absolute !important;
+  content: '' !important;
+  width: 15px !important;
+  height: 15px !important;
+  background: black !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  border-radius: 50% !important;
+}
+
+/* Gallery Swiper Pagination */
+
+.gallery-swiper {
+  position: relative;
+}
+
+.gallery-swiper .swiper-pagination {
+  position: absolute !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  /* justify-content: center !important; */
+  left: 52px !important;
+  bottom: 90px !important;
+  gap: 10px !important;
+  width: fit-content !important;
+}
+
+.gallery-swiper .swiper-pagination-bullet,
+.gallery-swiper .swiper-pagination-bullet-horizontal {
+  background: transparent !important;
+  position: relative !important;
+  width: 15px !important;
+  height: 15px !important;
+}
+
+.gallery-swiper .swiper-pagination-bullet-active {
+  position: relative !important;
+  background: #000 !important;
+  width: 15px !important;
+  height: 15px !important;
+}
+
+.gallery-swiper .swiper-pagination-bullet-active::after {
+  position: none !important;
+  content: '' !important;
+  width: none !important;
+  height: none !important;
+  background: none !important;
+  top: none !important;
+  left: none !important;
+  border-radius: none !important;
+}
+
+@media screen and (max-width: 1023px) {
+  .gallery-swiper .swiper-pagination {
+    width: 100% !important;
+  }
+  .gallery-swiper .swiper-pagination-horizontal {
+    /* left: 70% !important; */
+    left: none !important;
+    bottom: 20px !important;
+    gap: 3px !important;
+    row-gap: 5px;
+    justify-content: center !important;
+    height: 50px !important;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    width: 70% !important;
+    white-space: nowrap !important;
+    /* transform: translate(-50%, 0%) !important; */
+  }
+}
+
+/* review swiper */
+
+.review-swiper .swiper {
+  width: 100%;
+  height: 100%;
+  /* padding: 0px 40px 0px 40px; */
+}
+
+.review-swiper .swiper-wrapper {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+@media screen and (max-width: 1023px) {
+  .review-swiper .swiper {
+    height: 800px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .review-swiper .swiper {
+    height: 600px;
+  }
+
+  .review-swiper .swiper-wrapper {
+    box-sizing: border-box;
+    justify-content: start;
+    align-items: start;
+  }
+}
+
+.review-swiper .swiper-slide {
+  height: 100%;
+  padding: 0px 30px;
+}
+
+/* Review Swiper Buttons */
+.review-swiper .swiper-button-prev,
+.review-swiper .swiper-button-next {
+  display: none;
+}
+
+/* MUI NAV BAR */
+
+@media (max-width: 950px) {
+  .css-1qq5s3h-MuiPaper-root-MuiAppBar-root {
+    padding-left: 1px !important;
+  }
+
+  .css-134hlw3-MuiToolbar-root {
+    height: 0px !important;
+  }
+}
+
+/* SignUpStepper */
+
+.MuiStep-vertical {
+  position: relative;
+}
+
+.MuiStepLabel-vertical {
+  margin-top: 30px;
+  padding-top: 24px !important;
+}
+
+.MuiStepLabel-vertical .my-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.MuiStepConnector-vertical {
+  margin-left: 20px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.MuiStepConnector-lineVertical {
+  height: 42px;
+  border-left: 2px solid #cdcdd3;
+}
+
+.MuiStepIcon-root {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+}
+
+.css-117w1su-MuiStepIcon-text {
+  fill: #000;
+  font-size: 13px;
+}
+
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root {
+  color: white;
+}
+
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active,
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
+  color: #f8b4cb;
+}
+
+/* MUI STEPPER  End*/
+
+/* mui select dropdown */
+
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 0px !important;
+  padding-left: 5px !important;
+  /* height: 100% !important;
+  background-color: transparent !important; */
+}

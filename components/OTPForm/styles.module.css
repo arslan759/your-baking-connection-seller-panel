@@ -1,0 +1,20 @@
+.otpInput input::placeholder {
+  color: #fff; /* Change this to the desired color */
+}
+
+.inputStyles {
+  width: 71px;
+  height: 80px;
+  background: transparent;
+  border-radius: 8px;
+  color: white;
+  border: 1px solid #fff;
+  outline: none;
+  font-size: 48px;
+}
+
+@media screen and (max-width: 768px) {
+  .inputStyles {
+    font-size: 40px;
+  }
+}

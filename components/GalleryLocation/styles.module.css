@@ -1,0 +1,17 @@
+.background {
+  background-image: url('/Images/gallery-location-bg.png');
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: -10px -100px;
+  object-fit: cover;
+  width: 100%;
+  height: 453px;
+}
+
+@media screen and (max-width: 1023px) {
+  .background {
+    background-size: 100% 100%;
+    height: 353px;
+    width: 120vw;
+  }
+}

@@ -1,0 +1,5 @@
+mutation createUserWithOtp($user: CreateUserInput! $profile: UserProfileInput!) {
+  createUserWithOtp(user: $user profile:$profile) {
+    userId
+  }
+}

@@ -1,0 +1,21 @@
+.navbarMenu {
+  display: none;
+}
+
+.navbar {
+  display: flex;
+}
+
+@media screen and (max-width: 950px) {
+  .navbarMenu {
+    display: block;
+  }
+
+  .css-1qq5s3h-MuiPaper-root-MuiAppBar-root {
+    padding-left: 1px !important;
+  }
+
+  .navbar {
+    display: none;
+  }
+}

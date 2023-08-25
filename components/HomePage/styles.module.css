@@ -1,0 +1,142 @@
+.HowItWorksSection {
+  background: url('/Images/sprinkles.png') center / cover no-repeat;
+  /* border: 2px solid red; */
+}
+
+.ClientsSaySection {
+  /* background: url('/Images/sprinkles.png') center / cover no-repeat; */
+  position: relative;
+}
+
+.ClientsSaySection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 130%;
+  background: url('/Images/sprinkles.png');
+  background-size: 100% 150%;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: -100 !important;
+}
+
+@media screen and (max-width: 1025px) {
+  .ClientsSaySection::before {
+    display: none;
+  }
+}
+
+.ourMissionSection {
+  /* background: url('/Images/sprinkles.png') center / cover no-repeat; */
+  position: relative;
+  width: 100vw;
+}
+
+.ourMissionSection::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/Images/sprinkles-flipped.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: -100 !important;
+}
+
+@media screen and (min-width: 1025px) {
+  .ourMissionSection::after {
+    display: none;
+  }
+}
+
+.FAQsSection {
+  /* background: url('/Images/sprinkles.png') center / cover no-repeat; */
+  position: relative;
+}
+
+.FAQsSection::before {
+  content: '';
+  position: absolute;
+  top: -320px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/Images/grapes.png');
+  background-size: 550px 550px;
+  background-repeat: no-repeat;
+  /* background-position: center; */
+  z-index: -100 !important;
+}
+
+@media screen and (max-width: 1024px) {
+  .FAQsSection::before {
+    top: -220px;
+    background-size: 421px 421px;
+  }
+}
+
+@media screen and (max-width: 499px) {
+  .FAQsSection::before {
+    display: none;
+  }
+  .FAQsSection::after {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 45vw;
+    right: 0;
+    height: 100%;
+    overflow: hidden;
+    background: url('/Images/grapes-flipped.png');
+    background-size: 221px 221px;
+    background-repeat: no-repeat;
+    /* background-position: center; */
+    z-index: -100 !important;
+  }
+}
+
+@media (min-width: 500px) and (max-width: 677px) {
+  .FAQsSection::before {
+    display: none;
+  }
+  .FAQsSection::after {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 65vw;
+    right: 0;
+    height: 100%;
+    overflow: hidden;
+    background: url('/Images/grapes-flipped.png');
+    background-size: 221px 221px;
+    background-repeat: no-repeat;
+    /* background-position: center; */
+    z-index: -100 !important;
+  }
+}
+
+@media (min-width: 678px) and (max-width: 1024px) {
+  .FAQsSection::before {
+    display: none;
+  }
+
+  .FAQsSection::after {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 76vw;
+    right: 0;
+    height: 100%;
+    overflow: hidden;
+    background: url('/Images/grapes-flipped.png');
+    background-size: 221px 221px;
+    background-repeat: no-repeat;
+    /* background-position: center; */
+    z-index: -100 !important;
+  }
+}

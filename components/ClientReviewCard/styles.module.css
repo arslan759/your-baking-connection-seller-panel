@@ -1,0 +1,28 @@
+.reviewText {
+  display: block !important;
+  display: -webkit-box !important;
+  max-height: 300px !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  -webkit-line-clamp: 6 !important;
+  text-overflow: ellipsis !important;
+}
+
+.cakeImage {
+  position: absolute;
+  top: 50%;
+  left: -30px;
+  transform: translate(0, -50%);
+}
+
+@media screen and (max-width: 767px) {
+  .cakeImage {
+    left: -19px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .reviewText {
+    -webkit-line-clamp: 4 !important;
+  }
+}
