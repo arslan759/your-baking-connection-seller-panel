@@ -1,0 +1,23 @@
+.cardItem {
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 2px 2px 22px 0px rgba(0, 0, 0, 0.2);
+  padding: 18px;
+  /* width: 31%; */
+  /* height: auto; */
+  width: calc(100% / 3 - 16px);
+  cursor: pointer;
+  display: flex;
+  gap: 16px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.cardItem:hover {
+  transform: scale(1.05);
+}
+
+@media screen and (max-width: 767px) {
+  .cardItem {
+    width: 95%;
+  }
+}

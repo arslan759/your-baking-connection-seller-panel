@@ -1,0 +1,9 @@
+.imageOverlay {
+  background: url('/Images/sprinkles.png');
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 1000px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}

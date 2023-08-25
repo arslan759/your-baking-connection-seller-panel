@@ -1,0 +1,9 @@
+.background {
+  background: url('/Images/how-it-works-background.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-size: 100% 100%;
+  width: 99vw;
+  height: 950px;
+  object-fit: cover;
+}

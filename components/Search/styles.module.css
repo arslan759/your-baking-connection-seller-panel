@@ -1,0 +1,6 @@
+.findYourBakerBackground {
+  background-image: url('/Images/background-findBaker.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -7;
+}

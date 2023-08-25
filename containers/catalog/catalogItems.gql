@@ -1,0 +1,117 @@
+query catalogItemsQuery(
+  $shopId: ID!
+  $tagIds: [ID]
+  $searchQuery: String
+  $propertyFilters: propertyFiltersInput
+  $first: ConnectionLimitInt
+  $last: ConnectionLimitInt
+  $before: ConnectionCursor
+  $after: ConnectionCursor
+  $sortBy: CatalogItemSortByField
+  $sortByPriceCurrencyCode: String
+  $sortOrder: SortOrder
+  $offset: Int
+) {
+  catalogItems(
+    shopIds: [$shopId]
+    tagIds: $tagIds
+    searchQuery: $searchQuery
+    first: $first
+    last: $last
+    before: $before
+    after: $after
+    sortBy: $sortBy
+    sortByPriceCurrencyCode: $sortByPriceCurrencyCode
+    sortOrder: $sortOrder
+    offset: $offset
+    propertyFilters: $propertyFilters
+  ) {
+    totalCount
+    pageInfo {
+      endCursor
+      startCursor
+      hasNextPage
+      hasPreviousPage
+    }
+    edges {
+      cursor
+      node {
+        _id
+        ... on CatalogItemProduct {
+          product {
+            _id
+            title
+            slug
+            description
+            vendor
+            isLowQuantity
+            isSoldOut
+            isBackorder
+            propertyType
+            propertySaleType {
+              type
+            }
+            investmentDetails {
+              description
+            }
+            metafields {
+              description
+              key
+              namespace
+              scope
+              value
+              valueType
+            }
+            shop {
+              currency {
+                code
+              }
+            }
+            pricing {
+              compareAtPrice {
+                displayAmount
+              }
+              currency {
+                code
+              }
+              displayPrice
+              minPrice
+              maxPrice
+            }
+            primaryImage {
+              URLs {
+                thumbnail
+                small
+                medium
+                large
+              }
+            }
+            media {
+              URLs {
+                thumbnail
+                small
+                medium
+                large
+              }
+            }
+            financials {
+              title
+              value
+            }
+            location {
+              country
+              state
+            }
+            area {
+              unit
+              price
+              value
+            }
+          }
+          propertyUnits
+          propertyPrice
+        }
+      }
+    }
+  }
+}
