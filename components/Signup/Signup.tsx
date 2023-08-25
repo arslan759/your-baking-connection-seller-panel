@@ -22,23 +22,76 @@ export default function ForgetPassword() {
     console.log('close')
   }
 
-  return (
-    <div className={`${styles.signup} pb-[180px] md:h-[1072px] md:bg-cover md:bg-center`}>
-      <Navbar itemsColor='white' />
-      <button onClick={() => setStep(step + 1)}>step</button>
-      <button onClick={() => setStep(1)}>reset</button>
-      <button onClick={() => setIsSuccess(!isSuccess)}>success</button>
-      {isSuccess ? (
+  // page displays otp form
+  if (isOtp) {
+    return (
+      <div className={`${styles.signup} pb-[180px] md:h-[1072px] md:bg-cover md:bg-center`}>
+        <Navbar itemsColor='white' />
+        <button onClick={() => setStep(step + 1)}>step</button>
+        <button onClick={() => setStep(1)}>reset</button>
+        <button onClick={() => setIsSuccess(!isSuccess)}>success</button>
+        <button onClick={() => setIsOtp(!isOtp)}>otp</button>
+
+        <OTPForm closeOtp={handleOtpClose} type={'registration'} />
+      </div>
+    )
+  }
+
+  // page displays signup success
+  if (isSuccess) {
+    return (
+      <div className={`${styles.signup} pb-[180px] md:h-[1072px] md:bg-cover md:bg-center`}>
+        <Navbar itemsColor='white' />
+        <button onClick={() => setStep(step + 1)}>step</button>
+        <button onClick={() => setStep(1)}>reset</button>
+        <button onClick={() => setIsSuccess(!isSuccess)}>success</button>
+        <button onClick={() => setIsOtp(!isOtp)}>otp</button>
+
         <div className='w-full justify-center'>
           <SignupSuccess setIsSuccess={setIsSuccess} />
         </div>
-      ) : isOtp ? (
-        <OTPForm closeOtp={handleOtpClose} type={'registration'} />
-      ) : step === 1 ? (
+      </div>
+    )
+  }
+
+  // page displays signup form
+  if (step === 1) {
+    return (
+      <div className={`${styles.signup} pb-[180px] md:h-[1072px] md:bg-cover md:bg-center`}>
+        <Navbar itemsColor='white' />
+        <button onClick={() => setStep(step + 1)}>step</button>
+        <button onClick={() => setStep(1)}>reset</button>
+        <button onClick={() => setIsSuccess(!isSuccess)}>success</button>
+        <button onClick={() => setIsOtp(!isOtp)}>otp</button>
+
         <SignupForm openOtp={handleOtpOpen} />
-      ) : step === 2 ? (
+      </div>
+    )
+  } else if (step === 2) {
+    // page displays add shop details form
+    return (
+      <div className={`${styles.signup} pb-[180px] md:h-[1072px] md:bg-cover md:bg-center`}>
+        <Navbar itemsColor='white' />
+        <button onClick={() => setStep(step + 1)}>step</button>
+        <button onClick={() => setStep(1)}>reset</button>
+        <button onClick={() => setIsSuccess(!isSuccess)}>success</button>
+        <button onClick={() => setIsOtp(!isOtp)}>otp</button>
+
         <AddShopDetailsForm />
-      ) : null}
-    </div>
-  )
+      </div>
+    )
+  }
+  // page displays signup form
+  else
+    return (
+      <div className={`${styles.signup} pb-[180px] md:h-[1072px] md:bg-cover md:bg-center`}>
+        <Navbar itemsColor='white' />
+        <button onClick={() => setStep(step + 1)}>step</button>
+        <button onClick={() => setStep(1)}>reset</button>
+        <button onClick={() => setIsSuccess(!isSuccess)}>success</button>
+        <button onClick={() => setIsOtp(!isOtp)}>otp</button>
+
+        <SignupForm openOtp={handleOtpOpen} />
+      </div>
+    )
 }
