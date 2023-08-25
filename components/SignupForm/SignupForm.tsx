@@ -233,16 +233,38 @@ const SignupForm = ({ openOtp }: SignUpFormProps) => {
         <div className=''>
           <div className='md:mt-[24px]'>
             <Typography
-              variant='body2'
-              className='text-white text-[12px] md:text-[14px] uppercase tracking-[1px] p-0'
+              sx={{
+                fontSize: '14px !important',
+                fontFamily: 'Josefin Sans',
+                lineHeight: 'normal',
+                fontWeight: '500',
+                letterSpacing: '1px',
+                padding: '0px',
+                textTransform: 'uppercase',
+                color: '#fff',
+                '@media (max-width: 767px)': {
+                  fontSize: '12px !important',
+                },
+              }}
             >
               {' '}
               joining is quick and easy
             </Typography>
 
             <Typography
-              variant='h5'
-              className='text-green font-open_sans_bold capitalise mt-[10px] p-0'
+              sx={{
+                marginTop: '10px',
+                padding: '0px',
+                fontSize: '32px !important',
+                fontFamily: 'Open Sans',
+                lineHeight: 'normal',
+                fontWeight: '800 !important',
+                textTransform: 'capitalize',
+                color: '#7DDEC1',
+                '@media (max-width: 767px)': {
+                  fontSize: '24px !important',
+                },
+              }}
             >
               {' '}
               Sign up
@@ -386,8 +408,16 @@ const SignupForm = ({ openOtp }: SignUpFormProps) => {
                     }}
                   />
                   <Typography
-                    variant='body1'
-                    className='text-[12px] flex justify-start items-center text-[white]'
+                    sx={{
+                      fontSize: '12px !important',
+                      fontFamily: 'Open Sans',
+                      lineHeight: 'normal',
+                      fontWeight: '400 !important',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'start',
+                      color: '#fff',
+                    }}
                   >
                     I agree to all the Term of conditions & Privacy Policy
                   </Typography>
@@ -401,7 +431,15 @@ const SignupForm = ({ openOtp }: SignUpFormProps) => {
             </div>
 
             <div className='w-full flex justify-center mt-[8px] md:mt-[12px]'>
-              <Typography variant='body1' className='text-[12px] text-[white]'>
+              <Typography
+                sx={{
+                  fontSize: '12px !important',
+                  fontFamily: 'Open Sans',
+                  lineHeight: 'normal',
+                  fontWeight: '400 !important',
+                  color: '#fff',
+                }}
+              >
                 Already have an account? &nbsp;
                 <a
                   href='/signin'
@@ -409,14 +447,30 @@ const SignupForm = ({ openOtp }: SignUpFormProps) => {
                     textDecoration: 'none',
                   }}
                 >
-                  <span className='text-green'>Login</span>
+                  <span
+                    style={{
+                      fontWeight: '600 !important',
+                      color: '#7DDEC1',
+                    }}
+                  >
+                    Login
+                  </span>
                 </a>
               </Typography>
             </div>
 
             <div className='flex justify-center items-center  mt-[8px] md:mt-[20px]'>
               <div className='w-[97px] h-[0.5px] bg-[#fff]' />
-              <Typography variant='body1' className={`text-[12px] z-10 text-[white] mx-[10px]`}>
+              <Typography
+                sx={{
+                  fontSize: '12px !important',
+                  fontFamily: 'Open Sans',
+                  lineHeight: 'normal',
+                  fontWeight: '400 !important',
+                  color: '#fff',
+                  marginX: '10px',
+                }}
+              >
                 OR
               </Typography>
 
@@ -428,17 +482,18 @@ const SignupForm = ({ openOtp }: SignUpFormProps) => {
                 style={{
                   width: '100%',
                   height: '45px',
-                  // background: 'transparent',
+                  background: 'transparent',
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
                   gap: '16px',
-                  // color: '#fff',
+                  color: '#fff',
                   border: '0.5px solid #7DDEC1',
                   cursor: 'pointer',
+                  textTransform: 'none',
                 }}
-                className='bg-transparent hover:bg-green text-white hover:text-[#000] normal-case'
-              > 
+                // className='bg-transparent hover:bg-green text-white hover:text-[#000] normal-case'
+              >
                 Sign up with <img src='/Images/google.svg' alt='google-icon' />
               </Button>
             </div>
