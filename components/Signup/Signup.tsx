@@ -32,7 +32,9 @@ export default function ForgetPassword() {
         <button onClick={() => setIsSuccess(!isSuccess)}>success</button>
         <button onClick={() => setIsOtp(!isOtp)}>otp</button>
 
-        <OTPForm closeOtp={handleOtpClose} type={'registration'} />
+        <div className='w-full justify-center mt-[50px] md:mt-[130px]'>
+          <OTPForm closeOtp={handleOtpClose} type={'registration'} />
+        </div>
       </div>
     )
   }

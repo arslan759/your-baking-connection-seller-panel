@@ -71,7 +71,7 @@ const OTPForm = ({ closeOtp, type, email }: OTPFormProps) => {
   }
 
   return (
-    <div className='flex justify-center md:justify-end md:mr-[50px] mt-[170px]'>
+    <div className='flex justify-center md:justify-end md:mr-[50px]'>
       <div
         style={{
           borderRadius: '5px',
