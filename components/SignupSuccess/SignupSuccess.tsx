@@ -18,7 +18,7 @@ const SignupSuccess = ({ setIsSuccess }: SignupSuccessProps) => {
         <div className='w-full flex flex-col gap-y-[14px] md:gap-y-[36px]'>
           <div className='w-full flex flex-col items-center gap-y-[9px] md:gap-y-[24px]'>
             <img
-              src='/Images/Success.svg'
+              src='/Images/smiley.svg'
               alt='success'
               className='w-[37px] md:w-[95px] h-[37px] md:h-[95px]'
             />
@@ -37,7 +37,7 @@ const SignupSuccess = ({ setIsSuccess }: SignupSuccessProps) => {
                 },
               }}
             >
-              Success
+              WELCOME!
             </Typography>
           </div>
 
@@ -56,30 +56,12 @@ const SignupSuccess = ({ setIsSuccess }: SignupSuccessProps) => {
                 },
               }}
             >
-              {`Thank you for your request. We are working 
-                  hard to find the best service and deals for you. `}
-            </Typography>
-
-            <Typography
-              // variant='h1'
-              sx={{
-                color: '#fff',
-                fontSize: '18px !important',
-                fontFamily: 'Open Sans',
-                fontWeight: '400 !important',
-                lineHeight: '30px',
-                textAlign: 'center',
-                '@media (max-width: 768px)': {
-                  fontSize: '11px !important',
-                },
-              }}
-            >
-              {`Shortly you will find a confirmation in your email.`}
+              {`Thanks for joining! We're so excited you're here! You now have full feature access to easily create your bakery profile!`}
             </Typography>
           </div>
 
           <div className='w-80%'>
-            <PrimaryBtn text='See Shop Details' />
+            <PrimaryBtn text='Go To Bakery Profile' />
           </div>
         </div>
       </div>
