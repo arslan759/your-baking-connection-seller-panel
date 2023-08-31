@@ -376,7 +376,7 @@ export const ProductTypes = [
   'Croissants',
 ]
 
-export const GalleryNavigation = [
+export const BakerNavigationData = [
   {
     id: 1,
     title: 'Available Products',

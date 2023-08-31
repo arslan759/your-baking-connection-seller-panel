@@ -2,7 +2,7 @@ import React from 'react'
 import NavBar from '../NavBar/NavBar'
 import { Typography } from '@mui/material'
 import ProductDetailBreadCrumbs from '../ProductDetailBreadCrumbs/ProductDetailBreadCrumbs'
-import GallerySwiper from '../GallerySwiper/GallerySwiper'
+import BakerSwiper from '../BakerSwiper/BakerSwiper'
 import ProductDetailMainContent from '../ProductDetailMainContent/ProductDetailMainContent'
 import ProductDetailTabsSection from '../ProductDetailTabsSection/ProductDetailTabsSection'
 import MatchMadeInHeaven from '../MatchMadeInHeaven/MatchMadeInHeaven'
@@ -50,7 +50,7 @@ const ProductDetail = () => {
         <div className='w-[90%] md:w-[95%]'>
           <div className='flex flex-col items-center lg:flex-row lg:items-start'>
             <div className='w-[100%] lg:w-[40vw]'>
-              <GallerySwiper />
+              <BakerSwiper />
             </div>
             <div className='relative w-[100%] mt-[40px] lg:mt-[0px] lg:w-[100%] lg:pl-[40px]'>
               <ProductDetailMainContent />

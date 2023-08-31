@@ -89,6 +89,19 @@ export interface DropdownProps {
   onChange: (text: string) => void
 }
 
+export interface MultiSelectDropdownFieldProps {
+  name: string
+  label?: string
+  placeholder?: string
+  required: boolean
+  error?: boolean
+  options: any
+  errorText?: string
+  inputColor?: string
+  value: any
+  setValue: (arg0: any) => void
+}
+
 export interface ForgetPasswordFormProps {
   openOtp: () => void
   email: string
@@ -144,21 +157,21 @@ export interface SignupSuccessProps {
   setIsSuccess: (value: boolean) => void
 }
 
-export interface GalleryWeOfferItemProps {
+export interface BakerWeOfferItemProps {
   title: string
   image: string
 }
 
-export interface InspirationGalleryNavigationProps {
+export interface BakerNavigationProps {
   activeTab: number
   handleChange: (event: React.SyntheticEvent, newValue: number) => void
 }
 
-export interface InspirationGalleryTabsPanelProps {
+export interface BakerTabsPanelProps {
   activeTab: number
 }
 
-export interface GalleryProductCardProps {
+export interface ProductCardProps {
   image: string
   title: string
   description: string
