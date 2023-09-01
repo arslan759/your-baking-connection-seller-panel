@@ -6,7 +6,7 @@
   padding-bottom: 148px;
 }
 
-/* @media screen and (max-width: 767px) {
+@media screen and (max-width: 767px) {
   .signup {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.5) 100%),
       url('/Images/sign-in-background.webp') center / cover no-repeat,
@@ -15,4 +15,4 @@
     height: auto;
     padding-bottom: 30px;
   }
-} */
+}

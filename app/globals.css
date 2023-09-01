@@ -48,6 +48,10 @@
   text-decoration: none;
 }
 
+::-webkit-scrollbar {
+  width: 5px;
+}
+
 /* MUI Typography */
 
 .css-1wn6apb-MuiTypography-root {

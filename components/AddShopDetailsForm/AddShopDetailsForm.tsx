@@ -93,58 +93,17 @@ const SignupForm = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // console.log('form submitted')
-    // console.log('shop name is ', shopName)
-    // console.log("shop description is ", shopDescription)
-    // console.log('logo is ', logo)
-    // console.log('featured image is ', featuredImage)
-    // console.log('state is ', state)
-    // console.log('city is ', city)
-    // console.log('what we offer is ', whatWeOffer)
-    // console.log('what we offer chips are ', whatWeOfferChips)
-    // console.log('pickup service is ', PickupService)
-
-    // return
-
     // Checks if all fields are filled
-    if (
-      !shopName ||
-      !shopDescription ||
-      // !logo ||
-      // !featuredImage ||
-      !state ||
-      !city ||
-      !whatWeOfferChips.length
-    ) {
+    if (!shopName || !state || !city) {
       if (!shopName) {
         setShopNameError('Shop name is required')
       }
-
-      if (!shopDescription) {
-        setShopDescriptionError('Shop description is required')
-      }
-
-      if (!logo) {
-        setLogoError('Logo is required')
-      }
-
-      if (!featuredImage) {
-        setFeaturedImageError('Featured image is required')
-      }
-
       if (!state) {
         setStateError('State is required')
       }
-
       if (!city) {
         setCityError('City is required')
       }
-
-      if (!whatWeOfferChips.length) {
-        setWhatWeOfferError('What we offer is required')
-      }
-
-      console.log('executed')
       // Stops the execution of the function
       return
     }
@@ -284,6 +243,30 @@ const SignupForm = () => {
                 />
               </div>
 
+              <div className='mt-[16px] md:mt-[0px] w-full h-[1px] bg-[#fff]' />
+
+              <div className='w-full'>
+                <Typography
+                  sx={{
+                    mt: '0px',
+                    fontSize: '14px !important',
+                    fontFamily: 'Josefin Sans',
+                    lineHeight: 'normal',
+                    fontWeight: '500',
+                    letterSpacing: '1px',
+                    padding: '0px',
+                    textTransform: 'uppercase',
+                    color: '#fff',
+                    '@media (max-width: 767px)': {
+                      mt: '16px',
+                      fontSize: '12px !important',
+                    },
+                  }}
+                >
+                  {`You can start adding these bakery details now or later!`}
+                </Typography>
+              </div>
+
               <div className='w-full md:w-[45%]'>
                 <UploadInputField
                   label='upload logo'
@@ -291,7 +274,7 @@ const SignupForm = () => {
                   name='logo'
                   value={shopName}
                   errorText={shopNameError}
-                  required
+                  required={false}
                   onChange={handleChange}
                 />
               </div>
@@ -303,7 +286,7 @@ const SignupForm = () => {
                   name='shopName'
                   value={shopName}
                   errorText={shopNameError}
-                  required
+                  required={false}
                   onChange={handleChange}
                 />
               </div>
@@ -391,7 +374,7 @@ const SignupForm = () => {
                   name='whatWeOffer'
                   value={whatWeOffer}
                   errorText={whatWeOfferError}
-                  required
+                  required={false}
                   handleKeyPress={handleAddChip}
                   onChange={handleChange}
                 />
@@ -435,7 +418,7 @@ const SignupForm = () => {
                   name='shopDescription'
                   value={shopDescription}
                   errorText={shopDescriptionError}
-                  required
+                  required={false}
                   onChange={handleChange}
                 />
               </div>
