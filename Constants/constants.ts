@@ -571,45 +571,33 @@ export const GalleryShopImages = [
 export const YourProfileCardItemData = [
   {
     id: 1,
-    title: 'Purchase History',
+    title: 'Ledger',
     description: 'Recording and tracking transactions and monitoring cash flow',
-    image: '/Images/profile-purchase-history.svg',
+    image: '/Images/profile-ledger.svg',
   },
   {
     id: 2,
-    title: 'Ratings and Reviews',
+    title: 'Shop Management',
     description: 'Customer management, financial and inventory management',
-    image: '/Images/profile-rating-and-reviews.svg',
+    image: '/Images/profile-shop-management.svg',
   },
   {
     id: 3,
-    title: 'Preferences',
+    title: 'Notifications',
     description: 'Order confirmation, payment reminder, account balance update',
-    image: '/Images/profile-preferences.svg',
+    image: '/Images/profile-notifications.svg',
   },
-  // {
-  //   id: 4,
-  //   title: 'Privacy Setting',
-  //   description: 'Track, return, cancel an order, download invoice or buy again',
-  //   image: '/Images/profile-privacy-settings.svg',
-  // },
+  {
+    id: 4,
+    title: 'Order Management',
+    description: 'Track, return, cancel an order, download invoice or buy again ',
+    image: '/Images/profile-order-management.svg',
+  },
   {
     id: 5,
-    title: 'Payment Details',
-    description: 'Customer management, financial and inventory management',
-    image: '/Images/profile-payment-details.svg',
-  },
-  {
-    id: 6,
-    title: 'Settings',
-    description: 'Order confirmation, payment reminder, account balance update',
-    image: '/Images/profile-settings.svg',
-  },
-  {
-    id: 7,
-    title: 'Help',
-    description: 'Track, return, cancel an order, download invoice or buy again ',
-    image: '/Images/profile-help.svg',
+    title: 'Subscription',
+    description: 'Regular automatic billing, exclusive content access',
+    image: '/Images/profile-subscription.svg',
   },
 ]
 
