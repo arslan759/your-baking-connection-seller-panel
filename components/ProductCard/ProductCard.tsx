@@ -1,10 +1,10 @@
 import { Card, CardContent, CardMedia, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { GalleryProductCardProps } from 'types'
-import GalleryProductCardMenu from '../GalleryProductCardMenu/GalleryProductCardMenu'
+import { ProductCardProps } from 'types'
+import GalleryProductCardMenu from '../ProductCardMenu/ProductCardMenu'
 import { PrimaryBtn } from '../Buttons'
 
-const GalleryProductCard = ({
+const ProductCard = ({
   image,
   title,
   description,
@@ -13,7 +13,7 @@ const GalleryProductCard = ({
   newPrice,
   width,
   mdWidth,
-}: GalleryProductCardProps) => {
+}: ProductCardProps) => {
   const [isHovering, setIsHovering] = useState(false) // handle mouse enter and leave for more details on desktop view
   const [isDetailsVisible, setIsDetailsVisible] = useState(false) // Toggle More Details for mobile view
 
@@ -200,4 +200,4 @@ const GalleryProductCard = ({
   )
 }
 
-export default GalleryProductCard
+export default ProductCard

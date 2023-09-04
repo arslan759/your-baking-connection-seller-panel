@@ -1,5 +1,5 @@
 import React from 'react'
-import GalleryProductCard from '../GalleryProductCard/GalleryProductCard'
+import ProductCard from '../ProductCard/ProductCard'
 import { GalleryProductsData } from 'Constants/constants'
 import CustomPagination from '../CustomPagination/CustomPagination'
 
@@ -9,7 +9,7 @@ const BakerAvailableProducts = () => {
       <div className='w-[90vw] flex flex-wrap justify-start gap-x-[2%] gap-y-[8px] md:gap-y-[24px]'>
         {GalleryProductsData.map((item) => {
           return (
-            <GalleryProductCard
+            <ProductCard
               key={item.id}
               image={item.image}
               title={item.title}

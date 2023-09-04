@@ -1,6 +1,6 @@
 import { GalleryProductsData } from 'Constants/constants'
 import React from 'react'
-import GalleryProductCard from '../GalleryProductCard/GalleryProductCard'
+import ProductCard from '../ProductCard/ProductCard'
 import { Typography } from '@mui/material'
 
 const MatchMadeInHeaven = () => {
@@ -48,7 +48,7 @@ const MatchMadeInHeaven = () => {
         {GalleryProductsData.slice(0, 3).map((item) => {
           return (
             // <div className='w-full md:w-[32%]'>
-            <GalleryProductCard
+            <ProductCard
               key={item.id}
               image={item.image}
               title={item.title}
