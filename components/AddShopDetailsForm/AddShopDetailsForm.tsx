@@ -2,10 +2,11 @@ import { Chip, Radio, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import InputField from '../InputField/InputField'
 import DropdownField from '../DropdownField/DropdownField'
-import { cities, states } from 'Constants/constants'
+import { cities, states, weOfferData } from 'Constants/constants'
 import Image from 'next/image'
 import { PrimaryBtn } from '../Buttons'
 import UploadInputField from '../UploadInputField/UploadInputField'
+import MultiSelectDropdownField from '../MultiSelectDropdownField/MultiSelectDropdownField'
 
 const SignupForm = () => {
   const [shopName, setShopName] = useState('')
@@ -18,8 +19,7 @@ const SignupForm = () => {
 
   const [PickupService, setPickupService] = useState(true)
 
-  const [whatWeOffer, setWhatWeOffer] = useState<string>('')
-  const [whatWeOfferChips, setWhatWeOfferChips] = useState<string[]>([])
+  const [whatWeOffer, setWhatWeOffer] = useState<any[]>([])
 
   // Error states
   const [shopNameError, setShopNameError] = useState('')
@@ -36,12 +36,6 @@ const SignupForm = () => {
     if (name === 'shopName') {
       setShopName(value)
       setShopNameError(value ? '' : 'Shop name is required')
-    }
-
-    if (name === 'whatWeOffer') {
-      setWhatWeOffer(value)
-      console.log(value)
-      setWhatWeOfferError('')
     }
 
     if (name === 'shopDescription') {
@@ -61,20 +55,8 @@ const SignupForm = () => {
     }
   }
 
-  // handleKeyPress function for what we offer input field
-  const handleAddChip = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    // e.stopPropagation()
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      if (whatWeOffer.length) {
-        setWhatWeOfferChips([...whatWeOfferChips, whatWeOffer])
-        setWhatWeOffer('')
-      }
-    }
-  }
-
   const handleDeleteChip = (chipToDelete: string) => {
-    setWhatWeOfferChips((chips) => chips.filter((chip) => chip !== chipToDelete))
+    setWhatWeOffer((chips) => chips.filter((chip) => chip !== chipToDelete))
   }
 
   // handleStateChange function for state dropdown
@@ -117,7 +99,6 @@ const SignupForm = () => {
     console.log('state is ', state)
     console.log('city is ', city)
     console.log('what we offer is ', whatWeOffer)
-    console.log('what we offer chips are ', whatWeOfferChips)
     console.log('pickup service is ', PickupService)
 
     // Resets the form fields
@@ -127,8 +108,7 @@ const SignupForm = () => {
     setFeaturedImage(null)
     setState('')
     setCity('')
-    setWhatWeOffer('')
-    setWhatWeOfferChips([])
+    setWhatWeOffer([])
     setPickupService(false)
 
     // Resets the error states
@@ -367,24 +347,23 @@ const SignupForm = () => {
               </div>
 
               <div className='w-full'>
-                <InputField
+                <MultiSelectDropdownField
                   label='what we offer'
-                  type='text'
-                  inputColor='white'
                   name='whatWeOffer'
                   value={whatWeOffer}
                   errorText={whatWeOfferError}
                   required={false}
-                  handleKeyPress={handleAddChip}
-                  onChange={handleChange}
+                  options={weOfferData}
+                  inputColor='white'
+                  setValue={setWhatWeOffer}
                 />
 
-                {whatWeOfferChips.length > 0 && (
+                {whatWeOffer.length > 0 && (
                   <div className='flex flex-wrap gap-x-[24px] gap-y-[10px] mt-[15px]'>
-                    {whatWeOfferChips.map((chip, index) => (
+                    {whatWeOffer.map((chip, index) => (
                       <Chip
                         key={index}
-                        label={chip}
+                        label={chip.title}
                         deleteIcon={
                           // <div className='h-full flex items-center'>
                           <img src='/Images/x.svg' alt='x' className='h-[12px] w-[12px]' />

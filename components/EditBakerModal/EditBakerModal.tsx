@@ -6,7 +6,6 @@ import UploadInputField from '../UploadInputField/UploadInputField'
 import DropdownField from '../DropdownField/DropdownField'
 import { cities, states, weOfferData } from 'Constants/constants'
 import MultiSelectDropdownField from '../MultiSelectDropdownField/MultiSelectDropdownField'
-import BakerWeOfferItem from '../BakerWeOfferItem/BakerWeOfferItem'
 import CancelBtn from '../Buttons/CancelBtn'
 
 const EditBakerModal = () => {
@@ -29,7 +28,7 @@ const EditBakerModal = () => {
 
   const [PickupService, setPickupService] = useState(true)
 
-  const [whatWeOffer, setWhatWeOffer] = useState<string[]>([])
+  const [whatWeOffer, setWhatWeOffer] = useState<any[]>([])
 
   // Error states
   const [shopNameError, setShopNameError] = useState('')
@@ -189,14 +188,38 @@ const EditBakerModal = () => {
             borderRadius: '8px',
           }}
         >
-          <div className='w-full h-full'>
+          <Typography
+            sx={{
+              fontSize: '18px !important',
+              fontFamily: 'Open Sans',
+              fontWeight: '700 !important',
+              lineHeight: 'normal',
+              color: '#090909',
+              letterSpacing: '0.5px !important',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              '@media (min-width: 768px)': {
+                fontSize: '16px !important',
+              },
+            }}
+          >
+            <img
+              src='/Images/information-icon.svg'
+              alt='information'
+              className='w-[20px] h-[20px]'
+            />
+            Information
+          </Typography>
+
+          <div className='w-full h-full  mt-[22px]'>
             <form onSubmit={handleSubmit}>
               <div className='w-full flex flex-wrap gap-y-[8px] md:gap-y-[24px] justify-between'>
-                <div className='w-full md:w-[45%]'>
+                <div className='w-full'>
                   <InputField
                     label='shop name'
                     type='text'
-                    inputColor='#888'
+                    inputColor='#212529'
                     name='shopName'
                     value={shopName}
                     errorText={shopNameError}
@@ -205,7 +228,7 @@ const EditBakerModal = () => {
                   />
                 </div>
 
-                <div className='w-full md:w-[45%]'>
+                <div className='w-full'>
                   <DropdownField
                     label='state'
                     required={false}
@@ -213,12 +236,12 @@ const EditBakerModal = () => {
                     errorText={stateError}
                     value={state}
                     options={states}
-                    inputColor='#888'
+                    inputColor='#212529'
                     onChange={handleStateChange}
                   />
                 </div>
 
-                <div className='w-full md:w-[45%]'>
+                <div className='w-full'>
                   <DropdownField
                     label='city'
                     required={false}
@@ -226,15 +249,15 @@ const EditBakerModal = () => {
                     errorText={cityError}
                     value={city}
                     options={cities}
-                    inputColor='#888'
+                    inputColor='#212529'
                     onChange={handleCityChange}
                   />
                 </div>
 
-                <div className='w-full md:w-[45%]'>
+                <div className='w-full'>
                   <UploadInputField
                     label='upload logo'
-                    inputColor='#888'
+                    inputColor='#212529'
                     name='logo'
                     value={shopName}
                     errorText={shopNameError}
@@ -243,10 +266,10 @@ const EditBakerModal = () => {
                   />
                 </div>
 
-                <div className='w-full md:w-[45%]'>
+                <div className='w-full'>
                   <UploadInputField
                     label='featured image'
-                    inputColor='#888'
+                    inputColor='#212529'
                     name='shopName'
                     value={shopName}
                     errorText={shopNameError}
@@ -255,11 +278,11 @@ const EditBakerModal = () => {
                   />
                 </div>
 
-                <div className='w-full md:w-[45%]'>
+                <div className='w-full'>
                   <div className='flex flex-col capitalize'>
                     <label
                       style={{
-                        color: '#888',
+                        color: '#212529',
                       }}
                     >
                       <Typography sx={{}} className={`text-[12px]`} variant='body1'>
@@ -284,7 +307,7 @@ const EditBakerModal = () => {
                         />
                         <Typography
                           sx={{
-                            color: '#888',
+                            color: '#212529',
                           }}
                           className={`text-[12px]`}
                           variant='body1'
@@ -308,7 +331,7 @@ const EditBakerModal = () => {
                         />
                         <Typography
                           sx={{
-                            color: '#888',
+                            color: '#212529',
                             fontSize: '12px !important',
                           }}
                         >
@@ -338,7 +361,7 @@ const EditBakerModal = () => {
                     errorText={whatWeOfferError}
                     required={false}
                     options={weOfferData}
-                    inputColor='#888'
+                    inputColor='#212529'
                     setValue={setWhatWeOffer}
                   />
 
@@ -390,7 +413,7 @@ const EditBakerModal = () => {
                   <InputField
                     label='shop description'
                     type='textarea'
-                    inputColor='#888'
+                    inputColor='#212529'
                     rows={7}
                     name='shopDescription'
                     value={shopDescription}

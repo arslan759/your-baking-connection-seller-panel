@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material'
 import React from 'react'
-import { PrimaryBtn } from '../Buttons'
 import EditBakerModal from '../EditBakerModal/EditBakerModal'
+import AddBakerProductModal from '../AddBakerProductModal/AddBakerProductModal'
 
 const BakerMainContent = () => {
   return (
@@ -52,7 +52,7 @@ const BakerMainContent = () => {
       </div>
 
       <div className='mt-[12px] w-full'>
-        <PrimaryBtn text='Add Product' handleClick={() => console.log('add product clicked')} />
+        <AddBakerProductModal />
       </div>
 
       <div className='hidden lg:block mt-[24px] bg-[#6C6C6C] h-[0.5px] w-full' />
