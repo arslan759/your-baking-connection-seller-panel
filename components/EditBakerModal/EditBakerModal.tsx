@@ -6,7 +6,6 @@ import UploadInputField from '../UploadInputField/UploadInputField'
 import DropdownField from '../DropdownField/DropdownField'
 import { cities, states, weOfferData } from 'Constants/constants'
 import MultiSelectDropdownField from '../MultiSelectDropdownField/MultiSelectDropdownField'
-import BakerWeOfferItem from '../BakerWeOfferItem/BakerWeOfferItem'
 import CancelBtn from '../Buttons/CancelBtn'
 
 const EditBakerModal = () => {
@@ -29,7 +28,7 @@ const EditBakerModal = () => {
 
   const [PickupService, setPickupService] = useState(true)
 
-  const [whatWeOffer, setWhatWeOffer] = useState<string[]>([])
+  const [whatWeOffer, setWhatWeOffer] = useState<any[]>([])
 
   // Error states
   const [shopNameError, setShopNameError] = useState('')
