@@ -143,5 +143,5 @@ deploy-test:
   script:
     - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY
     - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY "cd /home/ubuntu/sp-test && git checkout test"
-#    - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY "cd /home/ubuntu/sp-test && pm2 delete sp-test"
+    - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY "cd /home/ubuntu/sp-test && pm2 delete sp-test"
     - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY "cd /home/ubuntu/sp-test && pm2 start 'npm start' --name sp-test"
