@@ -13,6 +13,8 @@ import { useRouter } from 'next/navigation'
 import { SignUpFormProps } from 'types'
 import withAuth from 'hocs/withAuth'
 
+import hashPassword from "../../lib/utils/hashPassword";
+
 const SignupForm = ({ openOtp }: SignUpFormProps) => {
   //sign up mutation hook
   const [signUp, loadingSignUp] = useCreateUserWithOtp()
@@ -205,7 +207,7 @@ const SignupForm = ({ openOtp }: SignUpFormProps) => {
       const userRand = Date.now()
       const result = await signUp({
         variables: {
-          user: { username: `u${userRand.toString()}`, email, password, type: 'email' },
+          user: { username: `u${userRand.toString()}`, email, password : hashPassword(password), type: 'email' },
           profile: { firstName, lastName, state, city },
         },
       })

@@ -1,0 +1,43 @@
+query catalogItems(
+  $shopIds: [ID]!
+  $first: ConnectionLimitInt
+  $offset: Int
+  $sortBy: CatalogItemSortByField
+  $sortOrder: SortOrder
+) {
+  catalogItems(
+    shopIds: $shopIds
+    first: $first
+    offset: $offset
+    sortBy: $sortBy
+    sortOrder: $sortOrder
+  ) {
+    totalCount
+    edges {
+      node {
+        ... on CatalogItemProduct {
+          product {
+            _id
+            title
+            description
+            media {
+              URLs {
+                thumbnail
+              }
+            }
+            variants {
+              variantId
+              pricing {
+                compareAtPrice {
+                  amount
+                  displayAmount
+                }
+                price
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

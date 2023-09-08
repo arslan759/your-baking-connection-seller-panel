@@ -10,9 +10,11 @@ import useLoginUser from '../../hooks/Authentication/Login/useLoginUser'
 import { withApollo } from 'lib/apollo/withApollo'
 import { useRouter } from 'next/navigation'
 import withAuth from '../../hocs/withAuth'
-
 import useViewer from 'hooks/viewer/useViewer'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
+
+
+import hashPassword from "../../lib/utils/hashPassword";
 
 const SigninForm = () => {
   //login mutation
@@ -86,7 +88,7 @@ const SigninForm = () => {
         variables: {
           user: {
             email,
-            password,
+            password: hashPassword(password),
           },
         },
       })

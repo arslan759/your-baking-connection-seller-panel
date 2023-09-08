@@ -18,6 +18,7 @@ export interface FooterLinksProps {
 export interface PrimaryBtnProps {
   text: string
   type?: 'button' | 'submit' | 'reset'
+  disabled?: boolean
   handleClick?: MouseEventHandler<HTMLButtonElement>
 }
 
@@ -207,4 +208,30 @@ export interface ProductDetailTabsPanelProps {
 export interface ProductDetailTabsProps {
   activeTab: number
   handleChange: (event: React.SyntheticEvent, newValue: number) => void
+}
+
+export interface ProductMediaURLsInterface {
+  large: string
+  original: string
+  small: string
+  thumbnail: string
+  medium: string
+}
+export interface ProductMediaInterface {
+  productId: string
+  priority: number
+  URLs: ProductMediaURLsInterface
+}
+
+export interface AddBakerProductImagesProps {
+  productMedia: ProductMediaInterface[]
+  setProductMedia: (image: string) => void
+}
+
+export interface PaginatorProps {
+  count: number
+  boundaryCount: number
+  siblingCount: number
+  page: number
+  onChange: (value: number) => void
 }

@@ -1,0 +1,8 @@
+mutation updateProductVariant($shopId: ID!, $variantId: ID!, $variant: ProductVariantInput!) {
+  updateProductVariant(input: { shopId: $shopId, variantId: $variantId, variant: $variant }) {
+    variant {
+      _id
+      title
+    }
+  }
+}
