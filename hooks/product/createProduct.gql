@@ -1,0 +1,33 @@
+mutation createProduct(
+  $shopId: ID!
+  $product: ProductInput
+  $shouldCreateFirstVariant: Boolean = true
+) {
+  createProduct(
+    input: {
+      shopId: $shopId
+      product: $product
+      shouldCreateFirstVariant: $shouldCreateFirstVariant
+    }
+  ) {
+    product {
+      _id
+      title
+      description
+      variants {
+        _id
+      }
+      media {
+        URLs {
+          large
+          medium
+          original
+          small
+          thumbnail
+        }
+        productId
+        variantId
+      }
+    }
+  }
+}

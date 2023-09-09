@@ -1,0 +1,21 @@
+mutation updateSimpleInventory(
+  $shopId: ID!
+  $isEnabled: Boolean = true
+  $productConfiguration: ProductConfigurationInput!
+  $inventoryInStock: Int
+  $canBackorder: Boolean = false
+) {
+  updateSimpleInventory(
+    input: {
+      shopId: $shopId
+      isEnabled: $isEnabled
+      productConfiguration: $productConfiguration
+      inventoryInStock: $inventoryInStock
+      canBackorder: $canBackorder
+    }
+  ) {
+    inventoryInfo {
+      isEnabled
+    }
+  }
+}

@@ -1,9 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PrimaryBtn } from '../Buttons'
 import { Modal, Radio, Slider, Stack, Typography } from '@mui/material'
 import InputField from '../InputField/InputField'
 import CancelBtn from '../Buttons/CancelBtn'
 import AddBakerProductImages from '../AddBakerProductImages/AddBakerProductImages'
+import useCreateProduct from 'hooks/product/useCreateProduct'
+import useUpdateProductVariant from 'hooks/product/useUpdateProductVariant'
+import useUpdateSimpleInventory from 'hooks/product/useUpdateSimpleInventory'
+
+import useUpdatePublishProduct from 'hooks/product/usePublishProduct'
+
+import { withApollo } from 'lib/apollo/withApollo'
+import { ProductMediaInterface } from 'types'
 
 const AddBakerProductModal = () => {
   const [isAdded, setIsAdded] = useState(false)
@@ -12,14 +20,24 @@ const AddBakerProductModal = () => {
   const [productTitle, setProductTitle] = useState('')
   const [productDescription, setProductDescription] = useState('')
   const [productPrice, setProductPrice] = useState('')
+  const [compareAtPrice, setCompareAtPrice] = useState('')
   const [customField, setCustomField] = useState('')
-  const [productImages, setProductImages] = useState([])
+
   const [isSalesTax, setIsSalesTax] = useState(false)
   const [salesTaxRate, setSalesTaxRate] = useState('')
   const [productQuantity, setProductQuantity] = useState(1)
   const [listingStartDate, setListingStartDate] = useState('')
   const [listingEndDate, setListingEndDate] = useState('')
   const [fulfillmentDate, setFulfillmentDate] = useState('')
+
+  const [productMedia, setProductMedia] = useState<ProductMediaInterface[]>([])
+
+  const [mediaPriority, setMediaPriority] = useState<number>(1)
+
+  //test effect remove later
+  useEffect(() => {
+    console.log('productMedia is ', productMedia)
+  }, [productMedia])
 
   // error states
   const [productTitleError, setProductTitleError] = useState('')
@@ -32,9 +50,134 @@ const AddBakerProductModal = () => {
   const [productListingError, setProductListingError] = useState('')
   const [fulfillmentDateError, setFulfillmentDateError] = useState('')
 
+  const [createProductFunction, loadingCreateProduct] = useCreateProduct()
+  const [updateProductVariantFunction, loadingUpdateProductVariant] = useUpdateProductVariant()
+  const [updateSimpleInventoryFunction, loadingUpdateSimpleInventory] = useUpdateSimpleInventory()
+  const [publishProductFunction, loadingPublishProduct] = useUpdatePublishProduct()
+
+  const [saveBtnDisable, setSaveBtnDisable] = useState(false)
+
+  useEffect(() => {
+    setSaveBtnDisable(
+      loadingCreateProduct ||
+        loadingUpdateProductVariant ||
+        loadingUpdateSimpleInventory ||
+        loadingPublishProduct,
+    )
+  }, [
+    loadingCreateProduct,
+    loadingUpdateProductVariant,
+    loadingUpdateSimpleInventory,
+    loadingPublishProduct,
+  ])
+
+  //step 1: create Product
+  const createProduct = async () => {
+    try {
+      let variables = {
+        shopId: 'cmVhY3Rpb24vc2hvcDpkU3VYTGIzRHg3TXNvV29nSg==',
+        product: {
+          title: productTitle,
+          description: productDescription,
+          isVisible: true,
+          media: productMedia,
+          productListingSchedule: {
+            startDate: listingStartDate,
+            endDate: listingEndDate,
+          },
+          availableFulfillmentDates: fulfillmentDate,
+        },
+      }
+      const createdProduct = await createProductFunction({ variables })
+
+      //@ts-ignore
+      const productId = createdProduct?.data?.createProduct?.product?._id
+      //@ts-ignore
+      const variantId = createdProduct?.data?.createProduct?.product?.variants[0]?._id
+
+      if (productId) {
+        console.log('product Id', productId)
+        await updateProductVariant(productId, variantId)
+      }
+    } catch (err) {
+      console.log('createproduct error', err)
+    }
+  }
+
+  //step 2: update product variant
+  const updateProductVariant = async (productId: string, variantId: string) => {
+    try {
+      let variables = {
+        shopId: 'cmVhY3Rpb24vc2hvcDpkU3VYTGIzRHg3TXNvV29nSg==',
+        variantId,
+        variant: {
+          isVisible: true,
+          price: parseFloat(productPrice),
+          compareAtPrice: parseFloat(compareAtPrice),
+          attributeLabel: `${productTitle}-label`,
+          isTaxable: salesTaxRate ? true : false,
+          media: productMedia,
+        },
+      }
+
+      const updatedProductVariant = await updateProductVariantFunction({ variables })
+
+      console.log('updated product variant is ', updatedProductVariant)
+
+      if (updatedProductVariant?.data?.updateProductVariant?.variant?._id) {
+        await publishProduct([productId], variantId)
+      }
+    } catch (err) {
+      console.log('error in updating variant', err)
+    }
+  }
+
+  //step 2.5 (optional: only applicable if the quantity is not unlimited)
+  const updateSimpleInventory = async (productId: string, variantId: string) => {
+    try {
+      let variables = {
+        shopId: 'cmVhY3Rpb24vc2hvcDpkU3VYTGIzRHg3TXNvV29nSg==',
+        inventoryInStock: productQuantity,
+        productConfiguration: {
+          productId,
+          productVariantId: variantId,
+        },
+        canBackOrder: false,
+      }
+      const updatedInventory = await updateSimpleInventoryFunction({ variables })
+
+      console.log('updated Inventory is ', updatedInventory)
+    } catch (err) {
+      console.log('updating inventory error ', err)
+    }
+  }
+
+  //step 3: publish product
+  const publishProduct = async (productId: string[], variantId: string) => {
+    try {
+      //Product is not unlimited quantity
+
+      if (productQuantity < 100) {
+        await updateSimpleInventory(productId[0], variantId)
+      }
+
+      const publish = await publishProductFunction({
+        variables: {
+          productIds: productId,
+        },
+      })
+      if (publish.data.publishProductsToCatalog[0]._id) {
+        console.log('coming to this condition')
+        handleAddProduct()
+      }
+      console.log('publish product success', publish)
+    } catch (err) {
+      console.log('error publishing product', err)
+    }
+  }
+
   // Add product Modal Handler
-  const handleAddProduct = () => {
-    console.log('add button clicked')
+  const handleAddProduct = async () => {
     setIsAdded(!isAdded)
   }
 
@@ -53,6 +196,10 @@ const AddBakerProductModal = () => {
     if (name === 'productPrice') {
       setProductPrice(value)
       setProductPriceError(value ? '' : 'Product price is required')
+    }
+
+    if (name === 'compareAtPrice') {
+      setCompareAtPrice(value)
     }
 
     if (name === 'salesTaxRate') {
@@ -92,14 +239,40 @@ const AddBakerProductModal = () => {
     setProductQuantity(newValue as number)
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //update product images
+
+  const handleUpdateProductMedia = (image: string) => {
+    console.log('image in parent is ', image)
+
+    setMediaPriority((prev) => prev + 1)
+
+    setProductMedia([
+      ...productMedia,
+      {
+        productId: '',
+        URLs: {
+          large: image,
+          medium: image,
+          original: image,
+          small: image,
+          thumbnail: image,
+        },
+        priority: mediaPriority,
+      },
+    ])
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    console.log('add button clicked')
+    await createProduct()
 
     console.log('product title is ', productTitle)
     console.log('product description is ', productDescription)
     console.log('product price is ', productPrice)
     console.log('custom field is ', customField)
-    console.log('product images are ', productImages)
+    // console.log('product images are ', productImages)
     console.log('is sales tax ', isSalesTax)
     console.log('sales tax rate is ', salesTaxRate)
     console.log('product quantity is ', productQuantity)
@@ -185,22 +358,39 @@ const AddBakerProductModal = () => {
                     onChange={handleChange}
                   />
                 </div>
+                <div className='flex w-full space-x-4'>
+                  <div className='flex-1 '>
+                    <InputField
+                      label='product price'
+                      type='number'
+                      inputColor='#212529'
+                      placeholder='Enter product price'
+                      name='productPrice'
+                      value={productPrice}
+                      errorText={productPriceError}
+                      required
+                      onChange={handleChange}
+                    />
+                  </div>
 
-                <div className='w-full'>
-                  <InputField
-                    label='product price'
-                    type='text'
-                    inputColor='#212529'
-                    placeholder='Enter product price'
-                    name='productPrice'
-                    value={productPrice}
-                    errorText={productPriceError}
-                    required
-                    onChange={handleChange}
-                  />
+                  <div className='flex-1'>
+                    <InputField
+                      label='compare at price'
+                      type='number'
+                      inputColor='#212529'
+                      placeholder='Enter compare at price'
+                      name='compareAtPrice'
+                      value={compareAtPrice}
+                      required={false}
+                      onChange={handleChange}
+                    />
+                  </div>
                 </div>
 
-                <AddBakerProductImages />
+                <AddBakerProductImages
+                  productMedia={productMedia}
+                  setProductMedia={handleUpdateProductMedia}
+                />
 
                 <Typography
                   sx={{
@@ -276,7 +466,7 @@ const AddBakerProductModal = () => {
                         color: '#676767',
                       }}
                     >
-                      Is the produt eligible for sales tax?
+                      Is the product eligible for sales tax?
                     </Typography>
 
                     <div className='mt-[12px] flex gap-x-[33px]'>
@@ -538,8 +728,9 @@ const AddBakerProductModal = () => {
                 </div> */}
               </div>
 
+              {saveBtnDisable ? <span>Loading...</span> : null}
               <div className='mt-[24px] md:mt-[23px]'>
-                <PrimaryBtn text='Save product' type='submit' />
+                <PrimaryBtn text='Save product' type='submit' disabled={saveBtnDisable} />
               </div>
 
               <div className='mt-[24px] md:mt-[23px]'>
@@ -553,4 +744,4 @@ const AddBakerProductModal = () => {
   )
 }
 
-export default AddBakerProductModal
+export default withApollo()(AddBakerProductModal)

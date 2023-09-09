@@ -1,5 +1,6 @@
+import React, { useState, useEffect, ChangeEvent } from 'react'
 import { CircularProgress, Typography } from '@mui/material'
-import React from 'react'
+import useFileUpload from 'hooks/fileUpload/useFileUpload'
 
 const dummyImages = [
   {
@@ -44,7 +45,73 @@ const dummyImages = [
   },
 ]
 
-const AddBakerProductImages = () => {
+import { AddBakerProductImagesProps } from 'types'
+
+const AddBakerProductImages = ({ productMedia, setProductMedia }: AddBakerProductImagesProps) => {
+  const [imageUploadCounter, setImageUploadCounter] = useState<number>(0)
+  const [images, setImages] = useState<any[]>([])
+  const [imageLoading, setImageLoading] = useState([true, true, true, true, true])
+
+  useEffect(() => {
+    const updatedLoadingArray = [...imageLoading]
+    updatedLoadingArray[productMedia?.length - 1] = false
+    setImageUploadCounter(productMedia?.length)
+    setImageLoading(updatedLoadingArray)
+  }, [productMedia])
+
+  const [uploadFile, loadingUploadFile] = useFileUpload()
+
+  const [uploadError, setUploadError] = useState<string>('')
+
+  async function handleFileUpload(e: ChangeEvent<HTMLInputElement>) {
+    try {
+      setUploadError('')
+      //@ts-ignore
+      const image = e.target.files[0]
+
+      console.log('image is ', image)
+
+      console.log('picture is ', image?.name)
+
+      if (!image) return
+
+      if (imageUploadCounter >= 5) {
+        return
+      }
+
+      if (image.size > 1024 * 1024 * 1) {
+        setUploadError('Picture size should be less than 1MB')
+        return
+      }
+
+      if (image.type !== 'image/jpeg' && image.type !== 'image/png') {
+        setUploadError('Selected file must be an image')
+        return
+      }
+
+      setImages([
+        ...images,
+        {
+          image: URL.createObjectURL(image),
+          loading: true,
+          name: image.name,
+          size: image.size / (1024 * 1024),
+        },
+      ])
+
+      //@ts-ignore
+      const uploadRes = await uploadFile(image, '/product-images')
+      if (uploadRes.result.status) {
+        console.log('setting product media', uploadRes.result.data[0].url)
+        setProductMedia(uploadRes.result.data[0].url)
+      }
+
+      setUploadError('')
+    } catch (err: any) {
+      setUploadError(err?.message)
+    }
+  }
+
   return (
     <div className='w-full'>
       <Typography
@@ -76,18 +143,20 @@ const AddBakerProductImages = () => {
         }}
       >
         <div className='w-full block md:hidden'>
-          <Typography
-            sx={{
-              color: '#212529',
-              fontFamily: 'Open Sans',
-              fontSize: '16px !important',
-              fontWeight: '600 !important',
-              lineHeight: 'normal',
-              textAlign: 'end',
-            }}
-          >
-            1/5
-          </Typography>
+          {productMedia.length > 0 && (
+            <Typography
+              sx={{
+                color: '#212529',
+                fontFamily: 'Open Sans',
+                fontSize: '16px !important',
+                fontWeight: '600 !important',
+                lineHeight: 'normal',
+                textAlign: 'end',
+              }}
+            >
+              {imageUploadCounter} / 5
+            </Typography>
+          )}
         </div>
         <div className='w-full flex flex-col items-center justify-center md:w-[48%] h-[225px] p-[8px] border-dashed rounded-[4px] border-[0.5px] border-[#888]'>
           <Typography
@@ -116,26 +185,30 @@ const AddBakerProductImages = () => {
                 browse
               </span>{' '}
             </span>
+
+            <input type='file' onChange={(e) => handleFileUpload(e)} />
+
+            <span style={{ color: 'red' }}>{uploadError}</span>
           </Typography>
         </div>
         <div className='w-full md:w-[48%] flex flex-col gap-y-[12px]'>
-          {dummyImages.map((image, index) => (
+          {images?.map((image: any, index: any) => (
             <div
               key={index}
               className={`rounded-[4px] flex gap-x-[10px] py-[10px] px-[16px] ${
-                image.status === 'uploaded' ? 'bg-[#000]/[0.80]' : 'bg-[#EAEAEA]'
+                !imageLoading[index] ? 'bg-[#000]/[0.80]' : 'bg-[#EAEAEA]'
               }`}
             >
               <img
-                src={image.image}
-                alt={image.name}
+                src={image?.image}
+                alt={image?.name}
                 className='w-[38px] h-[44px] object-cover rounded-[2px]'
               />
               <div className='w-full flex justify-between'>
                 <div className='h-full'>
                   <Typography
                     sx={{
-                      color: image.status === 'uploaded' ? '#fff' : '212529',
+                      color: !imageLoading[index] ? '#fff' : '212529',
                       fontSize: '16px !important',
                       fontFamily: 'Open Sans',
                       fontWeight: '400 !important',
@@ -145,7 +218,7 @@ const AddBakerProductImages = () => {
                       },
                     }}
                   >
-                    {image.name}
+                    {image?.name}
                   </Typography>
                   <Typography
                     sx={{
@@ -159,11 +232,11 @@ const AddBakerProductImages = () => {
                       },
                     }}
                   >
-                    {image.size}
+                    {image?.size?.toFixed(2)} MB
                   </Typography>
                 </div>
                 <div className='h-full flex items-center'>
-                  {image.status === 'uploaded' ? (
+                  {!imageLoading[index] ? (
                     <img
                       src='/Images/list-icon.svg'
                       alt='check-icon'
@@ -193,7 +266,7 @@ const AddBakerProductImages = () => {
                 textAlign: 'end',
               }}
             >
-              1/5
+              {imageUploadCounter}/5
             </Typography>
           </div>
         </div>

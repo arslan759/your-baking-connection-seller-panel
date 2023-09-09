@@ -1,10 +1,11 @@
 import { Button, Typography } from '@mui/material'
 import { PrimaryBtnProps } from 'types'
 
-const PrimaryBtn = ({ handleClick, type = 'button', text }: PrimaryBtnProps) => {
+const PrimaryBtn = ({ handleClick, type = 'button', text, disabled }: PrimaryBtnProps) => {
   return (
     <Button
       // className={`flex items-center justify-center w-full h-full group`}
+      disabled={disabled ? disabled : false}
       disableElevation
       type={type}
       sx={{

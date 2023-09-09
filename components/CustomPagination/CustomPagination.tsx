@@ -1,19 +1,28 @@
 import { Stack } from '@mui/material'
 import React, { useState } from 'react'
 import Pagination from '@mui/material/Pagination'
+import { PaginatorProps } from 'types'
 
-const CustomPagination = () => {
-  const [page, setPage] = useState(1)
+const CustomPagination = ({
+  count,
+  boundaryCount,
+  siblingCount,
+  page,
+  onChange,
+}: PaginatorProps) => {
 
+
+  
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value)
+    console.log('page value is ', value)
+    onChange(value)
   }
   return (
     <Stack spacing={2}>
       <Pagination
-        count={99}
-        boundaryCount={1}
-        siblingCount={1}
+        count={count}
+        boundaryCount={boundaryCount}
+        siblingCount={siblingCount}
         variant='outlined'
         shape='rounded'
         page={page}
