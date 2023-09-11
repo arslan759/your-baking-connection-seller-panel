@@ -1,11 +1,32 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { PrimaryBtn } from '../Buttons'
 import { Typography } from '@mui/material'
 import Navbar from '../NavBar/NavBar'
 import styles from './styles.module.css'
 import { SignupSuccessProps } from 'types'
+import useStores from 'hooks/useStores'
+import { useRouter } from 'next/navigation'
 
 const SignupSuccess = ({ setIsSuccess }: SignupSuccessProps) => {
+  //@ts-ignore
+  const { authStore } = useStores()
+  const { account } = authStore
+  const router = useRouter()
+  // const [shopId, setShopId] = useState<string>()
+  // const [loadingAccount, setLoadingAccount] = useState(true)
+
+  // useEffect(() => {
+  //   if (!account) return
+
+  //   setShopId(account?.adminUIShops[0]?._id)
+  //   setLoadingAccount(false)
+  // }, [account])
+
+  const handleNavigateToBakery = () => {
+    const shopId = localStorage.getItem('shopId')
+    router.replace(`/baker/${shopId}`)
+  }
+
   return (
     <div className='w-full h-[100vh] flex items-center justify-center'>
       <div className='w-[90vw] h-[fit-content] relative md:w-[760px] bg-[rgba(0,0,0,0.8999999761581421)] px-[30px] md:px-[112px] py-[49px] md:py-[122px] rounded-[6px] md:rounded-[15px] '>
@@ -61,7 +82,7 @@ const SignupSuccess = ({ setIsSuccess }: SignupSuccessProps) => {
           </div>
 
           <div className='w-80%'>
-            <PrimaryBtn text='Go To Bakery Profile' />
+            <PrimaryBtn text='Go To Bakery Profile' handleClick={handleNavigateToBakery} />
           </div>
         </div>
       </div>

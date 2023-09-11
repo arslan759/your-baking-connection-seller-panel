@@ -1,10 +1,12 @@
 mutation LoginUserMutation($user: LoginUserInput!) {
   loginUser(user: $user) {
+    shopId
     loginResult {
       tokens {
         refreshToken
         accessToken
       }
+
       sessionId
     }
   }

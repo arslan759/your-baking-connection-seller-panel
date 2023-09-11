@@ -1,5 +1,5 @@
 import { Chip, Radio, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import InputField from '../InputField/InputField'
 import DropdownField from '../DropdownField/DropdownField'
 import { cities, states, weOfferData } from 'Constants/constants'
@@ -7,17 +7,32 @@ import Image from 'next/image'
 import { PrimaryBtn } from '../Buttons'
 import UploadInputField from '../UploadInputField/UploadInputField'
 import MultiSelectDropdownField from '../MultiSelectDropdownField/MultiSelectDropdownField'
+import useCreateShop from 'hooks/shop/useCreateShop'
+import useUpdateShop from 'hooks/shop/useUpdateShop'
+import { withApollo } from 'lib/apollo/withApollo'
+import useStores from 'hooks/useStores'
+import { AddShopDetailsFormProps } from 'types'
+import useFileUpload from 'hooks/fileUpload/useFileUpload'
 
-const SignupForm = () => {
+const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
+  // auth store
+  //@ts-ignore
+  const { authStore } = useStores()
+  const { account } = authStore
+
   const [shopName, setShopName] = useState('')
   const [shopDescription, setShopDescription] = useState('')
   const [logo, setLogo] = useState<File | null>(null)
   const [featuredImage, setFeaturedImage] = useState<File | null>(null)
 
+  useEffect(() => {
+    console.log('logo is ', logo)
+  }, [logo])
+
   const [state, setState] = useState<string | null>('')
   const [city, setCity] = useState<string | null>('')
 
-  const [PickupService, setPickupService] = useState(true)
+  const [pickupService, setPickupService] = useState(true)
 
   const [whatWeOffer, setWhatWeOffer] = useState<any[]>([])
 
@@ -30,6 +45,15 @@ const SignupForm = () => {
   const [cityError, setCityError] = useState('')
   const [whatWeOfferError, setWhatWeOfferError] = useState('')
   const [pickupServiceError, setPickupServiceError] = useState('')
+
+  //phone number state for shop creation/updation
+  const [phone, setPhone] = useState<string>()
+
+  useEffect(() => {
+    setPhone(account?.phone)
+    setState(account?.state)
+    setCity(account?.city)
+  }, [account])
 
   // handleChange function for input fields
   const handleChange = (name: string, value: string) => {
@@ -71,8 +95,122 @@ const SignupForm = () => {
     setCityError(state ? '' : 'City is required')
   }
 
+  const [error, setError] = useState<string>()
+
+  const [createShop, loadingCreateShop] = useCreateShop()
+  const [updateShop, loadingUpdateShop] = useUpdateShop()
+
+  const handleUpdateShop = async (shopId: string) => {
+    const shopUpdated = await updateShop({
+      variables: {
+        input: {
+          shopId,
+          shopLogoUrls: {
+            primaryShopLogoUrl: logoImageUrl,
+          },
+          featuredShopImages: {
+            URLs: {
+              large: featuredImageUrl,
+              medium: featuredImageUrl,
+              original: featuredImageUrl,
+              small: featuredImageUrl,
+              thumbnail: featuredImageUrl,
+            },
+            priority: 1,
+          },
+          isPickup: pickupService,
+          categories: whatWeOffer?.map((item) => item.title),
+          addressBook: {
+            fullName: account?.firstName,
+            phone,
+            postal: '12345',
+            address1: 'sample address',
+            city,
+            region: state,
+            country: 'USA',
+            isCommercial: false,
+          },
+        },
+      },
+    })
+    console.log('updated shop is ', shopUpdated)
+    const shopId2 = shopUpdated?.data?.updateShop?.shop?._id
+    if (shopId2) {
+      localStorage.setItem('shopId', shopId2)
+      openSuccess()
+    }
+
+    try {
+    } catch (err: any) {
+      setError(err.message)
+    }
+  }
+
+  const handleCreateShop = async () => {
+    try {
+      const shop = await createShop({
+        variables: {
+          name: shopName,
+          description: shopDescription,
+        },
+      })
+      const shopId = shop?.data?.createShop?.shop?._id
+      if (shopId) {
+        handleUpdateShop(shopId)
+      }
+      console.log('shop created is ', shop)
+    } catch (err: any) {
+      setError(err.message)
+    }
+  }
+
+  const [uploadFile, loadingUploadFile] = useFileUpload()
+  const [logoImageUrl, setLogoImageUrl] = useState<string>()
+  const [featuredImageUrl, setFeaturedImageUrl] = useState<string>()
+
+  //handle logo image
+  async function handleUploadLogo(e: any) {
+    const logoImage = e.target.files[0]
+    if (logoImage.size > 1024 * 1024 * 1) {
+      setLogoError('Picture size should be less than 1MB')
+      return
+    }
+
+    if (logoImage.type !== 'image/jpeg' && logoImage.type !== 'image/png') {
+      setLogoError('Selected file must be an image')
+      return
+    }
+
+    //@ts-ignore
+    const uploadRes = await uploadFile(logoImage, '/profile-images')
+
+    if (uploadRes.result.status) {
+      setLogoImageUrl(uploadRes.result.data[0].url)
+    }
+  }
+
+  async function handleUploadFeatureImage(e: any) {
+    const featuredImage = e.target.files[0]
+    if (featuredImage.size > 1024 * 1024 * 1) {
+      setFeaturedImageError('Picture size should be less than 1MB')
+      return
+    }
+
+    if (featuredImage.type !== 'image/jpeg' && featuredImage.type !== 'image/png') {
+      setFeaturedImageError('Selected file must be an image')
+      return
+    }
+
+    //@ts-ignore
+    const uploadRes = await uploadFile(featuredImage, '/profile-images')
+
+    if (uploadRes.result.status) {
+      setFeaturedImageUrl(uploadRes.result.data[0].url)
+    }
+  }
+
   // handleSubmit function for form submission
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     // Checks if all fields are filled
@@ -90,6 +228,8 @@ const SignupForm = () => {
       return
     }
 
+    await handleCreateShop()
+
     // Logs the form data
     console.log('form submitted')
     console.log('shop name is ', shopName)
@@ -99,17 +239,17 @@ const SignupForm = () => {
     console.log('state is ', state)
     console.log('city is ', city)
     console.log('what we offer is ', whatWeOffer)
-    console.log('pickup service is ', PickupService)
+    console.log('pickup service is ', pickupService)
 
-    // Resets the form fields
-    setShopName('')
-    setShopDescription('')
-    setLogo(null)
-    setFeaturedImage(null)
-    setState('')
-    setCity('')
-    setWhatWeOffer([])
-    setPickupService(false)
+    // // Resets the form fields
+    // setShopName('')
+    // setShopDescription('')
+    // setLogo(null)
+    // setFeaturedImage(null)
+    // setState('')
+    // setCity('')
+    // setWhatWeOffer([])
+    // setPickupService(false)
 
     // Resets the error states
     setShopNameError('')
@@ -169,7 +309,7 @@ const SignupForm = () => {
               }}
             >
               {' '}
-              Add shop details
+              Add Bakery details
             </Typography>
           </div>
         </div>
@@ -252,23 +392,26 @@ const SignupForm = () => {
                   label='upload logo'
                   inputColor='white'
                   name='logo'
-                  value={shopName}
-                  errorText={shopNameError}
+                  value={logo}
+                  errorText={logoError}
                   required={false}
                   onChange={handleChange}
                 />
+
+                <input type='file' onChange={handleUploadLogo} />
               </div>
 
               <div className='w-full md:w-[45%]'>
                 <UploadInputField
                   label='featured image'
                   inputColor='white'
-                  name='shopName'
-                  value={shopName}
-                  errorText={shopNameError}
+                  name='featuredImage'
+                  value={featuredImage}
+                  errorText={featuredImageError}
                   required={false}
                   onChange={handleChange}
                 />
+                <input type='file' onChange={handleUploadFeatureImage} />
               </div>
 
               <div className='w-full md:w-[45%]'>
@@ -292,7 +435,7 @@ const SignupForm = () => {
                             color: '#7DDEC1',
                           },
                         }}
-                        checked={PickupService === true}
+                        checked={pickupService === true}
                         onChange={handlePickupServiceChange}
                         value={'yes'}
                         name='radio-buttons'
@@ -316,7 +459,7 @@ const SignupForm = () => {
                             color: '#7DDEC1',
                           },
                         }}
-                        checked={PickupService === false}
+                        checked={pickupService === false}
                         onChange={handlePickupServiceChange}
                         value={'no'}
                         name='radio-buttons'
@@ -403,8 +546,18 @@ const SignupForm = () => {
               </div>
             </div>
 
+            {loadingCreateShop || loadingUpdateShop ? (
+              <div className='mt-[10px]'>
+                <p style={{ color: 'white' }}>Loading...</p>
+              </div>
+            ) : null}
+
             <div className='mt-[24px] md:mt-[23px]'>
-              <PrimaryBtn text='Save and Continue' type='submit' />
+              <PrimaryBtn
+                text='Save and Continue'
+                type='submit'
+                disabled={loadingCreateShop || loadingUpdateShop}
+              />
             </div>
           </form>
         </div>
@@ -413,4 +566,4 @@ const SignupForm = () => {
   )
 }
 
-export default SignupForm
+export default withApollo()(AddShopDetailsForm)

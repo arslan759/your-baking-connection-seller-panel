@@ -1,6 +1,7 @@
 // @ts-ignore
 
 // Import Swiper React components
+import react, { useEffect } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore from 'swiper'
 import { Pagination } from 'swiper/modules'
@@ -12,8 +13,16 @@ import { GalleryShopImages } from 'Constants/constants'
 import { useState } from 'react'
 import { Typography } from '@mui/material'
 
-const BakerSwiper = () => {
+interface BakerSwiperProps {
+  featuredImages?: string[] | null | undefined
+}
+
+const BakerSwiper = ({ featuredImages }: BakerSwiperProps) => {
   const [selected, setSelected] = useState(1) // selected index for pagination
+
+  useEffect(() => {
+    console.log('featured images ', featuredImages)
+  }, [featuredImages])
 
   const handleSlideChange = (swiper: SwiperCore): void => {
     setSelected(swiper.realIndex + 1)
@@ -34,13 +43,13 @@ const BakerSwiper = () => {
         onSwiper={(swiper) => console.log(swiper)}
         className='gallery-swiper'
       >
-        {GalleryShopImages.map((background, index) => {
+        {featuredImages?.map((background: any, index: any) => {
           return (
             <SwiperSlide key={index}>
               <div
                 className='w-full h-[375px] md:h-[471px]'
                 style={{
-                  background: `url(${background.url}), lightgray 50% / cover no-repeat`,
+                  background: `url(${background?.URLs?.large}), lightgray 50% / cover no-repeat`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}
@@ -58,7 +67,7 @@ const BakerSwiper = () => {
                       textTransform: 'capitalize',
                     }}
                   >
-                    {selected} / {GalleryShopImages.length}
+                    {selected} / {[featuredImages]?.length}
                   </Typography>
                   <p className='text-center z-20 text-red-500'></p>
                 </div>

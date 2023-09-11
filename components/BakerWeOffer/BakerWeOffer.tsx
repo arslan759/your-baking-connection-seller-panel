@@ -1,9 +1,13 @@
 import { Typography } from '@mui/material'
 import { weOfferData } from 'Constants/constants'
-import React from 'react'
+import React, { useEffect } from 'react'
 import BakerWeOfferItem from '../BakerWeOfferItem/BakerWeOfferItem'
 
-const BakerWeOffer = () => {
+interface BakerWeOfferProps {
+  categories: string[] | null | undefined
+}
+
+const BakerWeOffer = ({ categories }: BakerWeOfferProps) => {
   return (
     <div className='w-full'>
       <Typography
@@ -29,9 +33,10 @@ const BakerWeOffer = () => {
 
       <div className='w-full flex justify-center'>
         <div className='w-[95%] lg:w-full flex flex-wrap justify-center lg:justify-start gap-[11px] mt-[24px] lg:[36px]'>
-          {weOfferData.map((item, index) => {
-            const { image, title } = item
-            return <BakerWeOfferItem key={title} image={image} title={title} />
+          {categories?.map((item, index) => {
+            const image = ''
+
+            return <BakerWeOfferItem key={index} image={image} title={item} />
           })}
         </div>
       </div>

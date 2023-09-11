@@ -1,0 +1,7 @@
+mutation createShop($name: String!, $description: String) {
+  createShop(input: { name: $name, description: $description }) {
+    shop {
+      _id
+    }
+  }
+}

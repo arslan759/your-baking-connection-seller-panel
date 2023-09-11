@@ -61,7 +61,7 @@ export interface UploadInputFieldProps {
   label?: string
   required: boolean
   placeholder?: string
-  value: string
+  value?: File | null
   onChange: (name: string, value: string) => void
 }
 
@@ -113,16 +113,27 @@ export interface ForgetPasswordFormProps {
 
 export interface SignUpFormProps {
   openOtp: () => void
+  setTokens: (accessToken: string, refreshToken: string) => void
+}
+
+export interface AddShopDetailsFormProps {
+  openSuccess: () => void
 }
 
 export interface SignUpFormProps {
   openOtp: () => void
 }
 
+interface Tokens {
+  accessToken: string
+  refreshToken: string
+}
 export interface OTPFormProps {
   closeOtp: () => void
   type: string
   email: string
+  tokens: Tokens
+  setStep: (step: number) => void
 }
 
 export interface SectionheadingProps {
@@ -170,6 +181,7 @@ export interface BakerNavigationProps {
 
 export interface BakerTabsPanelProps {
   activeTab: number
+  slug: string
 }
 
 export interface ProductCardProps {

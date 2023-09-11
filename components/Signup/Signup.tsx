@@ -13,6 +13,19 @@ export default function ForgetPassword() {
   const [step, setStep] = useState(1)
   const [isSuccess, setIsSuccess] = useState(false)
 
+  const [tokens, setTokens] = useState({
+    accessToken: '',
+    refreshToken: '',
+  })
+  const handleChangeTokens = (accessToken: string, refreshToken: string) => {
+    setTokens({ accessToken, refreshToken })
+  }
+  const handleChangeStep = (value: number) => {
+    setIsOtp(false)
+    console.log('step value is ', value)
+    setStep(value)
+  }
+
   const handleOtpOpen = () => {
     setIsOtp(true)
   }
@@ -22,18 +35,27 @@ export default function ForgetPassword() {
     console.log('close')
   }
 
+  const handleSuccessOpen = () => {
+    setIsSuccess(true)
+  }
+
   // page displays otp form
   if (isOtp) {
     return (
       <div className={`${styles.signup} pb-[180px] md:h-[1072px] md:bg-cover md:bg-center`}>
         <Navbar itemsColor='white' />
-        <button onClick={() => setStep(step + 1)}>step</button>
+        {/* <button onClick={() => setStep(step + 1)}>step</button>
         <button onClick={() => setStep(1)}>reset</button>
         <button onClick={() => setIsSuccess(!isSuccess)}>success</button>
-        <button onClick={() => setIsOtp(!isOtp)}>otp</button>
+        <button onClick={() => setIsOtp(!isOtp)}>otp</button> */}
 
         <div className='w-full justify-center mt-[50px] md:mt-[130px]'>
-          <OTPForm closeOtp={handleOtpClose} type={'registration'} />
+          <OTPForm
+            closeOtp={handleOtpClose}
+            type={'registration'}
+            tokens={tokens}
+            setStep={handleChangeStep}
+          />
         </div>
       </div>
     )
@@ -44,10 +66,10 @@ export default function ForgetPassword() {
     return (
       <div className={`${styles.signup} pb-[180px] md:h-[1072px] md:bg-cover md:bg-center`}>
         <Navbar itemsColor='white' />
-        <button onClick={() => setStep(step + 1)}>step</button>
+        {/* <button onClick={() => setStep(step + 1)}>step</button>
         <button onClick={() => setStep(1)}>reset</button>
         <button onClick={() => setIsSuccess(!isSuccess)}>success</button>
-        <button onClick={() => setIsOtp(!isOtp)}>otp</button>
+        <button onClick={() => setIsOtp(!isOtp)}>otp</button> */}
 
         <div className='w-full justify-center'>
           <SignupSuccess setIsSuccess={setIsSuccess} />
@@ -61,12 +83,12 @@ export default function ForgetPassword() {
     return (
       <div className={`${styles.signup} pb-[180px] md:h-[1072px] md:bg-cover md:bg-center`}>
         <Navbar itemsColor='white' />
-        <button onClick={() => setStep(step + 1)}>step</button>
+        {/* <button onClick={() => setStep(step + 1)}>step</button>
         <button onClick={() => setStep(1)}>reset</button>
         <button onClick={() => setIsSuccess(!isSuccess)}>success</button>
-        <button onClick={() => setIsOtp(!isOtp)}>otp</button>
+        <button onClick={() => setIsOtp(!isOtp)}>otp</button> */}
 
-        <SignupForm openOtp={handleOtpOpen} />
+        <SignupForm openOtp={handleOtpOpen} setTokens={handleChangeTokens} />
       </div>
     )
   } else if (step === 2) {
@@ -74,12 +96,12 @@ export default function ForgetPassword() {
     return (
       <div className={`${styles.signup} pb-[180px] md:h-[1072px] md:bg-cover md:bg-center`}>
         <Navbar itemsColor='white' />
-        <button onClick={() => setStep(step + 1)}>step</button>
+        {/* <button onClick={() => setStep(step + 1)}>step</button>
         <button onClick={() => setStep(1)}>reset</button>
         <button onClick={() => setIsSuccess(!isSuccess)}>success</button>
-        <button onClick={() => setIsOtp(!isOtp)}>otp</button>
+        <button onClick={() => setIsOtp(!isOtp)}>otp</button> */}
 
-        <AddShopDetailsForm />
+        <AddShopDetailsForm openSuccess={handleSuccessOpen} />
       </div>
     )
   }
@@ -88,10 +110,10 @@ export default function ForgetPassword() {
     return (
       <div className={`${styles.signup} pb-[180px] md:h-[1072px] md:bg-cover md:bg-center`}>
         <Navbar itemsColor='white' />
-        <button onClick={() => setStep(step + 1)}>step</button>
+        {/* <button onClick={() => setStep(step + 1)}>step</button>
         <button onClick={() => setStep(1)}>reset</button>
         <button onClick={() => setIsSuccess(!isSuccess)}>success</button>
-        <button onClick={() => setIsOtp(!isOtp)}>otp</button>
+        <button onClick={() => setIsOtp(!isOtp)}>otp</button> */}
 
         <SignupForm openOtp={handleOtpOpen} />
       </div>

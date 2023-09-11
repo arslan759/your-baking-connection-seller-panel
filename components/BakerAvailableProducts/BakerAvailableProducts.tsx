@@ -22,8 +22,10 @@ const BakerAvailableProducts = () => {
     setCurrentPage(pageNum)
   }
 
+  const shopId = localStorage.getItem('shopId')
+
   const [catalogItems, loadingItems, refetchItems, totalCount] = useCatalogItems({
-    shopIds: ['cmVhY3Rpb24vc2hvcDpkU3VYTGIzRHg3TXNvV29nSg=='],
+    shopIds: [shopId],
     first: itemsPerPage,
     offset,
     sortBy: 'updatedAt',

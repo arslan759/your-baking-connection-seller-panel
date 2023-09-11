@@ -19,9 +19,9 @@ const withAuth = (WrappedComponent) => {
       }
 
       // Consolidated condition to handle redirects
-      if (viewer?._id && (pathName === '/signin' || pathName === '/signup')) {
-        router.replace('/')
-      }
+      // if (viewer?._id && (pathName === '/signin' || pathName === '/signup')) {
+      //   router.replace('/')
+      // }
     }, [loading, viewer?._id, pathName])
 
     if (loading) {

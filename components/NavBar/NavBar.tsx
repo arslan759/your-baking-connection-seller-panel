@@ -12,7 +12,7 @@ import { withApollo } from 'lib/apollo/withApollo'
 
 const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarProps) => {
   const [viewer, loading, refetch] = useViewer()
-
+  const shopId = localStorage.getItem('shopId')
   console.log('viewer is ', viewer)
 
   const [open, SetOpen] = useState(false)
@@ -36,7 +36,7 @@ const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarPro
     { name: 'ABOUT BAKERS', path: '/about-bakers' },
     { name: 'MEMBERSHIP', path: '/membership' },
     { name: 'GALLERY', path: '/gallery' },
-    { name: 'SEARCH', path: '/search' },
+    { name: 'MY PROFILE', path: `/baker/${shopId}` },
   ]
 
   const handleLogOut = () => {

@@ -1,0 +1,17 @@
+query bakers {
+  bakers {
+    nodes {
+      _id
+      name
+      slug
+      description
+      shopLogoUrls {
+        primaryShopLogoUrl
+      }
+      addressBook {
+        city
+        region
+      }
+    }
+  }
+}

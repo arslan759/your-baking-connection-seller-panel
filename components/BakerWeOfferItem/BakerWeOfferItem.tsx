@@ -4,9 +4,13 @@ import styles from './styles.module.css'
 import { Typography } from '@mui/material'
 
 const BakerWeOfferItem = ({ image, title }: BakerWeOfferItemProps) => {
+  
+
   return (
     <div className={styles.item}>
-      <img src={image} alt={title} className='w-[36px] md:w-[48px] h-[36px] md:h-[48px]' />
+      {image && (
+        <img src={image} alt={title} className='w-[36px] md:w-[48px] h-[36px] md:h-[48px]' />
+      )}
       <Typography
         sx={{
           textAlign: 'center',

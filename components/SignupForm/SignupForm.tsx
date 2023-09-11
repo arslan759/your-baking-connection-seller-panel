@@ -13,9 +13,9 @@ import { useRouter } from 'next/navigation'
 import { SignUpFormProps } from 'types'
 import withAuth from 'hocs/withAuth'
 
-import hashPassword from "../../lib/utils/hashPassword";
+import hashPassword from '../../lib/utils/hashPassword'
 
-const SignupForm = ({ openOtp }: SignUpFormProps) => {
+const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
   //sign up mutation hook
   const [signUp, loadingSignUp] = useCreateUserWithOtp()
 
@@ -207,15 +207,27 @@ const SignupForm = ({ openOtp }: SignUpFormProps) => {
       const userRand = Date.now()
       const result = await signUp({
         variables: {
-          user: { username: `u${userRand.toString()}`, email, password : hashPassword(password), type: 'email' },
-          profile: { firstName, lastName, state, city },
+          user: {
+            username: `u${userRand.toString()}`,
+            email,
+            password: hashPassword(password),
+            type: 'email',
+          },
+          profile: { firstName, lastName, state, city, phone },
         },
       })
-      let userId = result?.data?.createUserWithOtp?.userId
-      if (userId) {
+
+      let userId = result?.data?.bakerRegistration?.userId
+      const accessToken = result?.data?.bakerRegistration?.loginResult?.tokens?.accessToken
+      const refreshToken = result?.data?.bakerRegistration?.loginResult?.tokens?.refreshToken
+
+      console.log('access token and refresh token in signup', accessToken, refreshToken)
+
+      if (userId && accessToken) {
         localStorage.setItem('userId', userId)
 
         openOtp()
+        setTokens(accessToken, refreshToken)
       }
     } catch (err) {
       console.log(err)
@@ -428,6 +440,11 @@ const SignupForm = ({ openOtp }: SignUpFormProps) => {
               </FormControl>
             </div>
 
+            {loadingSignUp && (
+              <div className='mt-[10px]'>
+                <p style={{ color: 'white' }}>Loading...</p>
+              </div>
+            )}
             <div className='mt-[24px] md:mt-[23px]'>
               <PrimaryBtn text='Register' type='submit' />
             </div>

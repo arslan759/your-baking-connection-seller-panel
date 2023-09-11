@@ -7,7 +7,7 @@ import useStores from 'hooks/useStores'
 import useCatalogItems from 'hooks/Products/useCatalogItems'
 import { withApollo } from 'lib/apollo/withApollo'
 
-const BakerTabsPanel = ({ activeTab }: BakerTabsPanelProps) => {
+const BakerTabsPanel = ({ activeTab, slug }: BakerTabsPanelProps) => {
   // const [products, setProducts] = useState(0)
 
   //@ts-ignore
@@ -18,13 +18,14 @@ const BakerTabsPanel = ({ activeTab }: BakerTabsPanelProps) => {
   console.log('total Available Products', totalAvailableProducts)
 
   const [, , , totalCount] = useCatalogItems({
-    shopIds: ['cmVhY3Rpb24vc2hvcDpkU3VYTGIzRHg3TXNvV29nSg=='],
+    shopIds: [slug],
   })
+  console.log('total count is ', totalCount)
 
   return (
     <div>
       {activeTab == 0 &&
-        (totalCount === 0 ? <BakerNoAvailableProducts /> : <BakerAvailableProducts />)}
+        (totalCount !== 0 ? <BakerAvailableProducts /> : <BakerNoAvailableProducts />)}
       {activeTab == 1 && <div>Gallery of work</div>}
       {activeTab == 2 && <div>terms and conditions</div>}
       {activeTab == 3 && <div>allergen info</div>}

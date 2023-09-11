@@ -10,7 +10,7 @@ import { withApollo } from 'lib/apollo/withApollo'
 import { useRouter } from 'next/navigation'
 import useForgotPasswordUser from '../../hooks/Authentication/ForgotPassword/useForgotPasswordUser'
 
-const OTPForm = ({ closeOtp, type, email }: OTPFormProps) => {
+const OTPForm = ({ closeOtp, type, email, tokens, setStep }: OTPFormProps) => {
   const [otp, setOtp] = useState('')
 
   const [verifyOtp, loadingVerifyOtp] = useOtpUser()
@@ -23,6 +23,8 @@ const OTPForm = ({ closeOtp, type, email }: OTPFormProps) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     const userId = localStorage.getItem('userId')
     e.preventDefault()
+
+    console.log('testtesttest')
 
     // Checks if email is empty or Less than 4 characters
     if (!otp || otp.length !== 4) {
@@ -42,7 +44,13 @@ const OTPForm = ({ closeOtp, type, email }: OTPFormProps) => {
           },
         })
         if (res?.data?.verifyOTPSignUp) {
-          router.replace('/signin')
+          const { accessToken, refreshToken } = tokens
+          console.log('true step')
+          setStep(2)
+          localStorage.setItem('accounts:accessToken', accessToken)
+          localStorage.setItem('accounts:refreshToken', refreshToken)
+
+          // router.replace('/signin')
         }
       } catch (err) {
         return err
@@ -164,6 +172,11 @@ const OTPForm = ({ closeOtp, type, email }: OTPFormProps) => {
               />
             </div>
 
+            {loadingVerifyOtp && (
+              <div className={'mt-[10px]'}>
+                <p style={{ color: 'white' }}>Loading...</p>
+              </div>
+            )}
             <div className='mt-[36px] md:mt-[40px]'>
               <PrimaryBtn text='Enter verification code' type='submit' />
             </div>

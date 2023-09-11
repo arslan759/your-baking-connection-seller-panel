@@ -13,8 +13,8 @@ import withAuth from '../../hocs/withAuth'
 import useViewer from 'hooks/viewer/useViewer'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 
+import hashPassword from '../../lib/utils/hashPassword'
 
-import hashPassword from "../../lib/utils/hashPassword";
 
 const SigninForm = () => {
   //login mutation
@@ -94,10 +94,13 @@ const SigninForm = () => {
       })
       const accessToken = res?.data?.loginUser?.loginResult?.tokens?.accessToken
       const refreshToken = res?.data?.loginUser?.loginResult?.tokens?.refreshToken
+      const shopId = res?.data?.loginUser?.shopId
 
       if (accessToken) {
         localStorage.setItem('accounts:accessToken', accessToken)
         localStorage.setItem('accounts:refreshToken', refreshToken)
+        localStorage.setItem('shopId', shopId)
+        router.replace(`/baker/${shopId}`)
       }
     } catch (err: any) {
       console.log(err)

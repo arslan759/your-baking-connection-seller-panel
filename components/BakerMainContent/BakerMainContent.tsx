@@ -3,9 +3,15 @@ import React from 'react'
 import EditBakerModal from '../EditBakerModal/EditBakerModal'
 import AddBakerProductModal from '../AddBakerProductModal/AddBakerProductModal'
 
-const BakerMainContent = () => {
+interface BakerMainContent {
+  bakerName?: string | undefined
+  description?: string | undefined
+  slug: string
+}
+
+const BakerMainContent = ({ bakerName, description, slug }: BakerMainContent) => {
   return (
-    <div className='mt-[24px] lg:mt-[100px] pb-[12px] lg:pb-[0px] bg-[#fff]'>
+    <div className='mt-[48px] lg:mt-[100px] pb-[12px] lg:pb-[0px] bg-[#fff]'>
       <div className='w-full flex'>
         <div className='w-[90%]  flex max-[276px]:flex-col flex-row md:flex-col gap-y-[20px]'>
           <div className='flex flex-col lg:flex-row gap-[12px] lg:gap-[24px]'>
@@ -30,7 +36,9 @@ const BakerMainContent = () => {
                   color: '#7DDEC1',
                 },
               }}
-            >{`Pie's Or Diewqqq`}</Typography>
+            >
+              {bakerName}
+            </Typography>
           </div>
           <div className='flex items-end lg:items-center gap-[4px] max-[300px]:ml-[10px] ml-[27px] md:ml-0'>
             <img src='/Images/star.svg' alt='start' className='h-[24px] w-[24px]' />
@@ -52,7 +60,7 @@ const BakerMainContent = () => {
       </div>
 
       <div className='mt-[12px] w-full'>
-        <AddBakerProductModal />
+        <AddBakerProductModal slug={slug} />
       </div>
 
       <div className='hidden lg:block mt-[24px] bg-[#6C6C6C] h-[0.5px] w-full' />
@@ -70,7 +78,9 @@ const BakerMainContent = () => {
               fontSize: '12px',
             },
           }}
-        >{`There are many variations of passages of Lorem Ipsum available.`}</Typography>
+        >
+          {bakerName}
+        </Typography>
       </div>
 
       <div className='block lg:hidden mt-[12px] bg-[#6C6C6C] h-[0.5px] w-full' />
@@ -88,7 +98,9 @@ const BakerMainContent = () => {
               fontSize: '12px',
             },
           }}
-        >{`There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures.`}</Typography>
+        >
+          {description}
+        </Typography>
       </div>
 
       <div className='hidden lg:block mt-[12px] bg-[#6C6C6C] h-[0.5px] w-full' />
