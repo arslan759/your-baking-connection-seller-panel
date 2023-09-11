@@ -98,7 +98,7 @@ const OrderManagementTable = () => {
       </TableContainer>
 
       <div className='mt-[32px] md:mt-[56px] flex justify-center'>
-        <CustomPagination />
+      <CustomPagination onChange={() => console.log('test')} />
       </div>
     </>
   )

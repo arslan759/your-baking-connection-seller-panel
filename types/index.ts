@@ -241,9 +241,9 @@ export interface AddBakerProductImagesProps {
 }
 
 export interface PaginatorProps {
-  count: number
-  boundaryCount: number
-  siblingCount: number
-  page: number
+  count?: number
+  boundaryCount?: number
+  siblingCount?: number
+  page?: number
   onChange: (value: number) => void
 }
