@@ -1,0 +1,21 @@
+mutation updateShop($input: UpdateShopInput!) {
+  updateShop(input: $input) {
+    shop {
+      _id
+      description
+      categories
+      addressBook {
+        address1
+        city
+        region
+      }
+      featuredShopImages {
+        URLs {
+          large
+          medium
+          original
+        }
+      }
+    }
+  }
+}

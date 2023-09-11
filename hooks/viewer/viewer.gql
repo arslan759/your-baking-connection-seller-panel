@@ -1,8 +1,12 @@
 query viewer {
   viewer {
     _id
-  
-
+    phone
+    state
+    city
+    adminUIShops {
+      _id
+    }
     addressBook {
       edges {
         node {
@@ -30,6 +34,5 @@ query viewer {
     name
     picture
     primaryEmailAddress
-  
   }
 }

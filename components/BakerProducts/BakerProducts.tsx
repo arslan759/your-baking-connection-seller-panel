@@ -4,7 +4,11 @@ import BakerForm from '../BakerForm/BakerForm'
 import BakerNavigation from '../BakerNavigation/BakerNavigation'
 import BakerTabsPanel from '../BakerTabsPanel/BakerTabsPanel'
 
-const BakerProducts = () => {
+interface BakerProductsProps {
+  slug: string
+}
+
+const BakerProducts = ({ slug }: BakerProductsProps) => {
   const [activeTab, setActiveTab] = useState(0)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -44,7 +48,7 @@ const BakerProducts = () => {
       </div>
 
       <div className='w-full mt-[24px] md:mt-[50px]'>
-        <BakerTabsPanel activeTab={activeTab} />
+        <BakerTabsPanel activeTab={activeTab} slug={slug} />
       </div>
 
       {/* <div className='w-[90vw] mt-[48px] md:mt-[100px]'>

@@ -117,7 +117,7 @@ const BakerNavigation = ({ activeTab, handleChange }: BakerNavigationProps) => {
                     justifyContent: 'center',
                   }}
                 >
-                  0
+                  
                 </span>
               </Typography>
             ) : (

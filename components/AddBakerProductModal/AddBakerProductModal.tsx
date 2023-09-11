@@ -12,10 +12,18 @@ import useUpdatePublishProduct from 'hooks/product/usePublishProduct'
 
 import { withApollo } from 'lib/apollo/withApollo'
 import { ProductMediaInterface } from 'types'
+import { useRouter } from 'next/navigation'
+import useCatalogItems from 'hooks/Products/useCatalogItems'
 
-const AddBakerProductModal = () => {
+interface AddBakerProductModalProps {
+  slug: string
+}
+
+const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
   const [isAdded, setIsAdded] = useState(false)
+  const [, , refetchCatalogItems, _] = useCatalogItems()
 
+  const router = useRouter()
   // input states
   const [productTitle, setProductTitle] = useState('')
   const [productDescription, setProductDescription] = useState('')
@@ -75,7 +83,7 @@ const AddBakerProductModal = () => {
   const createProduct = async () => {
     try {
       let variables = {
-        shopId: 'cmVhY3Rpb24vc2hvcDpkU3VYTGIzRHg3TXNvV29nSg==',
+        shopId: slug,
         product: {
           title: productTitle,
           description: productDescription,
@@ -108,7 +116,7 @@ const AddBakerProductModal = () => {
   const updateProductVariant = async (productId: string, variantId: string) => {
     try {
       let variables = {
-        shopId: 'cmVhY3Rpb24vc2hvcDpkU3VYTGIzRHg3TXNvV29nSg==',
+        shopId: slug,
         variantId,
         variant: {
           isVisible: true,
@@ -136,7 +144,7 @@ const AddBakerProductModal = () => {
   const updateSimpleInventory = async (productId: string, variantId: string) => {
     try {
       let variables = {
-        shopId: 'cmVhY3Rpb24vc2hvcDpkU3VYTGIzRHg3TXNvV29nSg==',
+        shopId: slug,
         inventoryInStock: productQuantity,
         productConfiguration: {
           productId,
@@ -168,6 +176,7 @@ const AddBakerProductModal = () => {
       })
       if (publish.data.publishProductsToCatalog[0]._id) {
         console.log('coming to this condition')
+        window.location.reload()
         handleAddProduct()
       }
       console.log('publish product success', publish)

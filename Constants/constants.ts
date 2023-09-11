@@ -263,42 +263,52 @@ export const profileNavigation = [
   },
 ]
 
+// export const weOfferData = [
+//   {
+//     id: 1,
+//     title: 'cake',
+//     image: '/Images/we-offer-1.svg',
+//   },
+//   {
+//     id: 2,
+//     title: 'bread',
+//     image: '/Images/we-offer-2.svg',
+//   },
+//   {
+//     id: 3,
+//     title: 'decorated cookies',
+//     image: '/Images/we-offer-3.svg',
+//   },
+//   {
+//     id: 4,
+//     title: 'decorated cakes',
+//     image: '/Images/we-offer-4.svg',
+//   },
+//   {
+//     id: 5,
+//     title: 'decorated cupcakes',
+//     image: '/Images/we-offer-4.svg',
+//   },
+//   {
+//     id: 6,
+//     title: 'chocolate',
+//     image: '/Images/we-offer-4.svg',
+//   },
+//   {
+//     id: 7,
+//     title: 'sandwich',
+//     image: '/Images/we-offer-4.svg',
+//   },
+// ]
+
 export const weOfferData = [
-  {
-    id: 1,
-    title: 'cake',
-    image: '/Images/we-offer-1.svg',
-  },
-  {
-    id: 2,
-    title: 'bread',
-    image: '/Images/we-offer-2.svg',
-  },
-  {
-    id: 3,
-    title: 'decorated cookies',
-    image: '/Images/we-offer-3.svg',
-  },
-  {
-    id: 4,
-    title: 'decorated cakes',
-    image: '/Images/we-offer-4.svg',
-  },
-  {
-    id: 5,
-    title: 'decorated cupcakes',
-    image: '/Images/we-offer-4.svg',
-  },
-  {
-    id: 6,
-    title: 'chocolate',
-    image: '/Images/we-offer-4.svg',
-  },
-  {
-    id: 7,
-    title: 'sandwich',
-    image: '/Images/we-offer-4.svg',
-  },
+  'cake',
+  'bread',
+  'decorated cookies',
+  'decorated cakes',
+  'decorated cupcakes',
+  'chocolate',
+  'sandwich',
 ]
 
 export const ProductsCatagory = [

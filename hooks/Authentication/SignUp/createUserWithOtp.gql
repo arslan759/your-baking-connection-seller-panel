@@ -1,5 +1,11 @@
-mutation createUserWithOtp($user: CreateUserInput! $profile: UserProfileInput!) {
-  createUserWithOtp(user: $user profile:$profile) {
+mutation createUserWithOtp($user: CreateUserInput!, $profile: UserProfileInput!) {
+  bakerRegistration(user: $user, profile: $profile) {
     userId
+    loginResult {
+      tokens {
+        refreshToken
+        accessToken
+      }
+    }
   }
 }

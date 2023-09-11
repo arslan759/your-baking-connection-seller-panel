@@ -1,5 +1,5 @@
 import { Chip, Modal, Radio, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PrimaryBtn } from '../Buttons'
 import InputField from '../InputField/InputField'
 import UploadInputField from '../UploadInputField/UploadInputField'
@@ -8,9 +8,16 @@ import { cities, states, weOfferData } from 'Constants/constants'
 import MultiSelectDropdownField from '../MultiSelectDropdownField/MultiSelectDropdownField'
 import CancelBtn from '../Buttons/CancelBtn'
 
+import useBaker from 'hooks/baker/useBaker'
+import useFileUpload from 'hooks/fileUpload/useFileUpload'
+import useUpdateShop from 'hooks/shop/useUpdateShop'
+
 const EditBakerModal = () => {
   // Edit Button Modal State
   const [isEdited, setIsEdited] = useState(false)
+
+  const shopId = localStorage.getItem('shopId')
+  const [baker, loadingBaker] = useBaker(shopId)
 
   // handleEdit function for edit button
   const handleEditShop = () => {
@@ -21,7 +28,10 @@ const EditBakerModal = () => {
   const [shopName, setShopName] = useState('')
   const [shopDescription, setShopDescription] = useState('')
   const [logo, setLogo] = useState<File | null>(null)
+  const [logoUrl, setLogoUrl] = useState<string>()
+
   const [featuredImage, setFeaturedImage] = useState<File | null>(null)
+  const [featuredImageUrl, setFeaturedImageUrl] = useState<string>()
 
   const [state, setState] = useState<string | null>('')
   const [city, setCity] = useState<string | null>('')
@@ -29,6 +39,19 @@ const EditBakerModal = () => {
   const [PickupService, setPickupService] = useState(true)
 
   const [whatWeOffer, setWhatWeOffer] = useState<any[]>([])
+
+  useEffect(() => {
+    if (loadingBaker) return
+
+    setShopName(baker?.name)
+    setShopDescription(baker?.description)
+    setLogoUrl(baker?.shopLogoUrls?.primaryShopLogoUrl)
+    setCity(baker?.addressBook[0]?.city)
+    setState(baker?.addressBook[0]?.region)
+    setWhatWeOffer(baker?.categories)
+    setLogoUrl(baker?.shopLogoUrls?.primaryShopLogoUrl)
+    setFeaturedImageUrl(baker?.featuredShopImages[0]?.URLs?.thumbnail)
+  }, [baker])
 
   // Error states
   const [shopNameError, setShopNameError] = useState('')
@@ -39,6 +62,8 @@ const EditBakerModal = () => {
   const [cityError, setCityError] = useState('')
   const [whatWeOfferError, setWhatWeOfferError] = useState('')
   const [pickupServiceError, setPickupServiceError] = useState('')
+
+  const [error, setError] = useState('')
 
   // handleChange function for input fields
   const handleChange = (name: string, value: string) => {
@@ -56,7 +81,9 @@ const EditBakerModal = () => {
   const chipLabel = (title: string, image: string) => {
     return (
       <div className='flex flex-col items-center'>
-        <img src={image} alt={title} className='w-[24px] md:w-[32px] h-[24px] md:h-[32px]' />
+        {image && (
+          <img src={image} alt={title} className='w-[24px] md:w-[32px] h-[24px] md:h-[32px]' />
+        )}
         <Typography
           sx={{
             textAlign: 'center',
@@ -107,8 +134,108 @@ const EditBakerModal = () => {
     setCityError(state ? '' : 'City is required')
   }
 
+  const [updateShop, loadingUpdateShop] = useUpdateShop()
+
+  const [uploadFile, loadingUploadFile] = useFileUpload()
+
+  //handle logo image
+  async function handleUploadLogo(e: any) {
+    console.log('handle upload logo', e)
+
+    const logoImage = e.target.files[0]
+    if (logoImage.size > 1024 * 1024 * 1) {
+      setLogoError('Picture size should be less than 1MB')
+      return
+    }
+
+    if (logoImage.type !== 'image/jpeg' && logoImage.type !== 'image/png') {
+      setLogoError('Selected file must be an image')
+      return
+    }
+
+    //@ts-ignore
+    const uploadRes = await uploadFile(logoImage, '/profile-images')
+
+    if (uploadRes.result.status) {
+      setLogoUrl(uploadRes.result.data[0].url)
+    }
+  }
+
+  //handle featured image
+  async function handleUploadFeatureImage(e: any) {
+    const featuredImage = e.target.files[0]
+    if (featuredImage.size > 1024 * 1024 * 1) {
+      setFeaturedImageError('Picture size should be less than 1MB')
+      return
+    }
+
+    if (featuredImage.type !== 'image/jpeg' && featuredImage.type !== 'image/png') {
+      setFeaturedImageError('Selected file must be an image')
+      return
+    }
+
+    //@ts-ignore
+    const uploadRes = await uploadFile(featuredImage, '/profile-images')
+
+    if (uploadRes.result.status) {
+      setFeaturedImageUrl(uploadRes.result.data[0].url)
+    }
+  }
+
   // handleSubmit function for form submission
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const handleUpdateShop = async () => {
+    const shopId = localStorage.getItem('shopId')
+
+    const shopUpdated = await updateShop({
+      variables: {
+        input: {
+          name: shopName,
+          description: shopDescription,
+          shopId,
+          shopLogoUrls: {
+            primaryShopLogoUrl: logoUrl,
+          },
+          featuredShopImages: {
+            URLs: {
+              large: featuredImageUrl,
+              medium: featuredImageUrl,
+              original: featuredImageUrl,
+              small: featuredImageUrl,
+              thumbnail: featuredImageUrl,
+            },
+            priority: 1,
+          },
+          isPickup: PickupService,
+          categories: whatWeOffer,
+          addressBook: {
+            fullName: 'test name',
+            phone: '+1200120123',
+            address1: 'test1',
+            region: state,
+            city: city,
+            country: 'USA',
+            isCommercial: false,
+            postal: '12345',
+          },
+        },
+      },
+    })
+    console.log('updated shop is ', shopUpdated)
+    const shopId2 = shopUpdated?.data?.updateShop?.shop?._id
+    if (shopId2) {
+      // localStorage.setItem('shopId', shopId2)
+      // openSuccess()
+      handleEditShop()
+    }
+
+    try {
+    } catch (err: any) {
+      setError(err.message)
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     // Logs the form data
@@ -122,15 +249,21 @@ const EditBakerModal = () => {
     console.log('what we offer is ', whatWeOffer)
     console.log('pickup service is ', PickupService)
 
+    try {
+      await handleUpdateShop()
+    } catch (err) {
+      console.log('err')
+    }
+
     // Resets the form fields
-    setShopName('')
-    setShopDescription('')
-    setLogo(null)
-    setFeaturedImage(null)
-    setState('')
-    setCity('')
-    setWhatWeOffer([])
-    setPickupService(false)
+    // setShopName('')
+    // setShopDescription('')
+    // setLogo(null)
+    // setFeaturedImage(null)
+    // setState('')
+    // setCity('')
+    // setWhatWeOffer([])
+    // setPickupService(false)
 
     // Resets the error states
     setShopNameError('')
@@ -259,24 +392,34 @@ const EditBakerModal = () => {
                     label='upload logo'
                     inputColor='#212529'
                     name='logo'
-                    value={shopName}
+                    // value={shopName}
                     errorText={shopNameError}
                     required={false}
                     onChange={handleChange}
                   />
                 </div>
+                <div>
+                  <img style={{ height: '80px', borderRadius: '10px' }} src={logoUrl} />
+                </div>
+
+                <input type='file' onChange={(e) => handleUploadLogo(e)} />
 
                 <div className='w-full'>
                   <UploadInputField
                     label='featured image'
                     inputColor='#212529'
                     name='shopName'
-                    value={shopName}
+                    // value={shopName}
                     errorText={shopNameError}
                     required={false}
                     onChange={handleChange}
                   />
                 </div>
+                <div>
+                  <img style={{ height: '80px', borderRadius: '10px' }} src={featuredImageUrl} />
+                </div>
+
+                <input type='file' onChange={(e) => handleUploadFeatureImage(e)} />
 
                 <div className='w-full'>
                   <div className='flex flex-col capitalize'>
@@ -357,20 +500,20 @@ const EditBakerModal = () => {
                   <MultiSelectDropdownField
                     label='what we offer'
                     name='whatWeOffer'
-                    value={whatWeOffer}
+                    value={['cake', 'muffins']}
                     errorText={whatWeOfferError}
                     required={false}
-                    options={weOfferData}
+                    options={['cake', 'muffins']}
                     inputColor='#212529'
                     setValue={setWhatWeOffer}
                   />
 
-                  {whatWeOffer.length > 0 && (
+                  {whatWeOffer?.length > 0 && (
                     <div className='flex flex-wrap gap-x-[24px] gap-y-[10px] mt-[15px]'>
-                      {whatWeOffer.map((chip: any, index) => (
+                      {whatWeOffer?.map((chip: any, index) => (
                         <Chip
                           key={index}
-                          label={chipLabel(chip.title, chip.image)}
+                          label={chipLabel(chip, '')}
                           deleteIcon={
                             // <div className='h-full flex items-center'>
                             <img
@@ -424,8 +567,13 @@ const EditBakerModal = () => {
                 </div>
               </div>
 
+              {loadingUpdateShop && (
+                <div className='mt-[12px]'>
+                  <p>Loading...</p>
+                </div>
+              )}
               <div className='mt-[24px] md:mt-[23px]'>
-                <PrimaryBtn text='Save and Continue' type='submit' />
+                <PrimaryBtn text='Save and Continue' type='submit' disabled={loadingUpdateShop} />
               </div>
 
               <div className='mt-[24px] md:mt-[23px]'>
