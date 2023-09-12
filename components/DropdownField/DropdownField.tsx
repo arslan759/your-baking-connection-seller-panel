@@ -125,7 +125,7 @@ const DropdownField = ({
             </MenuItem>
           ) : null}
 
-          {options.map((option, index) => (
+          {options?.map((option, index) => (
             <MenuItem key={index} value={option}>
               {option}
             </MenuItem>
