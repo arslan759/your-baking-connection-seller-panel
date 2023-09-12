@@ -2,18 +2,16 @@ import { Button, FormControl, FormHelperText, Typography } from '@mui/material'
 import { withApollo } from 'lib/apollo/withApollo'
 import Checkbox from '@mui/material/Checkbox'
 import Image from 'next/image'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import InputField from '../InputField/InputField'
 import { PrimaryBtn } from '../Buttons'
 import { checkPassword, validateEmail } from 'helpers/validations'
 import DropdownField from '../DropdownField/DropdownField'
-import { cities, states } from 'Constants/constants'
 import useCreateUserWithOtp from '../../hooks/Authentication/SignUp/useCreateUserOtp'
 import { useRouter } from 'next/navigation'
 import { SignUpFormProps } from 'types'
 import withAuth from 'hocs/withAuth'
 import { getCitiesApi, getStatesApi } from 'helpers/apis'
-
 import hashPassword from '../../lib/utils/hashPassword'
 
 const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
@@ -26,7 +24,9 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [states, setStates] = useState<any>([])
   const [state, setState] = useState<string | null>('')
+  const [cities, setCities] = useState<any>([])
   const [city, setCity] = useState<string | null>('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -247,6 +247,16 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
       console.log(err)
     }
   }
+
+  useEffect(() => {
+    getStatesApi(setStates)
+  }, [])
+
+  useEffect(() => {
+    setCities([])
+    setCity('')
+    getCitiesApi(state, setCities)
+  }, [state])
 
   return (
     <div className='flex justify-center md:justify-end md:mr-[50px] mt-[-10px] md:mt-[30px] pb-[10px]'>
