@@ -247,3 +247,7 @@ export interface PaginatorProps {
   page?: number
   onChange: (value: number) => void
 }
+
+export interface AccountDropdownProps {
+  account: any
+}

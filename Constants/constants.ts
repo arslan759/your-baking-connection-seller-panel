@@ -727,3 +727,60 @@ export const paymentMethods = [
     img: '/Images/stripe-icon.svg',
   },
 ]
+
+export const fullfillmentsData = [
+  {
+    id: 1,
+    img: '/Images/fullfillment-storefront.svg',
+    title: 'virtual storefront',
+    description: 'Your custom online bakery case will feature your beautiful creations',
+  },
+  {
+    id: 2,
+    img: '/Images/fullfillment-gallery.svg',
+    title: 'Photo Gallery',
+    description: 'Showcase your work in your personal gallery',
+  },
+  {
+    id: 3,
+    img: '/Images/fullfillment-listing.svg',
+    title: 'Product Listing',
+    description: 'Feature your amazing products in your custom shop',
+  },
+  {
+    id: 4,
+    img: '/Images/fullfillment-payments.svg',
+    title: 'Payment',
+    description: 'Promptly receive online payments via Stripe',
+  },
+  {
+    id: 5,
+    img: '/Images/fullfillment-custom-order.svg',
+    title: 'Custom Order Requests',
+    description: 'Efficiently receive detailed custom requests',
+  },
+  {
+    id: 6,
+    img: '/Images/fullfillment-custom.svg',
+    title: 'Custom Fulfilment',
+    description: 'Personalize your pick up or delivery options',
+  },
+  {
+    id: 7,
+    img: '/Images/fullfillment-reviews.svg',
+    title: 'Reviews',
+    description: 'Increase sales with our own review system',
+  },
+  {
+    id: 8,
+    img: '/Images/fullfillment-business.svg',
+    title: 'Business Management',
+    description: 'Product, sales and order management tools',
+  },
+  {
+    id: 9,
+    img: '/Images/fullfillment-resources.svg',
+    title: 'Resources',
+    description: 'Insider information, sale alerts and member discounts',
+  },
+]

@@ -114,7 +114,7 @@ function ToggleNavBar({ navbarIconColor }: ToggleNavBarProps) {
             >
               GALLERY
             </motion.a>
-            <motion.a
+            {/* <motion.a
               className='font-Josefin'
               href='/search'
               initial={{ y: 80, opacity: 0 }}
@@ -130,7 +130,7 @@ function ToggleNavBar({ navbarIconColor }: ToggleNavBarProps) {
               }}
             >
               SEARCH
-            </motion.a>
+            </motion.a> */}
           </motion.div>
         )}
       </AnimatePresence>
