@@ -1,6 +1,8 @@
 import React from 'react'
 import NavBar from '../NavBar/NavBar'
 import ShopManagementCard from '../ShopManagementCard/ShopManagementCard'
+import withAuth from 'hocs/withAuth'
+import { withApollo } from 'lib/apollo/withApollo'
 
 const ShopManagement = () => {
   return (
@@ -14,4 +16,4 @@ const ShopManagement = () => {
   )
 }
 
-export default ShopManagement
+export default withApollo()(withAuth(ShopManagement))

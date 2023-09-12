@@ -2,8 +2,15 @@ import React, { useState } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import { Typography } from '@mui/material'
+import EditBakerProductModal from '../EditBakerProductModal'
 
-const ProductCardMenu = () => {
+interface MenuProps {
+  title: string
+}
+
+const ProductCardMenu = ({ title }: MenuProps) => {
+  const [isEditProduct, setIsEditProduct] = useState(false)
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -12,6 +19,11 @@ const ProductCardMenu = () => {
   }
   const handleClose = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
+    setAnchorEl(null)
+  }
+
+  const handleIsEditProduct = () => {
+    setIsEditProduct(!isEditProduct)
     setAnchorEl(null)
   }
 
@@ -78,7 +90,7 @@ const ProductCardMenu = () => {
             transform: 'rotate(45deg)',
           }}
         />
-        <MenuItem onClick={handleClose}>
+        {/* <MenuItem onClick={handleClose}>
           <img src='/Images/plus-white.svg' alt='add-icon' className='mr-2' />
           <Typography
             sx={{
@@ -91,8 +103,8 @@ const ProductCardMenu = () => {
           >
             Add
           </Typography>
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
+        </MenuItem> */}
+        <MenuItem onClick={handleIsEditProduct}>
           <img src='/Images/edit-white.svg' alt='edit-icon' className='mr-2' />
           <Typography
             sx={{
@@ -121,6 +133,8 @@ const ProductCardMenu = () => {
           </Typography>
         </MenuItem>
       </Menu>
+
+      <EditBakerProductModal open={isEditProduct} onClose={handleIsEditProduct} title={title} />
     </div>
   )
 }

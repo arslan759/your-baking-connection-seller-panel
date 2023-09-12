@@ -16,7 +16,13 @@
   transform: scale(1.05);
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (min-width: 868px) and (max-width: 1299px) {
+  .cardItem {
+    width: calc(100% / 2 - 16px);
+  }
+}
+
+@media screen and (max-width: 868px) {
   .cardItem {
     width: 95%;
   }
