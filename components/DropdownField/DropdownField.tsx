@@ -80,13 +80,13 @@ const DropdownField = ({
             marginTop: label ? '5px' : '0px',
 
             '& fieldset': {
-              borderColor: inputColor,
+              borderColor: options?.length === 0 || !options ? '' : inputColor,
             },
             '&:hover fieldset': {
-              borderColor: inputColor,
+              borderColor: options?.length === 0 || !options ? '' : inputColor,
             },
             '&.Mui-focused fieldset': {
-              borderColor: inputColor,
+              borderColor: options?.length === 0 || !options ? '' : inputColor,
             },
           },
         }}
@@ -94,11 +94,12 @@ const DropdownField = ({
       >
         {/* <InputLabel id='demo-simple-select-label'>Age</InputLabel> */}
         <Select
-          // className='mt-[5px]'
           labelId='demo-multiple-name-label'
           id='demo-multiple-name'
+          autoWidth={true}
           displayEmpty={placeholder ? true : false}
           value={value}
+          disabled={options?.length === 0 || !options ? true : false}
           onChange={handleChange}
           IconComponent={() => (
             <svg
@@ -125,7 +126,7 @@ const DropdownField = ({
             </MenuItem>
           ) : null}
 
-          {options.map((option, index) => (
+          {options?.map((option, index) => (
             <MenuItem key={index} value={option}>
               {option}
             </MenuItem>
