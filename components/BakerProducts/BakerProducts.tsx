@@ -11,6 +11,13 @@ interface BakerProductsProps {
 const BakerProducts = ({ slug }: BakerProductsProps) => {
   const [activeTab, setActiveTab] = useState(0)
 
+  const [totalProducts, setTotalProducts] = useState(0)
+
+  const fetchTotalProducts = (totalProducts: number) => {
+    setTotalProducts(totalProducts)
+    console.log('total products in baker is ', totalProducts)
+  }
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     console.log('newValue', newValue)
     setActiveTab(newValue)
@@ -44,11 +51,15 @@ const BakerProducts = ({ slug }: BakerProductsProps) => {
       </div>
 
       <div className='w-[90vw] mt-[48px] flex justify-center'>
-        <BakerNavigation activeTab={activeTab} handleChange={handleChange} />
+        <BakerNavigation
+          activeTab={activeTab}
+          handleChange={handleChange}
+          totalProducts={totalProducts}
+        />
       </div>
 
       <div className='w-full mt-[24px] md:mt-[50px]'>
-        <BakerTabsPanel activeTab={activeTab} slug={slug} />
+        <BakerTabsPanel activeTab={activeTab} slug={slug} fetchTotalProducts={fetchTotalProducts} />
       </div>
 
       {/* <div className='w-[90vw] mt-[48px] md:mt-[100px]'>

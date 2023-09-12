@@ -34,8 +34,8 @@ const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarPro
     { name: 'HOME', path: '/' },
     { name: 'ABOUT BAKERS', path: '/about-bakers' },
     { name: 'MEMBERSHIP', path: '/membership' },
-    { name: 'GALLERY', path: '/gallery' },
-    // { name: 'MY PROFILE', path: `/baker/${shopId}` },
+    // { name: 'GALLERY', path: '/gallery' },
+    { name: 'BAKER', path: `/baker/${shopId}` },
   ]
 
   return (

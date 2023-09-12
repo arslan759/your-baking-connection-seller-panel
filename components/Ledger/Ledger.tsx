@@ -1,6 +1,8 @@
 import React from 'react'
 import NavBar from '../NavBar/NavBar'
 import LedgerCard from '../LedgerCard/LedgerCard'
+import { withApollo } from 'lib/apollo/withApollo'
+import withAuth from 'hocs/withAuth'
 
 const Ledger = () => {
   return (
@@ -14,4 +16,4 @@ const Ledger = () => {
   )
 }
 
-export default Ledger
+export default withApollo()(withAuth(Ledger))
