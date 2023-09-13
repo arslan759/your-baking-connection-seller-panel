@@ -5,7 +5,7 @@ import styles from './styles.module.css'
 
 const ClientReviewCard = ({ color, name, image, index, review }: ClientReviewCardProps) => {
   return (
-    <div className='h-[90%] py-[80px]'>
+    <div className='h-[90%] pt-[80px] pb-[20px]'>
       <div
         className='w-full h-[200px] md:h-[300px] flex flex-col items-center pb-[24px] !relative'
         style={{
