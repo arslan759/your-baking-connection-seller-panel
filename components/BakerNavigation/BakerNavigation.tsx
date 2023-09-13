@@ -3,7 +3,7 @@ import { BakerNavigationData } from 'Constants/constants'
 import React from 'react'
 import { BakerNavigationProps } from 'types'
 
-const BakerNavigation = ({ activeTab, handleChange }: BakerNavigationProps) => {
+const BakerNavigation = ({ activeTab, handleChange, totalProducts }: BakerNavigationProps) => {
   return (
     <Tabs
       value={activeTab}
@@ -117,7 +117,7 @@ const BakerNavigation = ({ activeTab, handleChange }: BakerNavigationProps) => {
                     justifyContent: 'center',
                   }}
                 >
-                  
+                  {totalProducts}
                 </span>
               </Typography>
             ) : (

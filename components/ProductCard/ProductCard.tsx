@@ -110,7 +110,7 @@ const ProductCard = ({
           </div>
         )}
 
-        <GalleryProductCardMenu />
+        <GalleryProductCardMenu title={title} />
       </div>
       <CardContent
         sx={{

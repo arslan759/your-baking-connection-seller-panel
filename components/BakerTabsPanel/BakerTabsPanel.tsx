@@ -7,7 +7,7 @@ import useStores from 'hooks/useStores'
 import useCatalogItems from 'hooks/Products/useCatalogItems'
 import { withApollo } from 'lib/apollo/withApollo'
 
-const BakerTabsPanel = ({ activeTab, slug }: BakerTabsPanelProps) => {
+const BakerTabsPanel = ({ activeTab, slug, fetchTotalProducts }: BakerTabsPanelProps) => {
   // const [products, setProducts] = useState(0)
 
   //@ts-ignore
@@ -21,6 +21,8 @@ const BakerTabsPanel = ({ activeTab, slug }: BakerTabsPanelProps) => {
     shopIds: [slug],
   })
   console.log('total count is ', totalCount)
+
+  fetchTotalProducts(totalCount)
 
   return (
     <div>

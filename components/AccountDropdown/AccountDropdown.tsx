@@ -16,8 +16,6 @@ import { Typography } from '@mui/material'
 const AccountDropdown = ({ account }: AccountDropdownProps) => {
   const router = useRouter()
 
-  const shopId = localStorage.getItem('shopId')
-
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -32,7 +30,7 @@ const AccountDropdown = ({ account }: AccountDropdownProps) => {
     router.push('/signin')
   }
 
-  console.log('account in dropdown is ', account)
+  console.log('account in dropdown is ', account?.firstName)
   return (
     <div className='flex'>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -45,7 +43,9 @@ const AccountDropdown = ({ account }: AccountDropdownProps) => {
             aria-haspopup='true'
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar src={account.picture} alt='' sx={{ width: 40, height: 40 }} />
+            <Avatar src={account?.picture} alt={account?.firstName} sx={{ width: 40, height: 40 }}>
+              {account?.firstName.charAt(0)}
+            </Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -89,9 +89,11 @@ const AccountDropdown = ({ account }: AccountDropdownProps) => {
             display: 'flex',
             alignItems: 'center',
           }}
-          onClick={() => router.push(`/baker/${shopId}`)}
+          onClick={() => router.push(`/profile`)}
         >
-          <Avatar src={account?.picture} alt={account.firstname} />{' '}
+          <Avatar src={account?.picture} alt={account?.firstName}>
+            {account?.firstName.charAt(0)}
+          </Avatar>
           <Typography
             sx={{
               fontSize: '16px !important',

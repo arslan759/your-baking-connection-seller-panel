@@ -7,6 +7,8 @@ import { ToggleNavBarProps } from 'types'
 function ToggleNavBar({ navbarIconColor }: ToggleNavBarProps) {
   const [open, setOpen] = useState(false)
 
+  const shopId = localStorage.getItem('shopId')
+
   const isOpen = () => {
     setOpen(true)
   }
@@ -99,7 +101,7 @@ function ToggleNavBar({ navbarIconColor }: ToggleNavBarProps) {
             </motion.a>
             <motion.a
               className='font-Josefin'
-              href='/gallery'
+              href={`/baker/${shopId}`}
               initial={{ y: 80, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5 }}
@@ -112,7 +114,7 @@ function ToggleNavBar({ navbarIconColor }: ToggleNavBarProps) {
                 },
               }}
             >
-              GALLERY
+              BAKER
             </motion.a>
             {/* <motion.a
               className='font-Josefin'

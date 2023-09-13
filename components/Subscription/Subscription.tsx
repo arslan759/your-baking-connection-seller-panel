@@ -1,5 +1,7 @@
 import React from 'react'
 import NavBar from '../NavBar/NavBar'
+import { withApollo } from 'lib/apollo/withApollo'
+import withAuth from 'hocs/withAuth'
 // import PurchaseHistoryCard from '../PurchaseHistoryCard/PurchaseHistoryCard'
 
 const Subscription = () => {
@@ -15,4 +17,4 @@ const Subscription = () => {
   )
 }
 
-export default Subscription
+export default withApollo()(withAuth(Subscription))
