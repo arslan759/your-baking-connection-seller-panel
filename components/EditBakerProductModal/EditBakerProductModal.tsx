@@ -19,18 +19,35 @@ interface EditBakerProductModalProps {
   slug: string
   open: boolean
   onClose: () => void
+  image: string
   title: string
+  description: string
+  category: string
+  oldPrice: string
+  newPrice: string
+  media: any
 }
 
-const EditBakerProductModal = ({ slug, open, onClose, title }: EditBakerProductModalProps) => {
+const EditBakerProductModal = ({
+  slug,
+  open,
+  onClose,
+  image,
+  title,
+  description,
+  category,
+  oldPrice,
+  newPrice,
+  media,
+}: EditBakerProductModalProps) => {
   const [, , refetchCatalogItems, _] = useCatalogItems()
 
   const router = useRouter()
   // input states
   const [productTitle, setProductTitle] = useState(title)
-  const [productDescription, setProductDescription] = useState('')
-  const [productPrice, setProductPrice] = useState('')
-  const [compareAtPrice, setCompareAtPrice] = useState('')
+  const [productDescription, setProductDescription] = useState(description)
+  const [productPrice, setProductPrice] = useState(newPrice)
+  const [compareAtPrice, setCompareAtPrice] = useState(oldPrice)
   const [customField, setCustomField] = useState('')
 
   const [isSalesTax, setIsSalesTax] = useState(false)
@@ -40,7 +57,7 @@ const EditBakerProductModal = ({ slug, open, onClose, title }: EditBakerProductM
   const [listingEndDate, setListingEndDate] = useState('')
   const [fulfillmentDate, setFulfillmentDate] = useState('')
 
-  const [productMedia, setProductMedia] = useState<ProductMediaInterface[]>([])
+  const [productMedia, setProductMedia] = useState<ProductMediaInterface[]>(media)
 
   const [mediaPriority, setMediaPriority] = useState<number>(1)
 
