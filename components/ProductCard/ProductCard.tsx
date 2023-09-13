@@ -13,6 +13,7 @@ const ProductCard = ({
   newPrice,
   width,
   mdWidth,
+  media
 }: ProductCardProps) => {
   const [isHovering, setIsHovering] = useState(false) // handle mouse enter and leave for more details on desktop view
   const [isDetailsVisible, setIsDetailsVisible] = useState(false) // Toggle More Details for mobile view
@@ -110,7 +111,15 @@ const ProductCard = ({
           </div>
         )}
 
-        <GalleryProductCardMenu title={title} />
+        <GalleryProductCardMenu
+          image={image}
+          title={title}
+          description={description}
+          category={category}
+          oldPrice={oldPrice}
+          newPrice={newPrice}
+          media={media}
+        />
       </div>
       <CardContent
         sx={{

@@ -33,6 +33,10 @@ const BakerAvailableProducts = () => {
   })
 
   useEffect(() => {
+    console.log('catalog items are ', catalogItems)
+  }, [catalogItems])
+
+  useEffect(() => {
     let page = Math.ceil(totalCount / itemsPerPage)
 
     setPageCount(page)
@@ -61,6 +65,7 @@ const BakerAvailableProducts = () => {
                   category={item?.category}
                   oldPrice={pricing[0].compareAtPrice?.amount}
                   newPrice={pricing[0].price}
+                  media={product?.media}
                 />
               )
             })}
