@@ -195,6 +195,7 @@ export interface ProductCardProps {
   newPrice: string
   width?: string
   mdWidth?: string
+  media: any
 }
 
 export interface YourProfileCardItemProps {

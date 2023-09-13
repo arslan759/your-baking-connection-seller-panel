@@ -14,6 +14,7 @@ import { withApollo } from 'lib/apollo/withApollo'
 import { ProductMediaInterface } from 'types'
 import { useRouter } from 'next/navigation'
 import useCatalogItems from 'hooks/Products/useCatalogItems'
+import DropdownField from '../DropdownField'
 
 interface AddBakerProductModalProps {
   slug: string
@@ -64,6 +65,10 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
   const [publishProductFunction, loadingPublishProduct] = useUpdatePublishProduct()
 
   const [saveBtnDisable, setSaveBtnDisable] = useState(false)
+
+  const handleCustomFieldChange = () => {
+    console.log('handling custom field')
+  }
 
   useEffect(() => {
     setSaveBtnDisable(
@@ -426,6 +431,17 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                 </Typography>
 
                 <div className='w-full'>
+                  <DropdownField
+                    label='custom'
+                    required={false}
+                    name='custom'
+                    errorText={customFieldError}
+                    value={customField}
+                    options={['Ingredients', 'Nutritional Facts', 'Serving Size', 'Allergens']}
+                    inputColor='#888'
+                    onChange={handleCustomFieldChange}
+                  />
+                  {/* 
                   <InputField
                     label='custom field'
                     type='text'
@@ -436,7 +452,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                     errorText={customFieldError}
                     required
                     onChange={handleChange}
-                  />
+                  /> */}
                   <Typography
                     sx={{
                       marginTop: '4px',

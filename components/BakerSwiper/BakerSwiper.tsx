@@ -47,6 +47,7 @@ const BakerSwiper = ({ featuredImages }: BakerSwiperProps) => {
           return (
             <SwiperSlide key={index}>
               <div
+                key={background?.URLs?.large}
                 className='w-full h-[375px] md:h-[471px]'
                 style={{
                   background: `url(${background?.URLs?.large}), lightgray 50% / cover no-repeat`,
