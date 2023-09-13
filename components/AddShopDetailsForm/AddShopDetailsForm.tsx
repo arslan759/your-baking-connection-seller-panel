@@ -13,6 +13,7 @@ import { withApollo } from 'lib/apollo/withApollo'
 import useStores from 'hooks/useStores'
 import { AddShopDetailsFormProps } from 'types'
 import useFileUpload from 'hooks/fileUpload/useFileUpload'
+import { getCitiesApi, getStatesApi } from 'helpers/apis'
 
 const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   // auth store
@@ -54,6 +55,19 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
     setState(account?.state)
     setCity(account?.city)
   }, [account])
+
+  const [cities, setCities] = useState([])
+  const [states, setStates] = useState([])
+
+  useEffect(() => {
+    getStatesApi(setStates)
+  }, [])
+
+  useEffect(() => {
+    setCities([])
+    setCity('')
+    getCitiesApi(state, setCities)
+  }, [state])
 
   // handleChange function for input fields
   const handleChange = (name: string, value: string) => {
