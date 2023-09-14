@@ -6,16 +6,14 @@ import { PrimaryBtn, SecondaryBtn } from '../Buttons'
 import styles from './styles.module.css'
 import ToggleNavBar from '../ToggleNavBar/ToggleNavBar'
 import { NavBarProps } from 'types'
-import useStores from 'hooks/useStores'
 import AccountDropdown from '../AccountDropdown/AccountDropdown'
 import { withApollo } from 'lib/apollo/withApollo'
+import useViewer from 'hooks/viewer/useViewer'
 
 const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarProps) => {
-  // @ts-ignore
-  const { authStore } = useStores()
-  const { account } = authStore
+  const [viewer, loading] = useViewer()
 
-  console.log('account is', account)
+  console.log('viewer in navbar is', viewer)
 
   const shopId = localStorage.getItem('shopId')
 
@@ -94,7 +92,7 @@ const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarPro
             //   <p style={{ color: 'black' }}>loading...</p>
             // ) : (
             <Grid>
-              {!account || Object.keys(account).length === 0 ? (
+              {!viewer || Object.keys(viewer).length === 0 ? (
                 <Box
                   sx={{
                     display: 'flex',
@@ -121,7 +119,7 @@ const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarPro
                   }}
                   // className={styles.navbar}
                 >
-                  <AccountDropdown account={account} />
+                  <AccountDropdown account={viewer} />
                 </Box>
               )}
             </Grid>

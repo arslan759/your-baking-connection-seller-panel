@@ -4,67 +4,79 @@ import { Modal, Radio, Slider, Stack, Typography } from '@mui/material'
 import InputField from '../InputField/InputField'
 import CancelBtn from '../Buttons/CancelBtn'
 import AddBakerProductImages from '../AddBakerProductImages/AddBakerProductImages'
-import useCreateProduct from 'hooks/product/useCreateProduct'
+import useUpdateProduct from 'hooks/product/useUpdateProduct'
 import useUpdateProductVariant from 'hooks/product/useUpdateProductVariant'
 import useUpdateSimpleInventory from 'hooks/product/useUpdateSimpleInventory'
-
 import useUpdatePublishProduct from 'hooks/product/usePublishProduct'
 
 import { withApollo } from 'lib/apollo/withApollo'
 import { ProductMediaInterface } from 'types'
 import { useRouter } from 'next/navigation'
-import useCatalogItems from 'hooks/Products/useCatalogItems'
 
 interface EditBakerProductModalProps {
-  slug: string
+  product: any
+  variants: any
+  category: string
   open: boolean
   onClose: () => void
-  image: string
-  title: string
-  description: string
-  category: string
-  oldPrice: string
-  newPrice: string
-  media: any
 }
 
 const EditBakerProductModal = ({
-  slug,
+  product,
+  variants,
+  category,
   open,
   onClose,
-  image,
-  title,
-  description,
-  category,
-  oldPrice,
-  newPrice,
-  media,
 }: EditBakerProductModalProps) => {
-  const [, , refetchCatalogItems, _] = useCatalogItems()
-
   const router = useRouter()
+
   // input states
-  const [productTitle, setProductTitle] = useState(title)
-  const [productDescription, setProductDescription] = useState(description)
-  const [productPrice, setProductPrice] = useState(newPrice)
-  const [compareAtPrice, setCompareAtPrice] = useState(oldPrice)
+  const [productTitle, setProductTitle] = useState(product?.title)
+  const [productDescription, setProductDescription] = useState(product?.description)
+  const [productPrice, setProductPrice] = useState(variants?.pricing[0].price)
+  const [compareAtPrice, setCompareAtPrice] = useState(variants?.pricing[0].compareAtPrice?.amount)
   const [customField, setCustomField] = useState('')
 
-  const [isSalesTax, setIsSalesTax] = useState(false)
-  const [salesTaxRate, setSalesTaxRate] = useState('')
-  const [productQuantity, setProductQuantity] = useState(1)
-  const [listingStartDate, setListingStartDate] = useState('')
-  const [listingEndDate, setListingEndDate] = useState('')
-  const [fulfillmentDate, setFulfillmentDate] = useState('')
+  const [isSalesTax, setIsSalesTax] = useState(variants?.isTaxable)
+  const [productQuantity, setProductQuantity] = useState(variants?.inventoryInStock)
+  const [listingStartDate, setListingStartDate] = useState(
+    product?.productListingSchedule?.startDate,
+  )
+  const [listingEndDate, setListingEndDate] = useState(product?.productListingSchedule?.endDate)
+  const [fulfillmentDate, setFulfillmentDate] = useState(product?.availableFulfillmentDates)
 
-  const [productMedia, setProductMedia] = useState<ProductMediaInterface[]>(media)
+  const [productMedia, setProductMedia] = useState<ProductMediaInterface[]>([])
 
   const [mediaPriority, setMediaPriority] = useState<number>(1)
 
+  const filterMedia = (media: any) => {
+    return media.map((item: any) => {
+      return {
+        productId: item.productId,
+        URLs: {
+          large: item.URLs.large,
+          medium: item.URLs.medium,
+          original: item.URLs.original,
+          small: item.URLs.small,
+          thumbnail: item.URLs.thumbnail,
+        },
+        priority: item.priority,
+      }
+    })
+  }
+
   //test effect remove later
   useEffect(() => {
-    console.log('productMedia is ', productMedia)
-  }, [productMedia])
+    console.log('product in edit product modal is ', product)
+    console.log('variant in edit product modal is ', variants)
+
+    const updatedMedia = filterMedia(product?.media)
+
+    setProductMedia(updatedMedia)
+
+    console.log('updated media is ', updatedMedia)
+
+  }, [product, variants])
 
   // error states
   const [productTitleError, setProductTitleError] = useState('')
@@ -72,37 +84,39 @@ const EditBakerProductModal = ({
   const [productPriceError, setProductPriceError] = useState('')
   const [customFieldError, setCustomFieldError] = useState('')
   const [productImagesError, setProductImagesError] = useState('')
-  const [salesTaxRateError, setSalesTaxRateError] = useState('')
   const [productQuantityError, setProductQuantityError] = useState('')
   const [productListingError, setProductListingError] = useState('')
   const [fulfillmentDateError, setFulfillmentDateError] = useState('')
 
-  const [createProductFunction, loadingCreateProduct] = useCreateProduct()
+  const [updateProductFunction, loadingUpdateProduct] = useUpdateProduct()
   const [updateProductVariantFunction, loadingUpdateProductVariant] = useUpdateProductVariant()
   const [updateSimpleInventoryFunction, loadingUpdateSimpleInventory] = useUpdateSimpleInventory()
   const [publishProductFunction, loadingPublishProduct] = useUpdatePublishProduct()
 
   const [saveBtnDisable, setSaveBtnDisable] = useState(false)
 
+  const shopId = localStorage.getItem('shopId')
+
   useEffect(() => {
     setSaveBtnDisable(
-      loadingCreateProduct ||
+      loadingUpdateProduct ||
         loadingUpdateProductVariant ||
         loadingUpdateSimpleInventory ||
         loadingPublishProduct,
     )
   }, [
-    loadingCreateProduct,
+    loadingUpdateProduct,
     loadingUpdateProductVariant,
     loadingUpdateSimpleInventory,
     loadingPublishProduct,
   ])
 
-  //step 1: create Product
-  const createProduct = async () => {
+  //step 1: update Product
+  const updateProduct = async () => {
     try {
       let variables = {
-        shopId: slug,
+        shopId: shopId,
+        productId: product?.productId,
         product: {
           title: productTitle,
           description: productDescription,
@@ -115,12 +129,14 @@ const EditBakerProductModal = ({
           availableFulfillmentDates: fulfillmentDate,
         },
       }
-      const createdProduct = await createProductFunction({ variables })
+      const updatedProduct = await updateProductFunction({ variables })
+
+      console.log("updated product is" , updatedProduct)
 
       //@ts-ignore
-      const productId = createdProduct?.data?.createProduct?.product?._id
+      const productId = updatedProduct?.data?.updateProduct?.product?._id
       //@ts-ignore
-      const variantId = createdProduct?.data?.createProduct?.product?.variants[0]?._id
+      const variantId = updatedProduct?.data?.updateProduct?.product?.variants[0]?._id
 
       if (productId) {
         console.log('product Id', productId)
@@ -135,14 +151,14 @@ const EditBakerProductModal = ({
   const updateProductVariant = async (productId: string, variantId: string) => {
     try {
       let variables = {
-        shopId: slug,
+        shopId: shopId,
         variantId,
         variant: {
           isVisible: true,
           price: parseFloat(productPrice),
           compareAtPrice: parseFloat(compareAtPrice),
           attributeLabel: `${productTitle}-label`,
-          isTaxable: salesTaxRate ? true : false,
+          isTaxable: isSalesTax,
           media: productMedia,
         },
       }
@@ -163,7 +179,7 @@ const EditBakerProductModal = ({
   const updateSimpleInventory = async (productId: string, variantId: string) => {
     try {
       let variables = {
-        shopId: slug,
+        shopId: shopId,
         inventoryInStock: productQuantity,
         productConfiguration: {
           productId,
@@ -225,11 +241,6 @@ const EditBakerProductModal = ({
       setCompareAtPrice(value)
     }
 
-    if (name === 'salesTaxRate') {
-      setSalesTaxRate(value)
-      setSalesTaxRateError(value ? '' : 'Sales tax rate is required')
-    }
-
     if (name === 'listingStartDate') {
       setListingStartDate(value)
       setProductListingError(value ? '' : 'Listing start date is required')
@@ -250,10 +261,8 @@ const EditBakerProductModal = ({
   const handleSaleTaxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === 'yes') {
       setIsSalesTax(true)
-      setSalesTaxRateError('')
     } else {
       setIsSalesTax(false)
-      setSalesTaxRateError('')
     }
   }
 
@@ -289,15 +298,13 @@ const EditBakerProductModal = ({
     e.preventDefault()
 
     console.log('add button clicked')
-    await createProduct()
+    await updateProduct()
 
     console.log('product title is ', productTitle)
     console.log('product description is ', productDescription)
     console.log('product price is ', productPrice)
     console.log('custom field is ', customField)
-    // console.log('product images are ', productImages)
     console.log('is sales tax ', isSalesTax)
-    console.log('sales tax rate is ', salesTaxRate)
     console.log('product quantity is ', productQuantity)
     console.log('listing start date is ', listingStartDate)
     console.log('listing end date is ', listingEndDate)
@@ -539,7 +546,7 @@ const EditBakerProductModal = ({
                     </div>
                   </div>
 
-                  {isSalesTax && (
+                  {/* {isSalesTax && (
                     <div className='mt-[10px] w-full md:w-[60%]'>
                       <InputField
                         // label='sales tax rate'
@@ -553,7 +560,7 @@ const EditBakerProductModal = ({
                         onChange={handleChange}
                       />
                     </div>
-                  )}
+                  )} */}
                 </div>
 
                 <div className='w-full md:w-[50%]'>
@@ -744,9 +751,9 @@ const EditBakerProductModal = ({
                 </div> */}
             </div>
 
-            {saveBtnDisable ? <span>Loading...</span> : null}
+            {/* {saveBtnDisable ? <span>Loading...</span> : null} */}
             <div className='mt-[24px] md:mt-[23px]'>
-              <PrimaryBtn text='Save product' type='submit' disabled={saveBtnDisable} />
+              <PrimaryBtn text='Save product' type='submit' disabled={saveBtnDisable} loading={saveBtnDisable} />
             </div>
 
             <div className='mt-[24px] md:mt-[23px]'>

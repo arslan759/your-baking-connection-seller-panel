@@ -128,7 +128,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
           price: parseFloat(productPrice),
           compareAtPrice: parseFloat(compareAtPrice),
           attributeLabel: `${productTitle}-label`,
-          isTaxable: salesTaxRate ? true : false,
+          isTaxable: isSalesTax,
           media: productMedia,
         },
       }

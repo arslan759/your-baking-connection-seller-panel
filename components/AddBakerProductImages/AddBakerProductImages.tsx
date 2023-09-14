@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent } from 'react'
+import React, { useState, useEffect, ChangeEvent, useRef } from 'react'
 import { CircularProgress, Typography } from '@mui/material'
 import useFileUpload from 'hooks/fileUpload/useFileUpload'
 
@@ -52,11 +52,19 @@ const AddBakerProductImages = ({ productMedia, setProductMedia }: AddBakerProduc
   const [images, setImages] = useState<any[]>([])
   const [imageLoading, setImageLoading] = useState([true, true, true, true, true])
 
+  const imageUploadRef = useRef<any>(null)
+
+  const handleImageUploadClick = () => {
+    imageUploadRef?.current?.click()
+  }
+
   useEffect(() => {
     const updatedLoadingArray = [...imageLoading]
     updatedLoadingArray[productMedia?.length - 1] = false
     setImageUploadCounter(productMedia?.length)
     setImageLoading(updatedLoadingArray)
+
+    console.log("product media in addproductImages is ", productMedia)
   }, [productMedia])
 
   const [uploadFile, loadingUploadFile] = useFileUpload()
@@ -177,6 +185,7 @@ const AddBakerProductImages = ({ productMedia, setProductMedia }: AddBakerProduc
             <span>
               Drag and drop or{' '}
               <span
+                onClick={handleImageUploadClick}
                 style={{
                   textDecoration: 'underline',
                   cursor: 'pointer',
@@ -186,7 +195,12 @@ const AddBakerProductImages = ({ productMedia, setProductMedia }: AddBakerProduc
               </span>{' '}
             </span>
 
-            <input type='file' onChange={(e) => handleFileUpload(e)} />
+            <input
+              ref={imageUploadRef}
+              type='file'
+              onChange={(e) => handleFileUpload(e)}
+              className='hidden'
+            />
 
             <span style={{ color: 'red' }}>{uploadError}</span>
           </Typography>

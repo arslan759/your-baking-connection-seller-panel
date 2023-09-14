@@ -1,0 +1,27 @@
+query catalogItemProductQuery($slugOrId: String!) {
+  catalogItemProduct(slugOrId: $slugOrId) {
+    _id
+    product {
+      _id
+      title
+      description
+      media {
+        URLs {
+          thumbnail
+          large
+        }
+      }
+      variants {
+        variantId
+        inventoryInStock
+        pricing {
+          compareAtPrice {
+            amount
+            displayAmount
+          }
+          price
+        }
+      }
+    }
+  }
+}
