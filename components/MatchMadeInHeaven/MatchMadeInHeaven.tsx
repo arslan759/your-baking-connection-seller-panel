@@ -44,7 +44,7 @@ const MatchMadeInHeaven = () => {
         </Typography>
       </div>
 
-      <div className='w-[100%] flex flex-wrap justify-start gap-x-[2%] gap-y-[8px] md:gap-y-[24px] mt-[48px] md:mt-[32px]'>
+      {/* <div className='w-[100%] flex flex-wrap justify-start gap-x-[2%] gap-y-[8px] md:gap-y-[24px] mt-[48px] md:mt-[32px]'>
         {GalleryProductsData.slice(0, 3).map((item) => {
           return (
             // <div className='w-full md:w-[32%]'>
@@ -61,7 +61,7 @@ const MatchMadeInHeaven = () => {
             // </div>
           )
         })}
-      </div>
+      </div> */}
 
       {/* <div className='w-[90vw] flex justify-center mt-[24px] md:mt-[48px]'>
         <CustomPagination />
