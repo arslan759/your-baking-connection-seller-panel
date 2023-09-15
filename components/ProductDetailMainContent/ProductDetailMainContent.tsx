@@ -1,11 +1,18 @@
 import { Rating, Typography } from '@mui/material'
-import { color } from 'framer-motion'
 import React from 'react'
-import InputField from '../InputField/InputField'
 import ProductDetailForm from '../ProductDetailForm/ProductDetailForm'
 import CartCardDetailsItem from '../CartCardDetailsItem/CartCardDetailsItem'
+import { ProductDetailMainContentProps } from 'types'
 
-const ProductDetailMainContent = () => {
+const ProductDetailMainContent = ({
+  title,
+  stock,
+  oldPrice,
+  newPrice,
+  reviews,
+  rating,
+  description,
+}: ProductDetailMainContentProps) => {
   return (
     <div className='pb-[12px] lg:pb-[0px] bg-[#fff]'>
       <div className='w-full flex justify-between items-center'>
@@ -26,7 +33,9 @@ const ProductDetailMainContent = () => {
                 fontSize: '18px !important',
               },
             }}
-          >{`Berry Cream Fantasy`}</Typography>
+          >
+            {title}
+          </Typography>
         </div>
         <div className='w-fit rounded-[16px] bg-primary px-[8px] py-[4px]'>
           <Typography
@@ -43,7 +52,7 @@ const ProductDetailMainContent = () => {
               },
             }}
           >
-            10 left in stock
+            {!stock ? `out of stock` : `${stock} left in stock`}
           </Typography>
         </div>
       </div>
@@ -62,7 +71,7 @@ const ProductDetailMainContent = () => {
             },
           }}
         >
-          15$
+          {oldPrice}$
         </Typography>
         <Typography
           sx={{
@@ -76,7 +85,7 @@ const ProductDetailMainContent = () => {
             },
           }}
         >
-          10$
+          {newPrice}$
         </Typography>
       </div>
 
@@ -86,7 +95,7 @@ const ProductDetailMainContent = () => {
             gap: '5px',
           }}
           name='read-only'
-          value={5}
+          value={rating}
           readOnly
         />
 
@@ -102,7 +111,7 @@ const ProductDetailMainContent = () => {
               fontSize: '14px !important',
             },
           }}
-        >{`(3 reviews)`}</Typography>
+        >{`(${reviews} reviews)`}</Typography>
       </div>
 
       <div className='w-[100%] lg:w-[95%] mt-[16px] lg:mt-[18px]'>
@@ -118,7 +127,9 @@ const ProductDetailMainContent = () => {
               fontSize: '16px !important',
             },
           }}
-        >{`A delectable cake with a rich, creamy and fluffy texture that melts in your mouth. This is the perfect cake for any special occasion, from a birthday to an anniversary or any other celebration.`}</Typography>
+        >
+          {description}
+        </Typography>
       </div>
 
       <div className=' mt-[16px] md:mt-[18px]'>

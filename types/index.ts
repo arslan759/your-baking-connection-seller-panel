@@ -256,6 +256,20 @@ export interface PaginatorProps {
   onChange: (value: number) => void
 }
 
+export interface ProductSwiperProps {
+  images: any[]
+}
+
+export interface ProductDetailMainContentProps {
+  title: string
+  stock: number
+  oldPrice: number
+  newPrice: number
+  reviews: number
+  description: string
+  rating: number
+}
+
 export interface AccountDropdownProps {
   account: any
 }
