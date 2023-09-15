@@ -5,24 +5,12 @@ import { Typography } from '@mui/material'
 import EditBakerProductModal from '../EditBakerProductModal'
 
 interface MenuProps {
-  image: string
-  title: string
-  description: string
+  product: any
+  variants: any
   category: string
-  oldPrice: string
-  newPrice: string
-  media: any
 }
 
-const ProductCardMenu = ({
-  image,
-  title,
-  description,
-  category,
-  oldPrice,
-  newPrice,
-  media,
-}: MenuProps) => {
+const ProductCardMenu = ({ product, variants, category }: MenuProps) => {
   const [isEditProduct, setIsEditProduct] = useState(false)
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
@@ -151,13 +139,9 @@ const ProductCardMenu = ({
       <EditBakerProductModal
         open={isEditProduct}
         onClose={handleIsEditProduct}
-        image={image}
-        title={title}
-        description={description}
+        product={product}
+        variants={variants}
         category={category}
-        oldPrice={oldPrice}
-        newPrice={newPrice}
-        media={media}
       />
     </div>
   )

@@ -19,6 +19,7 @@ export interface PrimaryBtnProps {
   text: string
   type?: 'button' | 'submit' | 'reset'
   disabled?: boolean
+  loading?: boolean
   handleClick?: MouseEventHandler<HTMLButtonElement>
 }
 
@@ -187,15 +188,19 @@ export interface BakerTabsPanelProps {
 }
 
 export interface ProductCardProps {
-  image: string
-  title: string
-  description: string
+  product: any
+  variants: any
   category: string
-  oldPrice: string
-  newPrice: string
+  // image: string
+  // title: string
+  // slug: string
+  // description: string
+  // category: string
+  // oldPrice: string
+  // newPrice: string
   width?: string
   mdWidth?: string
-  media: any
+  // media: any
 }
 
 export interface YourProfileCardItemProps {

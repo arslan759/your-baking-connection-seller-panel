@@ -5,16 +5,20 @@ import GalleryProductCardMenu from '../ProductCardMenu/ProductCardMenu'
 import { PrimaryBtn } from '../Buttons'
 
 const ProductCard = ({
-  image,
-  title,
-  description,
+  product,
+  variants,
   category,
-  oldPrice,
-  newPrice,
+  // image,
+  // title,
+  // description,
+  // category,
+  // slug,
+  // oldPrice,
+  // newPrice,
   width,
   mdWidth,
-  media
-}: ProductCardProps) => {
+}: // media,
+ProductCardProps) => {
   const [isHovering, setIsHovering] = useState(false) // handle mouse enter and leave for more details on desktop view
   const [isDetailsVisible, setIsDetailsVisible] = useState(false) // Toggle More Details for mobile view
 
@@ -35,10 +39,10 @@ const ProductCard = ({
   }
 
   // handle favourite click
-  const handleFavouriteClick = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
-    e.stopPropagation()
-    console.log('favourite clicked')
-  }
+  // const handleFavouriteClick = (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => {
+  //   e.stopPropagation()
+  //   console.log('favourite clicked')
+  // }
 
   // handle more details click
   const handleMoreDetailsClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -49,8 +53,17 @@ const ProductCard = ({
   // console.log('isDetailsVisible', isDetailsVisible)
   // console.log('isHovering', isHovering)
 
-  console.log('mdWidth', mdWidth)
-  console.log('width', width)
+  // console.log('mdWidth', mdWidth)
+  // console.log('width', width)
+
+  // slug={product?.slug}
+  // image={product?.media[0]?.URLs?.thumbnail}
+  // title={product?.title}
+  // description={product?.description}
+  // category={item?.category}
+  // oldPrice={pricing[0].compareAtPrice?.amount}
+  // newPrice={pricing[0].price}
+  // media={product?.media}
 
   return (
     <Card
@@ -73,8 +86,8 @@ const ProductCard = ({
             bordeRadius: '5px 5px 0px 0px',
             background:
               isHovering || isDetailsVisible
-                ? `linear-gradient(0deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), url(${image}), lightgray 50% / cover no-repeat`
-                : `url(${image}), lightgray 50% / cover no-repeat`,
+                ? `linear-gradient(0deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), url(${product?.media[0]?.URLs?.thumbnail}), lightgray 50% / cover no-repeat`
+                : `url(${product?.media[0]?.URLs?.thumbnail}), lightgray 50% / cover no-repeat`,
             height: '365px',
             width: '100%',
             backgroundPosition: 'center',
@@ -90,12 +103,12 @@ const ProductCard = ({
           // image={image}
           // alt={title}
         />
-        <img
+        {/* <img
           onClick={handleFavouriteClick}
           src='/Images/favourite.svg'
           alt='heart'
           className='absolute top-4 right-4 cursor-pointer'
-        />
+        /> */}
         {(isHovering || isDetailsVisible) && (
           <div
             onMouseEnter={handleMouseEnter}
@@ -111,15 +124,7 @@ const ProductCard = ({
           </div>
         )}
 
-        <GalleryProductCardMenu
-          image={image}
-          title={title}
-          description={description}
-          category={category}
-          oldPrice={oldPrice}
-          newPrice={newPrice}
-          media={media}
-        />
+        <GalleryProductCardMenu product={product} variants={variants} category={category} />
       </div>
       <CardContent
         sx={{
@@ -162,7 +167,7 @@ const ProductCard = ({
             },
           }}
         >
-          {title}
+          {product?.title}
         </Typography>
         <Typography
           sx={{
@@ -177,7 +182,7 @@ const ProductCard = ({
             },
           }}
         >
-          {description}
+          {product?.description}
         </Typography>
         <div className='flex gap-x-[14px] items-center'>
           <Typography
@@ -190,7 +195,7 @@ const ProductCard = ({
               textDecoration: 'line-through',
             }}
           >
-            ${parseInt(oldPrice)}
+            ${parseInt(variants?.pricing[0]?.compareAtPrice?.amount)}
           </Typography>
           <Typography
             sx={{
@@ -201,7 +206,7 @@ const ProductCard = ({
               fontFamily: 'Open Sans',
             }}
           >
-            ${parseInt(newPrice)}
+            ${parseInt(variants?.pricing[0].price)}
           </Typography>
         </div>
       </CardContent>

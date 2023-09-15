@@ -1,0 +1,12 @@
+mutation updateProduct($shopId: ID!, $productId: ID!, $product: ProductInput!) {
+  updateProduct(input: { shopId: $shopId, productId: $productId, product: $product }) {
+    product {
+      _id
+      slug
+      title
+      variants {
+        _id
+      }
+    }
+  }
+}

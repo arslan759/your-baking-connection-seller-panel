@@ -56,9 +56,9 @@ const ClientReviewSwiper = () => {
         // autoHeight={true}
         breakpoints={{
           0: {
-            slidesPerView: 2,
+            slidesPerView: 1,
             spaceBetween: 1,
-            direction: 'vertical',
+            direction: 'horizontal',
           },
 
           1024: {
