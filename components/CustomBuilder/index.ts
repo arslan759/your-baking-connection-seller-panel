@@ -1,1 +1,1 @@
-export {default} from './CustomBuilder';
+export { default } from './CustomBuilder'

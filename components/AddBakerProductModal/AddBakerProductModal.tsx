@@ -7,17 +7,38 @@ import AddBakerProductImages from '../AddBakerProductImages/AddBakerProductImage
 import useCreateProduct from 'hooks/product/useCreateProduct'
 import useUpdateProductVariant from 'hooks/product/useUpdateProductVariant'
 import useUpdateSimpleInventory from 'hooks/product/useUpdateSimpleInventory'
-
+import CustomBuilder from '../CustomBuilder'
 import useUpdatePublishProduct from 'hooks/product/usePublishProduct'
 
 import { withApollo } from 'lib/apollo/withApollo'
 import { ProductMediaInterface } from 'types'
 import { useRouter } from 'next/navigation'
 import useCatalogItems from 'hooks/Products/useCatalogItems'
-import DropdownField from '../DropdownField'
+import DropdownFieldChecked from '../DropdownFieldChecked'
 
 interface AddBakerProductModalProps {
   slug: string
+}
+
+interface CustomFieldOptions {
+  value: string
+  label: string
+}
+interface Option {
+  optionLabel: string
+  price: number
+}
+
+interface Attribute {
+  attribute: string
+  options: Option[]
+}
+
+interface CustomBuilderProps {
+  productAttributes: Attribute[]
+  showPriceFields: boolean[]
+  setProductAttributes: () => void
+  setShowPriceFields: () => void
 }
 
 const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
@@ -43,6 +64,17 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
 
   const [mediaPriority, setMediaPriority] = useState<number>(1)
 
+  const [productAttributes, setProductAttributes] = useState<Attribute[]>([])
+  const [showPriceFields, setShowPriceFields] = useState<boolean[]>([])
+
+  const handleChangeProductAttributes = (attributes: Attribute[]) => {
+    setProductAttributes(attributes)
+  }
+
+  const handleChangeShowPriceFields = (fields: boolean[]) => {
+    setShowPriceFields(fields)
+  }
+
   //test effect remove later
   useEffect(() => {
     console.log('productMedia is ', productMedia)
@@ -63,6 +95,13 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
   const [updateProductVariantFunction, loadingUpdateProductVariant] = useUpdateProductVariant()
   const [updateSimpleInventoryFunction, loadingUpdateSimpleInventory] = useUpdateSimpleInventory()
   const [publishProductFunction, loadingPublishProduct] = useUpdatePublishProduct()
+
+  const [customFieldOptions, setCustomFieldOptions] = useState<string[]>([
+    'Ingredients',
+    'Nutritional Facts',
+    'Serving Size',
+    'Allergens',
+  ])
 
   const [saveBtnDisable, setSaveBtnDisable] = useState(false)
 
@@ -99,6 +138,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
             endDate: listingEndDate,
           },
           availableFulfillmentDates: fulfillmentDate,
+          productAttributes,
         },
       }
       const createdProduct = await createProductFunction({ variables })
@@ -296,6 +336,12 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
 
     console.log('add product form submitted')
   }
+
+  useEffect(() => {
+    console.log('product attributes are ', productAttributes)
+    console.log('show check', showPriceFields)
+  }, [productAttributes, showPriceFields])
+
   return (
     <>
       <PrimaryBtn text='Add Product' handleClick={handleAddProduct} />
@@ -389,7 +435,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
 
                   <div className='flex-1'>
                     <InputField
-                      label='compare at price'
+                      label='compare at price (optional)'
                       type='number'
                       inputColor='#212529'
                       placeholder='Enter compare at price'
@@ -431,16 +477,17 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                 </Typography>
 
                 <div className='w-full'>
-                  <DropdownField
+                  {/* <DropdownFieldChecked
                     label='custom'
                     required={false}
                     name='custom'
                     errorText={customFieldError}
                     value={customField}
-                    options={['Ingredients', 'Nutritional Facts', 'Serving Size', 'Allergens']}
+                    options={customFieldOptions}
                     inputColor='#888'
                     onChange={handleCustomFieldChange}
-                  />
+                  /> */}
+                  <DropdownFieldChecked />
                   {/* 
                   <InputField
                     label='custom field'
@@ -466,6 +513,16 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                     {`Choose from a wide range of fields, such as color and flavor, to personalize
                     your catalog`}
                   </Typography>
+                </div>
+
+                {/* custom builder for meta data */}
+                <div>
+                  <CustomBuilder
+                    productAttributes={productAttributes}
+                    showPriceFields={showPriceFields}
+                    setProductAttributes={handleChangeProductAttributes}
+                    setShowPriceFields={handleChangeShowPriceFields}
+                  />
                 </div>
 
                 <div className='mt-[14px] md:mt-[24px] w-full flex flex-col md:flex-row gap-y-[32px]'>
