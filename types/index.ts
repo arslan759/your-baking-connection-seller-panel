@@ -50,7 +50,8 @@ export interface InputFieldProps {
   required: boolean
   placeholder?: string
   value: string
-  onChange: (name: string, value: string) => void
+  changeHandler?: any
+  onChange?: (name: string, value: string) => void
   handleKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
