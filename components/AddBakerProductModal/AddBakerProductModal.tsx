@@ -403,7 +403,6 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                     onChange={handleChange}
                   />
                 </div>
-
                 <div className='w-full'>
                   <InputField
                     label='product description'
@@ -446,12 +445,10 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                     />
                   </div>
                 </div>
-
                 <AddBakerProductImages
                   productMedia={productMedia}
                   setProductMedia={handleUpdateProductMedia}
                 />
-
                 <Typography
                   sx={{
                     fontSize: '18px !important',
@@ -475,56 +472,30 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                   />
                   Customization
                 </Typography>
-
                 <div className='w-full'>
-                  {/* <DropdownFieldChecked
-                    label='custom'
-                    required={false}
-                    name='custom'
-                    errorText={customFieldError}
-                    value={customField}
-                    options={customFieldOptions}
-                    inputColor='#888'
-                    onChange={handleCustomFieldChange}
-                  /> */}
-                  <DropdownFieldChecked />
-                  {/* 
-                  <InputField
-                    label='custom field'
-                    type='text'
-                    inputColor='#212529'
-                    placeholder='Create custom field'
-                    name='customField'
-                    value={customField}
-                    errorText={customFieldError}
-                    required
-                    onChange={handleChange}
-                  /> */}
-                  <Typography
-                    sx={{
-                      marginTop: '4px',
-                      fontSize: '14px !important',
-                      fontFamily: 'Open Sans',
-                      fontWeight: '600 !important',
-                      lineHeight: 'normal',
-                      color: '#676767',
-                    }}
-                  >
-                    {`Choose from a wide range of fields, such as color and flavor, to personalize
-                    your catalog`}
-                  </Typography>
+                  <div className='w-full'>
+                    <Typography
+                      sx={{
+                        marginBottom: '8px',
+                        fontSize: '14px !important',
+                        fontFamily: 'Open Sans',
+                        fontWeight: '600 !important',
+                        lineHeight: 'normal',
+                        color: '#676767',
+                      }}
+                    >
+                      {`Custom Field`}
+                    </Typography>
+                  </div>
+                  <div className='w-full'>
+                    <CustomBuilder
+                      productAttributes={productAttributes}
+                      showPriceFields={showPriceFields}
+                      setProductAttributes={handleChangeProductAttributes}
+                      setShowPriceFields={handleChangeShowPriceFields}
+                    />
+                  </div>
                 </div>
-
-                {/* custom builder for meta data */}
-                <div>
-                  <CustomBuilder
-                    productAttributes={productAttributes}
-                    showPriceFields={showPriceFields}
-                    setProductAttributes={handleChangeProductAttributes}
-                    setShowPriceFields={handleChangeShowPriceFields}
-                  />
-                </div>
-
                 <div className='mt-[14px] md:mt-[24px] w-full flex flex-col md:flex-row gap-y-[32px]'>
                   <div className='w-full md:w-[50%]'>
                     <Typography
@@ -605,7 +576,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                       </div>
                     </div>
 
-                    {isSalesTax && (
+                    {/* {isSalesTax && (
                       <div className='mt-[10px] w-full md:w-[60%]'>
                         <InputField
                           // label='sales tax rate'
@@ -619,7 +590,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                           onChange={handleChange}
                         />
                       </div>
-                    )}
+                    )} */}
                   </div>
 
                   <div className='w-full md:w-[50%]'>
@@ -649,6 +620,9 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
 
                     <Stack spacing={2} direction='row' sx={{ mt: '30px' }} alignItems='center'>
                       <Slider
+                        sx={{
+                          color: '#7DDEC1',
+                        }}
                         aria-label='quantity'
                         defaultValue={1}
                         value={productQuantity}
@@ -671,7 +645,6 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                     </Stack>
                   </div>
                 </div>
-
                 <div className='w-full md:w-[50%]'>
                   <div className='w-full md:w-[95%]'>
                     <Typography
@@ -729,7 +702,6 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                     </div>
                   </div>
                 </div>
-
                 <div className='w-full md:w-[50%]'>
                   <div className='w-full md:w-[95%]'>
                     <Typography
@@ -771,7 +743,6 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                     />
                   </div>
                 </div>
-
                 {/* <div className='w-full md:w-[45%]'>
                   <DropdownField
                     label='city'
@@ -784,7 +755,6 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                     onChange={handleCityChange}
                   />
                 </div> */}
-
                 {/* <div className='w-full md:w-[45%]'>
                   <UploadInputField
                     label='upload logo'
@@ -796,7 +766,6 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                     onChange={handleChange}
                   />
                 </div> */}
-
                 {/* <div className='w-full md:w-[45%]'>
                   <UploadInputField
                     label='featured image'

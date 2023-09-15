@@ -50,7 +50,8 @@ export interface InputFieldProps {
   required: boolean
   placeholder?: string
   value: string
-  onChange: (name: string, value: string) => void
+  changeHandler?: any
+  onChange?: (name: string, value: string) => void
   handleKeyPress?: (event: React.KeyboardEvent<HTMLInputElement>) => void
 }
 
@@ -254,6 +255,20 @@ export interface PaginatorProps {
   siblingCount?: number
   page?: number
   onChange: (value: number) => void
+}
+
+export interface ProductSwiperProps {
+  images: any[]
+}
+
+export interface ProductDetailMainContentProps {
+  title: string
+  stock: number
+  oldPrice: number
+  newPrice: number
+  reviews: number
+  description: string
+  rating: number
 }
 
 export interface AccountDropdownProps {

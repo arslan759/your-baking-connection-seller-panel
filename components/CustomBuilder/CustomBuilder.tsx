@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import styles from './styles.module.css'
+import { Typography } from '@mui/material'
+import CustomField from '../CustomField'
+import { PrimaryBtn } from '../Buttons'
 
 interface Option {
   optionLabel: string
@@ -92,55 +96,102 @@ function CustomBuilder({
   }
 
   return (
-    <div>
-      {productAttributes.map((attribute, attrIndex) => (
-        <div key={attrIndex}>
-          <input
-            type='text'
-            value={attribute.attribute}
-            onChange={(e) => handleAttributeChange(e, attrIndex, e.target.value)}
+    <div className={styles.card}>
+      <div className='w-full flex justify-between items-center'>
+        <Typography
+          sx={{
+            fontSize: '16px !important',
+            fontFamily: 'Open Sans',
+            fontWeight: '600 !important',
+            lineHeight: 'normal',
+            color: '#676767',
+          }}
+        >
+          {`Create Custom Field`}
+        </Typography>
+
+        <img src='/Images/brush.svg' alt='brush' className='w-[20px] h-[20px]' />
+      </div>
+      <div className='w-full'>
+        <Typography
+          sx={{
+            fontSize: '14px !important',
+            fontFamily: 'Open Sans',
+            fontWeight: '400 !important',
+            lineHeight: '16px',
+            color: '#676767',
+          }}
+        >
+          {`Create wide range of fields, such as color and flavor, to personalize your catalog`}
+        </Typography>
+      </div>
+
+      <div className='mt-[32px] flex flex-col w-full gap-y-[28px]'>
+        {productAttributes.map((attribute, attrIndex) => (
+          // <div key={attrIndex}>
+          //   <input
+          //     type='text'
+          //     value={attribute.attribute}
+          //     onChange={(e) => handleAttributeChange(e, attrIndex, e.target.value)}
+          //   />
+          //   <label>
+          //     Enable Price for this attribute:
+          //     <input
+          //       type='checkbox'
+          //       checked={showPriceFields[attrIndex]}
+          //       onChange={() => togglePriceField(attrIndex)}
+          //     />
+          //   </label>
+          //   <button onClick={(e) => addOption(e, attrIndex)}>Add Option</button>
+          //   <button onClick={(e) => removeAttribute(e, attrIndex)}>Delete Attribute</button>
+          //   {attribute.options.map((option, optionIndex) => (
+          //     <div key={optionIndex}>
+          //       <input
+          //         type='text'
+          //         value={option.optionLabel}
+          //         onChange={(e) =>
+          //           handleOptionChange(attrIndex, optionIndex, e.target.value, option.price)
+          //         }
+          //       />
+          //       {showPriceFields[attrIndex] && (
+          //         <input
+          //           type='number'
+          //           value={option.price}
+          //           onChange={(e) =>
+          //             handleOptionChange(
+          //               attrIndex,
+          //               optionIndex,
+          //               option.optionLabel,
+          //               Number(e.target.value),
+          //             )
+          //           }
+          //         />
+          //       )}
+          //       <button onClick={(e) => removeOption(e, attrIndex, optionIndex)}>
+          //         Remove Option
+          //       </button>
+          //     </div>
+          //   ))}
+          // </div>
+          <CustomField
+            key={attrIndex}
+            attrIndex={attrIndex}
+            attribute={attribute}
+            handleAttributeChange={handleAttributeChange}
+            showPriceFields={showPriceFields}
+            togglePriceField={togglePriceField}
+            addOption={addOption}
+            removeAttribute={removeAttribute}
+            handleOptionChange={handleOptionChange}
+            removeOption={removeOption}
           />
-          <label>
-            Enable Price for this attribute:
-            <input
-              type='checkbox'
-              checked={showPriceFields[attrIndex]}
-              onChange={() => togglePriceField(attrIndex)}
-            />
-          </label>
-          <button onClick={(e) => addOption(e, attrIndex)}>Add Option</button>
-          <button onClick={(e) => removeAttribute(e, attrIndex)}>Delete Attribute</button>
-          {attribute.options.map((option, optionIndex) => (
-            <div key={optionIndex}>
-              <input
-                type='text'
-                value={option.optionLabel}
-                onChange={(e) =>
-                  handleOptionChange(attrIndex, optionIndex, e.target.value, option.price)
-                }
-              />
-              {showPriceFields[attrIndex] && (
-                <input
-                  type='number'
-                  value={option.price}
-                  onChange={(e) =>
-                    handleOptionChange(
-                      attrIndex,
-                      optionIndex,
-                      option.optionLabel,
-                      Number(e.target.value),
-                    )
-                  }
-                />
-              )}
-              <button onClick={(e) => removeOption(e, attrIndex, optionIndex)}>
-                Remove Option
-              </button>
-            </div>
-          ))}
-        </div>
-      ))}
-      <button onClick={(e) => addAttribute(e)}>Add Attribute</button>
+        ))}
+      </div>
+
+      <div className='w-full mt-[28px]'>
+        <PrimaryBtn text='Add New Field' handleClick={(e) => addAttribute(e)} />
+      </div>
+      {/* <button onClick={(e) => addAttribute(e)}>Add Attribute</button> */}
     </div>
   )
 }
