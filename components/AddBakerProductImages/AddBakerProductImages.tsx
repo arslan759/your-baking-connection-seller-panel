@@ -1,53 +1,15 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from 'react'
 import { CircularProgress, Typography } from '@mui/material'
 import useFileUpload from 'hooks/fileUpload/useFileUpload'
-
-const dummyImages = [
-  {
-    id: 1,
-    name: 'image1',
-    image:
-      'https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg?w=2000',
-    size: '1.5mb',
-    status: 'uploaded',
-  },
-  {
-    id: 2,
-    name: 'image2',
-    image:
-      'https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg?w=2000',
-    size: '2.5mb',
-    status: 'uploaded',
-  },
-  {
-    id: 3,
-    name: 'image3',
-    image:
-      'https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg?w=2000',
-    size: '1.1mb',
-    status: 'uploaded',
-  },
-  {
-    id: 4,
-    name: 'image4',
-    image:
-      'https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg?w=2000',
-    size: '594kb',
-    status: 'uploaded',
-  },
-  {
-    id: 5,
-    name: 'image5',
-    image:
-      'https://img.freepik.com/free-photo/top-view-pepperoni-pizza-with-mushroom-sausages-bell-pepper-olive-corn-black-wooden_141793-2158.jpg?w=2000',
-    size: '1.5mb',
-    status: 'loading',
-  },
-]
+import DeleteIcon from '@mui/icons-material/Delete'
 
 import { AddBakerProductImagesProps } from 'types'
 
-const AddBakerProductImages = ({ productMedia, setProductMedia }: AddBakerProductImagesProps) => {
+const AddBakerProductImages = ({
+  productMedia,
+  handleUpdateProductMedia,
+  setProductMedia,
+}: AddBakerProductImagesProps) => {
   const [imageUploadCounter, setImageUploadCounter] = useState<number>(0)
   const [images, setImages] = useState<any[]>([])
   const [imageLoading, setImageLoading] = useState([true, true, true, true, true])
@@ -64,12 +26,33 @@ const AddBakerProductImages = ({ productMedia, setProductMedia }: AddBakerProduc
     setImageUploadCounter(productMedia?.length)
     setImageLoading(updatedLoadingArray)
 
-    console.log("product media in addproductImages is ", productMedia)
+    console.log('product media in addproductImages is ', productMedia)
+    console.log('image loading is ', imageLoading)
+    console.log('image upload counter is ', imageUploadCounter)
   }, [productMedia])
 
   const [uploadFile, loadingUploadFile] = useFileUpload()
 
   const [uploadError, setUploadError] = useState<string>('')
+
+  const handleFileDelete = (index: number) => {
+    const updatedImages = [...images]
+    const updatedLoading = imageLoading.map((item, i) => {
+      if (i < imageUploadCounter - 1) {
+        return false
+      } else {
+        return true
+      }
+    })
+
+    console.log('updated image loading is ', updatedLoading)
+
+    updatedImages.splice(index, 1)
+    setImages(updatedImages)
+    setImageLoading(updatedLoading)
+    setProductMedia(updatedImages)
+    setImageUploadCounter(imageUploadCounter - 1)
+  }
 
   async function handleFileUpload(e: ChangeEvent<HTMLInputElement>) {
     try {
@@ -111,7 +94,7 @@ const AddBakerProductImages = ({ productMedia, setProductMedia }: AddBakerProduc
       const uploadRes = await uploadFile(image, '/product-images')
       if (uploadRes.result.status) {
         console.log('setting product media', uploadRes.result.data[0].url)
-        setProductMedia(uploadRes.result.data[0].url)
+        handleUpdateProductMedia(uploadRes.result.data[0].url)
       }
 
       setUploadError('')
@@ -251,11 +234,22 @@ const AddBakerProductImages = ({ productMedia, setProductMedia }: AddBakerProduc
                 </div>
                 <div className='h-full flex items-center'>
                   {!imageLoading[index] ? (
-                    <img
-                      src='/Images/list-icon.svg'
-                      alt='check-icon'
-                      className='h-[20px] w-[20px]'
-                    />
+                    <div className='flex items-center gap-x-[8px]'>
+                      {/* <img
+                        src='/Images/list-icon.svg'
+                        alt='check-icon'
+                        className='h-[20px] w-[20px]'
+                      /> */}
+                      <DeleteIcon
+                        sx={{
+                          color: '#7DDEC1',
+                          height: '20px !important',
+                          width: '20px !important',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handleFileDelete(index)}
+                      />
+                    </div>
                   ) : (
                     <CircularProgress
                       sx={{

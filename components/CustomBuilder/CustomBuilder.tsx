@@ -19,6 +19,9 @@ interface CustomBuilderProps {
   showPriceFields: boolean[]
   setProductAttributes: (productAttributes: Attribute[]) => void
   setShowPriceFields: (showPriceFields: boolean[]) => void
+  productAttributesError: any[]
+  removeAttributeError: (index: number) => void
+  removeOptionError: (attrIndex: number, optionIndex: number) => void
 }
 
 function CustomBuilder({
@@ -26,6 +29,9 @@ function CustomBuilder({
   showPriceFields,
   setProductAttributes,
   setShowPriceFields,
+  productAttributesError,
+  removeAttributeError,
+  removeOptionError,
 }: CustomBuilderProps) {
   // const [productAttributes, setProductAttributes] = useState<Attribute[]>([])
   // const [showPriceFields, setShowPriceFields] = useState<boolean[]>([])
@@ -78,6 +84,8 @@ function CustomBuilder({
     const updatedShowPriceFields = [...showPriceFields]
     updatedShowPriceFields.splice(attrIndex, 1)
     setShowPriceFields(updatedShowPriceFields)
+
+    removeAttributeError(attrIndex)
   }
 
   const addOption = (e: any, attrIndex: number) => {
@@ -93,6 +101,8 @@ function CustomBuilder({
     updatedAttributes[attrIndex].options.splice(optionIndex, 1)
 
     setProductAttributes(updatedAttributes)
+
+    removeOptionError(attrIndex, optionIndex)
   }
 
   return (
@@ -184,6 +194,7 @@ function CustomBuilder({
             removeAttribute={removeAttribute}
             handleOptionChange={handleOptionChange}
             removeOption={removeOption}
+            productAttributesError={productAttributesError}
           />
         ))}
       </div>
