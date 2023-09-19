@@ -3,10 +3,11 @@ import styles from './styles.module.css'
 import { Typography } from '@mui/material'
 import CustomField from '../CustomField'
 import { PrimaryBtn } from '../Buttons'
+import { parse } from 'path'
 
 interface Option {
   optionLabel: string
-  price: number
+  price: number | string
 }
 
 interface Attribute {
@@ -19,6 +20,9 @@ interface CustomBuilderProps {
   showPriceFields: boolean[]
   setProductAttributes: (productAttributes: Attribute[]) => void
   setShowPriceFields: (showPriceFields: boolean[]) => void
+  productAttributesError: any[]
+  removeAttributeError: (index: number) => void
+  removeOptionError: (attrIndex: number, optionIndex: number) => void
 }
 
 function CustomBuilder({
@@ -26,6 +30,9 @@ function CustomBuilder({
   showPriceFields,
   setProductAttributes,
   setShowPriceFields,
+  productAttributesError,
+  removeAttributeError,
+  removeOptionError,
 }: CustomBuilderProps) {
   // const [productAttributes, setProductAttributes] = useState<Attribute[]>([])
   // const [showPriceFields, setShowPriceFields] = useState<boolean[]>([])
@@ -36,20 +43,24 @@ function CustomBuilder({
     const updatedAttributes = [...productAttributes]
     updatedAttributes[index].attribute = attribute
     setProductAttributes(updatedAttributes)
+
+    removeAttributeError(index)
   }
 
   const handleOptionChange = (
     attrIndex: number,
     optionIndex: number,
     label: string,
-    price: number,
+    price: number | string,
   ) => {
     const updatedAttributes = [...productAttributes]
     updatedAttributes[attrIndex].options[optionIndex] = {
       optionLabel: label,
-      price: price,
+      price: price ? parseFloat(price as string) : parseFloat('0'),
     }
     setProductAttributes(updatedAttributes)
+
+    removeOptionError(attrIndex, optionIndex)
   }
 
   const togglePriceField = (attrIndex: number) => {
@@ -63,7 +74,7 @@ function CustomBuilder({
     e.stopPropagation()
     setProductAttributes([
       ...productAttributes,
-      { attribute: '', options: [{ optionLabel: '', price: 0 }] },
+      { attribute: '', options: [{ optionLabel: '', price: '' }] },
     ])
     setShowPriceFields([...showPriceFields, false])
   }
@@ -78,13 +89,15 @@ function CustomBuilder({
     const updatedShowPriceFields = [...showPriceFields]
     updatedShowPriceFields.splice(attrIndex, 1)
     setShowPriceFields(updatedShowPriceFields)
+
+    removeAttributeError(attrIndex)
   }
 
   const addOption = (e: any, attrIndex: number) => {
     e.preventDefault()
     e.stopPropagation()
     const updatedAttributes = [...productAttributes]
-    updatedAttributes[attrIndex].options.push({ optionLabel: '', price: 0 })
+    updatedAttributes[attrIndex].options.push({ optionLabel: '', price: '' })
     setProductAttributes(updatedAttributes)
   }
 
@@ -93,6 +106,8 @@ function CustomBuilder({
     updatedAttributes[attrIndex].options.splice(optionIndex, 1)
 
     setProductAttributes(updatedAttributes)
+
+    removeOptionError(attrIndex, optionIndex)
   }
 
   return (
@@ -127,7 +142,7 @@ function CustomBuilder({
       </div>
 
       <div className='mt-[32px] flex flex-col w-full gap-y-[28px]'>
-        {productAttributes.map((attribute, attrIndex) => (
+        {productAttributes?.map((attribute, attrIndex) => (
           // <div key={attrIndex}>
           //   <input
           //     type='text'
@@ -184,6 +199,7 @@ function CustomBuilder({
             removeAttribute={removeAttribute}
             handleOptionChange={handleOptionChange}
             removeOption={removeOption}
+            productAttributesError={productAttributesError}
           />
         ))}
       </div>

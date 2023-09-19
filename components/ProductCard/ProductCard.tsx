@@ -191,18 +191,20 @@ ProductCardProps) => {
           {product?.description}
         </Typography>
         <div className='flex gap-x-[14px] items-center'>
-          <Typography
-            sx={{
-              color: '#888',
-              fontSize: '12px !important',
-              fontWeight: '400',
-              lineHeight: 'normal',
-              fontFamily: 'Open Sans',
-              textDecoration: 'line-through',
-            }}
-          >
-            ${parseInt(variants?.pricing[0]?.compareAtPrice?.amount)}
-          </Typography>
+          {variants?.pricing[0]?.compareAtPrice?.amount ? (
+            <Typography
+              sx={{
+                color: '#888',
+                fontSize: '12px !important',
+                fontWeight: '400',
+                lineHeight: 'normal',
+                fontFamily: 'Open Sans',
+                textDecoration: 'line-through',
+              }}
+            >
+              ${parseInt(variants?.pricing[0]?.compareAtPrice?.amount)}
+            </Typography>
+          ) : null}
           <Typography
             sx={{
               color: '#090909',

@@ -2,6 +2,7 @@ import { Checkbox, Typography } from '@mui/material'
 import React from 'react'
 import { PrimaryBtn, TertiaryBtn } from '../Buttons'
 import InputField from '../InputField'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 interface CustomFieldProps {
   attrIndex: number
@@ -13,6 +14,7 @@ interface CustomFieldProps {
   removeAttribute: any
   handleOptionChange: any
   removeOption: any
+  productAttributesError: any
 }
 
 const CustomField = ({
@@ -23,6 +25,7 @@ const CustomField = ({
   togglePriceField,
   addOption,
   removeAttribute,
+  productAttributesError,
   removeOption,
   handleOptionChange,
 }: CustomFieldProps) => {
@@ -32,10 +35,10 @@ const CustomField = ({
         <InputField
           label='Attribute Name'
           type='text'
-          inputColor='#888'
+          inputColor='#090909'
           name='price'
           value={attribute.attribute}
-          // errorText={passwordError}
+          errorText={productAttributesError[attrIndex]?.attribute}
           required={false}
           changeHandler={(e: any) => handleAttributeChange(e, attrIndex, e.target.value)}
         />
@@ -94,10 +97,10 @@ const CustomField = ({
               <InputField
                 label='option label'
                 type='text'
-                inputColor='#888'
+                inputColor='#090909'
                 name='optionLabel'
                 value={option.optionLabel}
-                //   errorText={passwordError}
+                errorText={productAttributesError[attrIndex]?.options[optionIndex]?.optionLabel}
                 required={false}
                 changeHandler={(e: any) =>
                   handleOptionChange(attrIndex, optionIndex, e.target.value, option.price)
@@ -110,10 +113,10 @@ const CustomField = ({
                 <InputField
                   label='Price'
                   type='number'
-                  inputColor='#888'
+                  inputColor='#090909'
                   name='price'
                   value={option.price}
-                  // errorText={passwordError}
+                  errorText={productAttributesError[attrIndex]?.options[optionIndex]?.price}
                   required={false}
                   changeHandler={(e: any) =>
                     handleOptionChange(
@@ -127,20 +130,28 @@ const CustomField = ({
               </div>
             )}
           </div>
-          <div className='h-[30px] w-fit mt-[20px]'>
-            <PrimaryBtn
+          <div className='w-fit mt-[8px]'>
+            {/* <PrimaryBtn
               text='Remove Option'
               handleClick={(e) => removeOption(e, attrIndex, optionIndex)}
+            /> */}
+            <DeleteIcon
+              onClick={(e) => removeOption(e, attrIndex, optionIndex)}
+              sx={{
+                color: '#FF0000',
+                fontSize: '20px !important',
+                cursor: 'pointer',
+              }}
             />
           </div>
         </div>
       ))}
 
       <div className='w-full flex flex-col md:flex-row gap-[18px]'>
-        <div className='w-[100%] md:w-fit'>
+        <div className='h-[35px] w-[100%] md:w-fit'>
           <PrimaryBtn text='Add Option' handleClick={(e) => addOption(e, attrIndex)} />
         </div>
-        <div className='w-[100%] md:w-fit'>
+        <div className='h-[35px] w-[100%] md:w-fit'>
           <TertiaryBtn text='Delete Attribute' handleClick={(e) => removeAttribute(e, attrIndex)} />
         </div>
       </div>
