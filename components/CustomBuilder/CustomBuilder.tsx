@@ -3,10 +3,11 @@ import styles from './styles.module.css'
 import { Typography } from '@mui/material'
 import CustomField from '../CustomField'
 import { PrimaryBtn } from '../Buttons'
+import { parse } from 'path'
 
 interface Option {
   optionLabel: string
-  price: number
+  price: number | string
 }
 
 interface Attribute {
@@ -42,20 +43,24 @@ function CustomBuilder({
     const updatedAttributes = [...productAttributes]
     updatedAttributes[index].attribute = attribute
     setProductAttributes(updatedAttributes)
+
+    removeAttributeError(index)
   }
 
   const handleOptionChange = (
     attrIndex: number,
     optionIndex: number,
     label: string,
-    price: number,
+    price: number | string,
   ) => {
     const updatedAttributes = [...productAttributes]
     updatedAttributes[attrIndex].options[optionIndex] = {
       optionLabel: label,
-      price: price,
+      price: price ? parseFloat(price as string) : parseFloat('0'),
     }
     setProductAttributes(updatedAttributes)
+
+    removeOptionError(attrIndex, optionIndex)
   }
 
   const togglePriceField = (attrIndex: number) => {
@@ -69,7 +74,7 @@ function CustomBuilder({
     e.stopPropagation()
     setProductAttributes([
       ...productAttributes,
-      { attribute: '', options: [{ optionLabel: '', price: 0 }] },
+      { attribute: '', options: [{ optionLabel: '', price: '' }] },
     ])
     setShowPriceFields([...showPriceFields, false])
   }
@@ -92,7 +97,7 @@ function CustomBuilder({
     e.preventDefault()
     e.stopPropagation()
     const updatedAttributes = [...productAttributes]
-    updatedAttributes[attrIndex].options.push({ optionLabel: '', price: 0 })
+    updatedAttributes[attrIndex].options.push({ optionLabel: '', price: '' })
     setProductAttributes(updatedAttributes)
   }
 
@@ -137,7 +142,7 @@ function CustomBuilder({
       </div>
 
       <div className='mt-[32px] flex flex-col w-full gap-y-[28px]'>
-        {productAttributes.map((attribute, attrIndex) => (
+        {productAttributes?.map((attribute, attrIndex) => (
           // <div key={attrIndex}>
           //   <input
           //     type='text'

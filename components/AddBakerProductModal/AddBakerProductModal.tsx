@@ -27,7 +27,7 @@ interface CustomFieldOptions {
 }
 interface Option {
   optionLabel: string
-  price: number
+  price: number | string
 }
 
 interface Attribute {
@@ -94,7 +94,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
       options: [
         {
           optionLabel: '',
-          price: 0,
+          price: '',
         },
       ],
     },
@@ -145,8 +145,8 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
           isVisible: true,
           media: productMedia,
           productListingSchedule: {
-            startDate: listingStartDate,
-            endDate: listingEndDate,
+            startDate: listingStartDate ? listingStartDate : '',
+            endDate: listingEndDate ? listingEndDate : '',
           },
           availableFulfillmentDates: fulfillmentDate,
           productAttributes,
@@ -409,7 +409,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
 
   const removeAttributeError = (index: number) => {
     let updatedProductAttributesError = [...productAttributesError]
-    updatedProductAttributesError.splice(index, 1)
+    updatedProductAttributesError?.splice(index, 1)
     // updatedProductAttributesError[index] = {
     //   attribute: '',
     //   options: [],
@@ -419,7 +419,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
 
   const removeOptionError = (attrIndex: number, optionIndex: number) => {
     let updatedProductAttributesError = [...productAttributesError]
-    updatedProductAttributesError[attrIndex].options.splice(optionIndex, 1)
+    updatedProductAttributesError[attrIndex]?.options?.splice(optionIndex, 1)
     // updatedProductAttributesError[attrIndex].options[optionIndex] = {
     //   optionLabel: '',
     //   price: '',
@@ -430,16 +430,15 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    console.log('add button clicked')
+    // console.log('add button clicked')
 
-    console.log('product attributes are ', productAttributes)
-    const isValidAttributes = validateProductAttributes()
+    // console.log('product attributes are ', productAttributes)
 
-    console.log('is valid attributes ', isValidAttributes)
+    // console.log('is valid attributes ', isValidAttributes)
 
-    console.log('product attributes error is ', productAttributesError)
+    // console.log('product attributes error is ', productAttributesError)
 
-    return
+    // return
 
     if (
       !productTitle ||
@@ -462,16 +461,24 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
       setProductListingError,
     )
 
+    console.log('listing start date is ', listingStartDate)
+    console.log('listing end date is ', listingEndDate)
+    console.log('fullfillment date is ', fulfillmentDate)
+
+    // return
+
     const isValidFulfillmentDate = validateDates(fulfillmentDate, '', setFulfillmentDateError)
+    const isValidAttributes = validateProductAttributes()
 
     console.log('is valid listing dates ', isValidListingDates)
     console.log('is valid fulfillment date ', isValidFulfillmentDate)
+    console.log('is valid attributes ', isValidAttributes)
 
-    if (!isValidListingDates || !isValidFulfillmentDate) {
+    if (!isValidListingDates || !isValidFulfillmentDate || !isValidAttributes) {
       return
     }
 
-    // await createProduct()
+    await createProduct()
 
     // resetForm()
 
@@ -949,9 +956,9 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
                 </div> */}
               </div>
 
-              {saveBtnDisable ? <span>Loading...</span> : null}
+              {/* {saveBtnDisable ? <span>Loading...</span> : null} */}
               <div className='mt-[24px] md:mt-[23px]'>
-                <PrimaryBtn text='Save product' type='submit' disabled={saveBtnDisable} />
+                <PrimaryBtn text='Save product' type='submit' loading={saveBtnDisable} />
               </div>
 
               <div className='mt-[24px] md:mt-[23px]'>

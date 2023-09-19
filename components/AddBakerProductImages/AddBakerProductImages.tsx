@@ -26,6 +26,12 @@ const AddBakerProductImages = ({
     setImageUploadCounter(productMedia?.length)
     setImageLoading(updatedLoadingArray)
 
+    if (!productMedia?.length) {
+      setImages([])
+      setImageLoading([true, true, true, true, true])
+      setImageUploadCounter(0)
+    }
+
     console.log('product media in addproductImages is ', productMedia)
     console.log('image loading is ', imageLoading)
     console.log('image upload counter is ', imageUploadCounter)

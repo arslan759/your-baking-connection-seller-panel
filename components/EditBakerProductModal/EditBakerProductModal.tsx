@@ -12,6 +12,8 @@ import useUpdatePublishProduct from 'hooks/product/usePublishProduct'
 import { withApollo } from 'lib/apollo/withApollo'
 import { ProductMediaInterface } from 'types'
 import { useRouter } from 'next/navigation'
+import CustomBuilder from '../CustomBuilder'
+import { validateDates } from 'helpers/validations'
 
 interface EditBakerProductModalProps {
   product: any
@@ -19,6 +21,16 @@ interface EditBakerProductModalProps {
   category: string
   open: boolean
   onClose: () => void
+}
+
+interface Option {
+  optionLabel: string
+  price: number | string
+}
+
+interface Attribute {
+  attribute: string
+  options: Option[]
 }
 
 const EditBakerProductModal = ({
@@ -46,11 +58,21 @@ const EditBakerProductModal = ({
   const [fulfillmentDate, setFulfillmentDate] = useState(product?.availableFulfillmentDates)
 
   const [productMedia, setProductMedia] = useState<ProductMediaInterface[]>([])
+  const [productAttributes, setProductAttributes] = useState<Attribute[]>([])
+  const [showPriceFields, setShowPriceFields] = useState<boolean[]>([])
 
   const [mediaPriority, setMediaPriority] = useState<number>(1)
 
+  const handleChangeProductAttributes = (attributes: Attribute[]) => {
+    setProductAttributes(attributes)
+  }
+
+  const handleChangeShowPriceFields = (fields: boolean[]) => {
+    setShowPriceFields(fields)
+  }
+
   const filterMedia = (media: any) => {
-    return media.map((item: any) => {
+    return media?.map((item: any) => {
       return {
         productId: item.productId,
         URLs: {
@@ -65,17 +87,40 @@ const EditBakerProductModal = ({
     })
   }
 
+  const filterAttributes = (attribute: any) => {
+    return attribute?.map((item: any, index: number) => {
+      return {
+        attribute: item.attribute,
+        options: item.options.map((option: any) => {
+          if (option.price) {
+            setShowPriceFields((prev) => {
+              prev[index] = true
+              return prev
+            })
+          }
+
+          return {
+            optionLabel: option.optionLabel,
+            price: parseFloat(option.price),
+          }
+        }),
+      }
+    })
+  }
+
   //test effect remove later
   useEffect(() => {
     console.log('product in edit product modal is ', product)
     console.log('variant in edit product modal is ', variants)
 
     const updatedMedia = filterMedia(product?.media)
+    const updatedAttributes = filterAttributes(product?.productAttributes)
 
     setProductMedia(updatedMedia)
+    setProductAttributes(updatedAttributes)
 
     console.log('updated media is ', updatedMedia)
-
+    console.log('updated attributes is ', updatedAttributes)
   }, [product, variants])
 
   // error states
@@ -87,6 +132,17 @@ const EditBakerProductModal = ({
   const [productQuantityError, setProductQuantityError] = useState('')
   const [productListingError, setProductListingError] = useState('')
   const [fulfillmentDateError, setFulfillmentDateError] = useState('')
+  const [productAttributesError, setProductAttributesError] = useState<any[]>([
+    {
+      attribute: '',
+      options: [
+        {
+          optionLabel: '',
+          price: '',
+        },
+      ],
+    },
+  ])
 
   const [updateProductFunction, loadingUpdateProduct] = useUpdateProduct()
   const [updateProductVariantFunction, loadingUpdateProductVariant] = useUpdateProductVariant()
@@ -123,15 +179,16 @@ const EditBakerProductModal = ({
           isVisible: true,
           media: productMedia,
           productListingSchedule: {
-            startDate: listingStartDate,
-            endDate: listingEndDate,
+            startDate: listingStartDate ? listingStartDate : '',
+            endDate: listingEndDate ? listingEndDate : '',
           },
           availableFulfillmentDates: fulfillmentDate,
+          productAttributes,
         },
       }
       const updatedProduct = await updateProductFunction({ variables })
 
-      console.log("updated product is" , updatedProduct)
+      console.log('updated product is', updatedProduct)
 
       //@ts-ignore
       const productId = updatedProduct?.data?.updateProduct?.product?._id
@@ -143,7 +200,7 @@ const EditBakerProductModal = ({
         await updateProductVariant(productId, variantId)
       }
     } catch (err) {
-      console.log('createproduct error', err)
+      console.log('updateproduct error', err)
     }
   }
 
@@ -243,17 +300,17 @@ const EditBakerProductModal = ({
 
     if (name === 'listingStartDate') {
       setListingStartDate(value)
-      setProductListingError(value ? '' : 'Listing start date is required')
+      // setProductListingError(value ? '' : 'Listing start date is required')
     }
 
     if (name === 'listingEndDate') {
       setListingEndDate(value)
-      setProductListingError(value ? '' : 'Listing end date is required')
+      // setProductListingError(value ? '' : 'Listing end date is required')
     }
 
     if (name === 'fulfillmentDate') {
       setFulfillmentDate(value)
-      setFulfillmentDateError(value ? '' : 'Fulfillment date is required')
+      // setFulfillmentDateError(value ? '' : 'Fulfillment date is required')
     }
   }
 
@@ -294,24 +351,147 @@ const EditBakerProductModal = ({
     ])
   }
 
+  const validateProductAttributes = () => {
+    let isValid = true
+    let updatedProductAttributesError = [...productAttributesError]
+
+    productAttributes.forEach((attribute, index) => {
+      if (!attribute.attribute) {
+        updatedProductAttributesError[index] = {
+          attribute: 'Attribute is required',
+          options: [],
+        }
+        isValid = false
+      } else {
+        updatedProductAttributesError[index] = {
+          attribute: '',
+          options: [],
+        }
+      }
+
+      attribute.options.forEach((option, optionIndex) => {
+        if (!option.optionLabel) {
+          updatedProductAttributesError[index].options[optionIndex] = {
+            optionLabel: 'Option label is required',
+            price: '',
+          }
+          if (showPriceFields[index] && !option.price) {
+            updatedProductAttributesError[index].options[optionIndex] = {
+              optionLabel: 'Option label is required',
+              price: 'Price is required',
+            }
+          } else {
+            updatedProductAttributesError[index].options[optionIndex] = {
+              optionLabel: 'Option label is required',
+              price: '',
+            }
+          }
+          isValid = false
+        } else {
+          updatedProductAttributesError[index].options[optionIndex] = {
+            optionLabel: '',
+            price: '',
+          }
+          if (showPriceFields[index] && !option.price) {
+            updatedProductAttributesError[index].options[optionIndex] = {
+              optionLabel: '',
+              price: 'Price is required',
+            }
+            isValid = false
+          } else {
+            updatedProductAttributesError[index].options[optionIndex] = {
+              optionLabel: '',
+              price: '',
+            }
+          }
+        }
+      })
+    })
+    setProductAttributesError(updatedProductAttributesError)
+
+    return isValid
+  }
+
+  const removeAttributeError = (index: number) => {
+    let updatedProductAttributesError = [...productAttributesError]
+    updatedProductAttributesError?.splice(index, 1)
+    // updatedProductAttributesError[index] = {
+    //   attribute: '',
+    //   options: [],
+    // }
+    setProductAttributesError(updatedProductAttributesError)
+  }
+
+  const removeOptionError = (attrIndex: number, optionIndex: number) => {
+    let updatedProductAttributesError = [...productAttributesError]
+    updatedProductAttributesError[attrIndex]?.options?.splice(optionIndex, 1)
+    // updatedProductAttributesError[attrIndex].options[optionIndex] = {
+    //   optionLabel: '',
+    //   price: '',
+    // }
+    setProductAttributesError(updatedProductAttributesError)
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    console.log('add button clicked')
-    await updateProduct()
+    if (
+      !productTitle ||
+      !productDescription ||
+      !productPrice ||
+      productMedia.length === 0 ||
+      !productQuantity
+    ) {
+      setProductTitleError(productTitle ? '' : 'Product title is required')
+      setProductDescriptionError(productDescription ? '' : 'Product description is required')
+      setProductPriceError(productPrice ? '' : 'Product price is required')
+      setProductImagesError(productMedia.length > 0 ? '' : 'Product images are required')
+      setProductQuantityError(productQuantity ? '' : 'Product quantity is required')
+      return
+    }
 
-    console.log('product title is ', productTitle)
-    console.log('product description is ', productDescription)
-    console.log('product price is ', productPrice)
-    console.log('custom field is ', customField)
-    console.log('is sales tax ', isSalesTax)
-    console.log('product quantity is ', productQuantity)
+    const isValidListingDates = validateDates(
+      listingStartDate,
+      listingEndDate,
+      setProductListingError,
+    )
+
     console.log('listing start date is ', listingStartDate)
     console.log('listing end date is ', listingEndDate)
-    console.log('fulfillment date is ', fulfillmentDate)
+    console.log('fullfillment date is ', fulfillmentDate)
+
+    // return
+
+    const isValidFulfillmentDate = validateDates(fulfillmentDate, '', setFulfillmentDateError)
+    const isValidAttributes = validateProductAttributes()
+
+    console.log('is valid listing dates ', isValidListingDates)
+    console.log('is valid fulfillment date ', isValidFulfillmentDate)
+    console.log('is valid attributes ', isValidAttributes)
+
+    if (!isValidListingDates || !isValidFulfillmentDate || !isValidAttributes) {
+      return
+    }
+
+    await updateProduct()
+
+    // console.log('product title is ', productTitle)
+    // console.log('product description is ', productDescription)
+    // console.log('product price is ', productPrice)
+    // console.log('custom field is ', customField)
+    // console.log('is sales tax ', isSalesTax)
+    // console.log('product quantity is ', productQuantity)
+    // console.log('listing start date is ', listingStartDate)
+    // console.log('listing end date is ', listingEndDate)
+    // console.log('fulfillment date is ', fulfillmentDate)
 
     console.log('add product form submitted')
   }
+
+  useEffect(() => {
+    console.log('product attributes are ', productAttributes)
+    console.log('show check', showPriceFields)
+  }, [productAttributes, showPriceFields])
   return (
     <Modal
       sx={{
@@ -366,7 +546,6 @@ const EditBakerProductModal = ({
                   onChange={handleChange}
                 />
               </div>
-
               <div className='w-full'>
                 <InputField
                   label='product description'
@@ -398,7 +577,7 @@ const EditBakerProductModal = ({
 
                 <div className='flex-1'>
                   <InputField
-                    label='compare at price'
+                    label='compare at price (optional)'
                     type='number'
                     inputColor='#212529'
                     placeholder='Enter compare at price'
@@ -410,10 +589,16 @@ const EditBakerProductModal = ({
                 </div>
               </div>
 
-              <AddBakerProductImages
-                productMedia={productMedia}
-                setProductMedia={handleUpdateProductMedia}
-              />
+              <div className='w-full'>
+                <AddBakerProductImages
+                  productMedia={productMedia}
+                  handleUpdateProductMedia={handleUpdateProductMedia}
+                  setProductMedia={setProductMedia}
+                />
+                {productImagesError && (
+                  <span className='text-red-500 text-xs'>{productImagesError}</span>
+                )}
+              </div>
 
               <Typography
                 sx={{
@@ -438,34 +623,33 @@ const EditBakerProductModal = ({
                 />
                 Customization
               </Typography>
-
               <div className='w-full'>
-                <InputField
-                  label='custom field'
-                  type='text'
-                  inputColor='#212529'
-                  placeholder='Create custom field'
-                  name='customField'
-                  value={customField}
-                  errorText={customFieldError}
-                  required
-                  onChange={handleChange}
-                />
-                <Typography
-                  sx={{
-                    marginTop: '4px',
-                    fontSize: '14px !important',
-                    fontFamily: 'Open Sans',
-                    fontWeight: '600 !important',
-                    lineHeight: 'normal',
-                    color: '#676767',
-                  }}
-                >
-                  {`Choose from a wide range of fields, such as color and flavor, to personalize
-                    your catalog`}
-                </Typography>
+                <div className='w-full'>
+                  <Typography
+                    sx={{
+                      marginBottom: '8px',
+                      fontSize: '14px !important',
+                      fontFamily: 'Open Sans',
+                      fontWeight: '600 !important',
+                      lineHeight: 'normal',
+                      color: '#676767',
+                    }}
+                  >
+                    {`Custom Field`}
+                  </Typography>
+                </div>
+                <div className='w-full'>
+                  <CustomBuilder
+                    productAttributes={productAttributes}
+                    showPriceFields={showPriceFields}
+                    setProductAttributes={handleChangeProductAttributes}
+                    setShowPriceFields={handleChangeShowPriceFields}
+                    productAttributesError={productAttributesError}
+                    removeAttributeError={removeAttributeError}
+                    removeOptionError={removeOptionError}
+                  />
+                </div>
               </div>
-
               <div className='mt-[14px] md:mt-[24px] w-full flex flex-col md:flex-row gap-y-[32px]'>
                 <div className='w-full md:w-[50%]'>
                   <Typography
@@ -547,20 +731,20 @@ const EditBakerProductModal = ({
                   </div>
 
                   {/* {isSalesTax && (
-                    <div className='mt-[10px] w-full md:w-[60%]'>
-                      <InputField
-                        // label='sales tax rate'
-                        type='text'
-                        inputColor='#888'
-                        placeholder='Enter sales tax rate'
-                        name='salesTaxRate'
-                        value={salesTaxRate}
-                        errorText={salesTaxRateError}
-                        required
-                        onChange={handleChange}
-                      />
-                    </div>
-                  )} */}
+                      <div className='mt-[10px] w-full md:w-[60%]'>
+                        <InputField
+                          // label='sales tax rate'
+                          type='text'
+                          inputColor='#888'
+                          placeholder='Enter sales tax rate'
+                          name='salesTaxRate'
+                          value={salesTaxRate}
+                          errorText={salesTaxRateError}
+                          required
+                          onChange={handleChange}
+                        />
+                      </div>
+                    )} */}
                 </div>
 
                 <div className='w-full md:w-[50%]'>
@@ -590,7 +774,11 @@ const EditBakerProductModal = ({
 
                   <Stack spacing={2} direction='row' sx={{ mt: '30px' }} alignItems='center'>
                     <Slider
+                      sx={{
+                        color: '#7DDEC1',
+                      }}
                       aria-label='quantity'
+                      min={1}
                       defaultValue={1}
                       value={productQuantity}
                       onChange={handleQuantityChange}
@@ -612,7 +800,6 @@ const EditBakerProductModal = ({
                   </Stack>
                 </div>
               </div>
-
               <div className='w-full md:w-[50%]'>
                 <div className='w-full md:w-[95%]'>
                   <Typography
@@ -648,7 +835,7 @@ const EditBakerProductModal = ({
                         placeholder='Start date'
                         name='listingStartDate'
                         value={listingStartDate}
-                        errorText={productListingError}
+                        // errorText={productListingError}
                         required={false}
                         onChange={handleChange}
                       />
@@ -662,15 +849,19 @@ const EditBakerProductModal = ({
                         placeholder='End date'
                         name='listingEndDate'
                         value={listingEndDate}
-                        errorText={productListingError}
+                        // errorText={productListingError}
                         required={false}
                         onChange={handleChange}
                       />
                     </div>
                   </div>
+                  <div className='w-full'>
+                    {productListingError && (
+                      <span className='text-red-500 text-xs'>{productListingError}</span>
+                    )}
+                  </div>
                 </div>
               </div>
-
               <div className='w-full md:w-[50%]'>
                 <div className='w-full md:w-[95%]'>
                   <Typography
@@ -712,7 +903,6 @@ const EditBakerProductModal = ({
                   />
                 </div>
               </div>
-
               {/* <div className='w-full md:w-[45%]'>
                   <DropdownField
                     label='city'
@@ -725,7 +915,6 @@ const EditBakerProductModal = ({
                     onChange={handleCityChange}
                   />
                 </div> */}
-
               {/* <div className='w-full md:w-[45%]'>
                   <UploadInputField
                     label='upload logo'
@@ -737,7 +926,6 @@ const EditBakerProductModal = ({
                     onChange={handleChange}
                   />
                 </div> */}
-
               {/* <div className='w-full md:w-[45%]'>
                   <UploadInputField
                     label='featured image'
@@ -753,7 +941,7 @@ const EditBakerProductModal = ({
 
             {/* {saveBtnDisable ? <span>Loading...</span> : null} */}
             <div className='mt-[24px] md:mt-[23px]'>
-              <PrimaryBtn text='Save product' type='submit' disabled={saveBtnDisable} loading={saveBtnDisable} />
+              <PrimaryBtn text='Save product' type='submit' loading={saveBtnDisable} />
             </div>
 
             <div className='mt-[24px] md:mt-[23px]'>
