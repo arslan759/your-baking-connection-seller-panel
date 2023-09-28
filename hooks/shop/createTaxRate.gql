@@ -1,0 +1,7 @@
+mutation createTaxRate($shopId: ID!, $country: String, $rate: Float!, $region: String) {
+  createTaxRate(input: { shopId: $shopId, country: $country, region: $region, rate: $rate }) {
+    taxRate {
+      _id
+    }
+  }
+}

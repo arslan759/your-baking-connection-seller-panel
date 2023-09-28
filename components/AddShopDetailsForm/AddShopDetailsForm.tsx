@@ -15,6 +15,7 @@ import { AddShopDetailsFormProps } from 'types'
 import useFileUpload from 'hooks/fileUpload/useFileUpload'
 import { getCitiesApi, getStatesApi } from 'helpers/apis'
 
+import useCreateTaxRate from 'hooks/shop/useCreateTaxRate'
 const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   // auth store
   //@ts-ignore
@@ -23,6 +24,9 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
 
   const [shopName, setShopName] = useState('')
   const [shopDescription, setShopDescription] = useState('')
+
+  const [shopTax, setShopTax] = useState('')
+  const [shopTaxError, setShopTaxError] = useState('')
   const [logo, setLogo] = useState<File | null>(null)
   const [featuredImage, setFeaturedImage] = useState<File | null>(null)
 
@@ -75,10 +79,13 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       setShopName(value)
       setShopNameError(value ? '' : 'Shop name is required')
     }
-
     if (name === 'shopDescription') {
       setShopDescription(value)
       setShopDescriptionError(value ? '' : 'Shop description is required')
+    }
+    if (name === 'shopTax') {
+      setShopTax(value)
+      setShopTaxError(value ? '' : 'Tax percentage is required')
     }
   }
 
@@ -113,6 +120,8 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
 
   const [createShop, loadingCreateShop] = useCreateShop()
   const [updateShop, loadingUpdateShop] = useUpdateShop()
+
+  const [createTax, loadingCreateTaxRate] = useCreateTaxRate()
 
   const handleUpdateShop = async (shopId: string) => {
     const shopUpdated = await updateShop({
@@ -151,12 +160,32 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
     const shopId2 = shopUpdated?.data?.updateShop?.shop?._id
     if (shopId2) {
       localStorage.setItem('shopId', shopId2)
-      openSuccess()
+      handleCreateTaxRate(shopId2)
     }
 
     try {
     } catch (err: any) {
       setError(err.message)
+    }
+  }
+
+  const handleCreateTaxRate = async (shopId: string) => {
+    try {
+      const taxRate = await createTax({
+        variables: {
+          shopId,
+          country: 'United States',
+          region: state,
+          rate: parseFloat(shopTax),
+        },
+      })
+      console.log('tax rate is ', taxRate)
+
+      if (taxRate?.data?.createTaxRate?._id) {
+        openSuccess()
+      }
+    } catch (err: any) {
+      console.log('err', err)
     }
   }
 
@@ -376,6 +405,23 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
                   onChange={handleCityChange}
                 />
               </div>
+
+              <div className='w-full md:w-[45%]'>
+                <InputField
+                  label='shop tax rate(%)'
+                  type='number'
+                  inputColor='white'
+                  name='shopTax'
+                  value={shopTax}
+                  errorText={shopTaxError}
+                  required
+                  onChange={handleChange}
+                />
+              </div>
+
+              {/* <span style={{ fontSize: '10px', color: 'white' }}>
+                *Enter Tax percentage that will be applicable to individual products
+              </span> */}
 
               <div className='mt-[16px] md:mt-[0px] w-full h-[1px] bg-[#fff]' />
 
