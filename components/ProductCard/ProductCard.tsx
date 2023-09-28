@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { ProductCardProps } from 'types'
 import GalleryProductCardMenu from '../ProductCardMenu/ProductCardMenu'
 import { PrimaryBtn } from '../Buttons'
+import { useRouter } from 'next/navigation'
 
 const ProductCard = ({
   product,
@@ -21,6 +22,8 @@ const ProductCard = ({
 ProductCardProps) => {
   const [isHovering, setIsHovering] = useState(false) // handle mouse enter and leave for more details on desktop view
   const [isDetailsVisible, setIsDetailsVisible] = useState(false) // Toggle More Details for mobile view
+
+  const router = useRouter()
 
   // handle mouse enter and leave
   const handleMouseEnter = () => {
@@ -47,7 +50,10 @@ ProductCardProps) => {
   // handle more details click
   const handleMoreDetailsClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation()
-    console.log('more details clicked')
+
+    // console.log('slug', `/product/${slug}`)
+
+    router.push(`/product/${product?.slug}`)
   }
 
   // console.log('isDetailsVisible', isDetailsVisible)
@@ -185,18 +191,20 @@ ProductCardProps) => {
           {product?.description}
         </Typography>
         <div className='flex gap-x-[14px] items-center'>
-          <Typography
-            sx={{
-              color: '#888',
-              fontSize: '12px !important',
-              fontWeight: '400',
-              lineHeight: 'normal',
-              fontFamily: 'Open Sans',
-              textDecoration: 'line-through',
-            }}
-          >
-            ${parseInt(variants?.pricing[0]?.compareAtPrice?.amount)}
-          </Typography>
+          {variants?.pricing[0]?.compareAtPrice?.amount ? (
+            <Typography
+              sx={{
+                color: '#888',
+                fontSize: '12px !important',
+                fontWeight: '400',
+                lineHeight: 'normal',
+                fontFamily: 'Open Sans',
+                textDecoration: 'line-through',
+              }}
+            >
+              ${parseInt(variants?.pricing[0]?.compareAtPrice?.amount)}
+            </Typography>
+          ) : null}
           <Typography
             sx={{
               color: '#090909',
