@@ -4,9 +4,9 @@ import styles from './styles.module.css'
 
 const HowItWorksPcView = () => {
   return (
-    <div className={`${styles.background} hidden lg:flex items-center justify-start `}>
+    <div className={`${styles.maskedDiv} hidden lg:flex items-center justify-start `}>
       <div className='w-[55%] h-[auto] flex items-center justify-center mt-[-25px]'>
-        <div className='w-[90%] h-full flex flex-col gap-y-[36px] relative'>
+        <div className='w-fit h-full flex flex-col gap-y-[36px] relative px-[30px]'>
           <img
             src='Images/dotted-line.svg'
             alt='dotted-line'
@@ -147,6 +147,14 @@ const HowItWorksPcView = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className='w-[45%] h-full'>
+        <img
+          src='https://www.snackandbakery.com/ext/resources/images/bakeryproducts.jpg?1432238179'
+          alt='image'
+          className='w-full h-full object-cover'
+        />
       </div>
     </div>
   )

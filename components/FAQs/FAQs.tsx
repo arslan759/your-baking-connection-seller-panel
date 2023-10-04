@@ -13,8 +13,16 @@ const FAQs = () => {
         <SectionSubHeading subHeading={`Frequently asked questions`} />
       </div>
 
-      <div className={`${styles.maskedDiv} flex items-start justify-end  `}>
-        <div className='w-[58%]  h-[auto] md:h-[auto] flex items-start justify-center'>
+      <div className={`${styles.maskedDiv} flex items-center justify-start `}>
+        <div className='w-[42%] h-full'>
+          <img
+            src='https://www.snackandbakery.com/ext/resources/images/bakeryproducts.jpg?1432238179'
+            alt='image'
+            className='w-full h-full object-cover'
+          />
+        </div>
+
+        <div className='w-[58%] h-[auto] flex items-center justify-center mt-[-25px] px-[20px] md:px-[80px]'>
           <CustomAccordion />
         </div>
       </div>

@@ -8,15 +8,39 @@
   object-fit: cover;
 }
 
-/* @media screen and (max-width: 768px) {
-  .background {
-    background: url('/Images/how-it-works-background.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-size: 100% 100%;
-    width: 99vw;
-    height: 100vh;
+.background {
+  background: url('/Images/faqs-background.webp');
+  background-repeat: no-repeat;
+  /* background-size: cover; */
+  background-size: 100% 100%;
+  width: 100vw;
+  height: 500px;
+  object-fit: cover;
+}
 
+@media screen and (max-width: 768px) {
+  .background {
+    height: 400px;
   }
 }
-     */
+
+.maskedDiv {
+  width: 100vw;
+  height: 500px;
+  /* height: 100%; */
+  /* padding: 180px 50px; */
+  background: #f8b4cb;
+  background-size: 100% 100%;
+  -webkit-mask-image: url('/Images/how-it-works-background.webp');
+  mask-image: url('/Images/how-it-works-background.webp');
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .maskedDiv {
+    /* padding: 80px 25px; */
+    height: 500px;
+    /* height: 100%; */
+  }
+}
