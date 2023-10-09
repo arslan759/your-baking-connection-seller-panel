@@ -181,7 +181,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       })
       console.log('tax rate is ', taxRate)
 
-      if (taxRate?.data?.createTaxRate?._id) {
+      if (taxRate?.data?.createTaxRate?.taxRate?._id) {
         openSuccess()
       }
     } catch (err: any) {
