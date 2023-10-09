@@ -44,7 +44,7 @@ const AccountDropdown = ({ account }: AccountDropdownProps) => {
             aria-expanded={open ? 'true' : undefined}
           >
             <Avatar src={account?.picture} alt={account?.firstName} sx={{ width: 40, height: 40 }}>
-              {account?.firstName.charAt(0)}
+              {account?.firstName?.charAt(0)}
             </Avatar>
           </IconButton>
         </Tooltip>
@@ -92,7 +92,7 @@ const AccountDropdown = ({ account }: AccountDropdownProps) => {
           onClick={() => router.push(`/profile`)}
         >
           <Avatar src={account?.picture} alt={account?.firstName}>
-            {account?.firstName.charAt(0)}
+            {account?.firstName?.charAt(0)}
           </Avatar>
           <Typography
             sx={{

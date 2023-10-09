@@ -129,21 +129,28 @@ const CustomField = ({
                 />
               </div>
             )}
+            <div className='mt-0 sm:mt-[30px]'>
+              <DeleteIcon
+                onClick={(e) => removeOption(e, attrIndex, optionIndex)}
+                sx={{
+                  color: '#d64038',
+                  fontSize: '20px !important',
+                  cursor: 'pointer',
+                }}
+              />
+            </div>
           </div>
-          <div className='w-fit mt-[8px]'>
-            {/* <PrimaryBtn
-              text='Remove Option'
-              handleClick={(e) => removeOption(e, attrIndex, optionIndex)}
-            /> */}
+          {/* <div className='w-fit mt-[8px]'>
+          
             <DeleteIcon
               onClick={(e) => removeOption(e, attrIndex, optionIndex)}
               sx={{
-                color: '#FF0000',
+                color: '',
                 fontSize: '20px !important',
                 cursor: 'pointer',
               }}
             />
-          </div>
+          </div> */}
         </div>
       ))}
 

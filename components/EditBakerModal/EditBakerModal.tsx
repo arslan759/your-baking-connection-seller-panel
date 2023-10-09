@@ -50,7 +50,9 @@ const EditBakerModal = () => {
     setState(baker?.addressBook[0]?.region)
     setWhatWeOffer(baker?.categories)
     setLogoUrl(baker?.shopLogoUrls?.primaryShopLogoUrl)
-    setFeaturedImageUrl(baker?.featuredShopImages[0]?.URLs?.thumbnail)
+    if (baker?.featuredShopImages && baker?.featuredShopImages?.length !== 0) {
+      setFeaturedImageUrl(baker?.featuredShopImages[0]?.URLs?.thumbnail)
+    }
   }, [baker])
 
   // Error states
