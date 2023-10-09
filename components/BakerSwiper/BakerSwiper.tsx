@@ -40,7 +40,7 @@ const BakerSwiper = ({ featuredImages }: BakerSwiperProps) => {
         }}
         slidesPerView={1}
         onSlideChange={handleSlideChange}
-        onSwiper={(swiper) => console.log(swiper)}
+        onSwiper={(swiper: any) => console.log(swiper)}
         className='gallery-swiper'
       >
         {featuredImages?.map((background: any, index: any) => {

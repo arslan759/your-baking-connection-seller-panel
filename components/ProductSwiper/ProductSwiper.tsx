@@ -31,7 +31,7 @@ const ProductSwiper = ({ images }: ProductSwiperProps) => {
         }}
         slidesPerView={1}
         onSlideChange={handleSlideChange}
-        onSwiper={(swiper) => console.log(swiper)}
+        onSwiper={(swiper: any) => console.log(swiper)}
         className='gallery-swiper'
       >
         {images?.map((background, index) => {

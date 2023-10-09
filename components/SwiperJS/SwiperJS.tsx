@@ -20,7 +20,7 @@ const SwiperJS = () => {
       pagination={{ clickable: true }}
       slidesPerView={1}
       onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
+      onSwiper={(swiper: any) => console.log(swiper)}
       className='background-swiper'
     >
       {HomePageBackgrounds.map((background, index) => {

@@ -1,4 +1,14 @@
 .background {
+  background: url('/Images/how-it-works-background.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-size: 100% 100%;
+  width: 99vw;
+  height: 950px;
+  object-fit: contain;
+}
+
+.background {
   background: url('/Images/faqs-background.webp');
   background-repeat: no-repeat;
   /* background-size: cover; */
@@ -16,21 +26,21 @@
 
 .maskedDiv {
   width: 100vw;
-  min-height: 950px;
-  height: 100%;
-  padding: 180px 50px;
-  background-image: url('/Images/faqs-background.webp');
+  height: 950px;
+  /* height: 100%; */
+  /* padding: 180px 50px; */
+  background: #7ddec1;
   background-size: 100% 100%;
-  -webkit-mask-image: url('/Images/faqs-background.webp');
-  mask-image: url('/Images/faqs-background.webp');
+  -webkit-mask-image: url('/Images/how-it-works-background.webp');
+  mask-image: url('/Images/how-it-works-background.webp');
   -webkit-mask-size: 100% 100%;
   mask-size: 100% 100%;
 }
 
 @media screen and (max-width: 768px) {
   .maskedDiv {
-    padding: 80px 25px;
-    min-height: 300px;
-    height: 100%;
+    /* padding: 80px 25px; */
+    height: 400px;
+    /* height: 100%; */
   }
 }
