@@ -1,14 +1,21 @@
 import React, { useState } from 'react'
 import styles from './styles.module.css'
-import { Typography } from '@mui/material'
+import { CircularProgress, Typography } from '@mui/material'
 import InputField from '../InputField/InputField'
 import { PrimaryBtn } from '../Buttons'
 import DropdownField from '../DropdownField/DropdownField'
 import { BakeryNameOptions, DurationOptions, RatingOptions } from 'Constants/constants'
 import OrderManagementTable from '../OrderManagementTable/OrderManagementTable'
 import ProfileBreadCrumbs from '../ProfileBreadCrumbs/ProfileBreadCrumbs'
+import useCustomOrdersByShop from 'hooks/orders/useCustomOrdersByShop'
+import CustomOrdersTable from '../CustomOrdersTable/CustomOrdersTable'
 
-const OrderManagementCard = () => {
+const CustomOrderManagementCard = () => {
+  const [customOrders, loadingCustomOrders, totalCount, refetchCustomOrders] =
+    useCustomOrdersByShop()
+
+  console.log('customOrders', customOrders)
+
   const [search, setSearch] = useState('')
 
   const [duration, setDuration] = useState('')
@@ -99,7 +106,7 @@ const OrderManagementCard = () => {
             },
           }}
         >
-          order management
+          custom orders
         </Typography>
 
         <div>
@@ -166,7 +173,7 @@ const OrderManagementCard = () => {
               />
             </div>
 
-            <div className='w-full md:w-[15%]'>
+            {/* <div className='w-full md:w-[15%]'>
               <DropdownField
                 // label='state'
                 required
@@ -178,9 +185,9 @@ const OrderManagementCard = () => {
                 inputColor='#888'
                 onChange={handleBakeryNameChange}
               />
-            </div>
+            </div> */}
 
-            <div className='w-full md:w-[15%]'>
+            {/* <div className='w-full md:w-[15%]'>
               <DropdownField
                 // label='state'
                 required
@@ -192,16 +199,26 @@ const OrderManagementCard = () => {
                 inputColor='#888'
                 onChange={handleRatingChange}
               />
-            </div>
+            </div> */}
           </div>
         </form>
       </div>
 
-      <div className='mt-[56px] md:mt-[64px]'>
-        <OrderManagementTable />
-      </div>
+      {loadingCustomOrders ? (
+        <div className='w-full flex justify-center items-center mt-[56px] md:mt-[64px]'>
+          <CircularProgress
+            sx={{
+              color: '#7DDEC1',
+            }}
+          />
+        </div>
+      ) : (
+        <div className='mt-[56px] md:mt-[64px]'>
+          <CustomOrdersTable orders={customOrders} />
+        </div>
+      )}
     </div>
   )
 }
 
-export default OrderManagementCard
+export default CustomOrderManagementCard
