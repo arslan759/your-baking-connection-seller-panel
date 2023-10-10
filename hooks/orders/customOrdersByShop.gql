@@ -1,0 +1,27 @@
+query customOrdersByShopQuery {
+  customOrdersByShop {
+    totalCount
+    nodes {
+      _id
+      referenceId
+      shopId
+      itemName
+      email
+      phoneNumber
+      quantity
+      details
+      createdAt
+      updatedAt
+      workflow
+      fulfillmentDate
+      orderByInfo {
+        _id
+        firstName
+        lastName
+        name
+        primaryEmailAddress
+        userId
+      }
+    }
+  }
+}

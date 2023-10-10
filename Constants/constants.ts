@@ -605,6 +605,12 @@ export const YourProfileCardItemData = [
   },
   {
     id: 5,
+    title: 'Custom Orders',
+    description: 'Track, return, cancel an order, download invoice or buy again ',
+    image: '/Images/profile-order-management.svg',
+  },
+  {
+    id: 6,
     title: 'Subscription',
     description: 'Regular automatic billing, exclusive content access',
     image: '/Images/profile-subscription.svg',

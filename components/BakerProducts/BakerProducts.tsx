@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import CustomOrders from '../CustomOrders/CustomOrders'
+import CustomOrder from '../CustomOrder/CustomOrder'
 import BakerForm from '../BakerForm/BakerForm'
 import BakerNavigation from '../BakerNavigation/BakerNavigation'
 import BakerTabsPanel from '../BakerTabsPanel/BakerTabsPanel'
