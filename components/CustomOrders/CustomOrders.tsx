@@ -2,7 +2,6 @@ import React from 'react'
 import NavBar from '../NavBar/NavBar'
 import CustomOrdersCard from '../CustomOrdersCard'
 import { withApollo } from 'lib/apollo/withApollo'
-import withAuth from 'hocs/withAuth'
 
 const CustomOrders = () => {
   return (
@@ -16,4 +15,4 @@ const CustomOrders = () => {
   )
 }
 
-export default withApollo()(withAuth(CustomOrders))
+export default withApollo()(CustomOrders)

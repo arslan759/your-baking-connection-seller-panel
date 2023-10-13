@@ -8,12 +8,18 @@ import ToggleNavBar from '../ToggleNavBar/ToggleNavBar'
 import { NavBarProps } from 'types'
 import AccountDropdown from '../AccountDropdown/AccountDropdown'
 import { withApollo } from 'lib/apollo/withApollo'
-import useViewer from 'hooks/viewer/useViewer'
+import { useSession } from 'next-auth/react'
 
 const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarProps) => {
-  const [viewer, loading] = useViewer()
+  const { data: session, status } = useSession()
+  const token = localStorage.getItem('accounts:accessToken')
 
-  console.log('viewer in navbar is', viewer)
+  console.log('session', session)
+
+  if (status === 'authenticated' && !token) {
+    localStorage.setItem('accounts:accessToken', session?.user?.accessToken)
+    localStorage.setItem('accounts:refreshToken', session?.user?.refreshToken)
+  }
 
   const shopId = localStorage.getItem('shopId')
 
@@ -92,7 +98,7 @@ const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarPro
             //   <p style={{ color: 'black' }}>loading...</p>
             // ) : (
             <Grid>
-              {!viewer || Object.keys(viewer).length === 0 ? (
+              {status === 'unauthenticated' ? (
                 <Box
                   sx={{
                     display: 'flex',
@@ -119,7 +125,7 @@ const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarPro
                   }}
                   // className={styles.navbar}
                 >
-                  <AccountDropdown account={viewer} />
+                  <AccountDropdown />
                 </Box>
               )}
             </Grid>

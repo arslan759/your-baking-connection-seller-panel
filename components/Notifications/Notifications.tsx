@@ -2,7 +2,6 @@ import React from 'react'
 import NavBar from '../NavBar/NavBar'
 import NotificationsCard from '../NotificationsCard'
 import { withApollo } from 'lib/apollo/withApollo'
-import withAuth from 'hocs/withAuth'
 
 const Notifications = () => {
   return (
@@ -16,4 +15,4 @@ const Notifications = () => {
   )
 }
 
-export default withApollo()(withAuth(Notifications))
+export default withApollo()(Notifications)

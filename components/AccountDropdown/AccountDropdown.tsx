@@ -10,10 +10,10 @@ import Tooltip from '@mui/material/Tooltip'
 import Settings from '@mui/icons-material/Settings'
 import Logout from '@mui/icons-material/Logout'
 import { useRouter } from 'next/navigation'
-import { AccountDropdownProps } from 'types'
 import { Typography } from '@mui/material'
+import { signOut } from 'next-auth/react'
 
-const AccountDropdown = ({ account }: AccountDropdownProps) => {
+const AccountDropdown = () => {
   const router = useRouter()
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
@@ -25,12 +25,13 @@ const AccountDropdown = ({ account }: AccountDropdownProps) => {
     setAnchorEl(null)
   }
 
-  const handleLogOut = () => {
+  const handleLogOut = async () => {
     localStorage.clear()
-    router.push('/signin')
+    await signOut()
+    // router.push('/signin')
   }
 
-  console.log('account in dropdown is ', account?.firstName)
+  // console.log('account in dropdown is ', account?.firstName)
   return (
     <div className='flex'>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -43,9 +44,9 @@ const AccountDropdown = ({ account }: AccountDropdownProps) => {
             aria-haspopup='true'
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar src={account?.picture} alt={account?.firstName} sx={{ width: 40, height: 40 }}>
-              {account?.firstName?.charAt(0)}
-            </Avatar>
+            <Avatar sx={{ width: 40, height: 40 }} />
+            {/* {account?.firstName?.charAt(0)} */}
+            {/* </Avatar> */}
           </IconButton>
         </Tooltip>
       </Box>
@@ -91,9 +92,9 @@ const AccountDropdown = ({ account }: AccountDropdownProps) => {
           }}
           onClick={() => router.push(`/profile`)}
         >
-          <Avatar src={account?.picture} alt={account?.firstName}>
-            {account?.firstName?.charAt(0)}
-          </Avatar>
+          <Avatar />
+          {/* {account?.firstName?.charAt(0)} */}
+          {/* </Avatar> */}
           <Typography
             sx={{
               fontSize: '16px !important',

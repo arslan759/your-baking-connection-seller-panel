@@ -5,11 +5,9 @@ import InputField from '../InputField/InputField'
 import { PrimaryBtn } from '../Buttons'
 import { validateEmail } from 'helpers/validations'
 import { ForgetPasswordFormProps } from 'types'
-
 import useForgotPasswordUser from 'hooks/Authentication/ForgotPassword/useForgotPasswordUser'
 import { withApollo } from 'lib/apollo/withApollo'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
-import withAuth from 'hocs/withAuth'
 
 const ForgotPasswordForm = ({ openOtp, setEmail, email }: ForgetPasswordFormProps) => {
   // const [email, setEmail] = useState('')
@@ -208,4 +206,4 @@ const ForgotPasswordForm = ({ openOtp, setEmail, email }: ForgetPasswordFormProp
   )
 }
 
-export default withApollo()(withAuth(ForgotPasswordForm))
+export default withApollo()(ForgotPasswordForm)
