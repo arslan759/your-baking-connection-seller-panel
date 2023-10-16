@@ -6,20 +6,25 @@ import PasswordField from '../PasswordField/PasswordField'
 import { Typography } from '@mui/material'
 import Checkbox from '@mui/material/Checkbox'
 import Image from 'next/image'
-import useLoginUser from '../../hooks/Authentication/Login/useLoginUser'
+// import useLoginUser from '../../hooks/Authentication/Login/useLoginUser'
 import { withApollo } from 'lib/apollo/withApollo'
 import { useRouter } from 'next/navigation'
-import withAuth from '../../hocs/withAuth'
-import useViewer from 'hooks/viewer/useViewer'
+// import useViewer from 'hooks/viewer/useViewer'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
-
+import { signIn, useSession } from 'next-auth/react'
 import hashPassword from '../../lib/utils/hashPassword'
-
 
 const SigninForm = () => {
   //login mutation
-  const [loginUser, loadingLoginUser] = useLoginUser()
-  const [viewer, loading, refetch] = useViewer()
+  // const [loginUser, loadingLoginUser] = useLoginUser()
+  // const [viewer, loading, refetch] = useViewer()
+
+  const [isLoggingIn, setIsLoggingIn] = useState(false)
+  const { data: session } = useSession()
+
+  // useEffect(() => {
+  //   console.log('loading login user', loadingLoginUser)
+  // }, [loadingLoginUser])
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -58,6 +63,7 @@ const SigninForm = () => {
     // Reset error states
     setEmailErr('')
     setPasswordErr('')
+    setGenError('')
 
     // Checks if email is valid
     const isEmailValid = validateEmail(email)
@@ -84,26 +90,46 @@ const SigninForm = () => {
     }
 
     try {
-      const res = await loginUser({
-        variables: {
-          user: {
-            email,
-            password: hashPassword(password),
-          },
-        },
+      setIsLoggingIn(true)
+      const res = await signIn('credentials', {
+        username: email,
+        password,
+        redirect: false,
+        // callbackUrl: '/',
       })
-      const accessToken = res?.data?.loginUser?.loginResult?.tokens?.accessToken
-      const refreshToken = res?.data?.loginUser?.loginResult?.tokens?.refreshToken
-      const shopId = res?.data?.loginUser?.shopId
 
-      if (accessToken) {
-        localStorage.setItem('accounts:accessToken', accessToken)
-        localStorage.setItem('accounts:refreshToken', refreshToken)
-        localStorage.setItem('shopId', shopId)
-        router.replace(`/baker/${shopId}`)
+      if (res?.status === 200 && res?.ok) {
+        setIsLoggingIn(false)
+        console.log('session in signin form is ', session)
+        router.push('/')
       }
+
+      if (res?.status === 401 && !res?.ok) {
+        setIsLoggingIn(false)
+        setGenError('Invalid email or password')
+        return
+      }
+      // const res = await loginUser({
+      //   variables: {
+      //     user: {
+      //       email,
+      //       password: hashPassword(password),
+      //     },
+      //   },
+      // })
+      // const accessToken = res?.data?.loginUser?.loginResult?.tokens?.accessToken
+      // const refreshToken = res?.data?.loginUser?.loginResult?.tokens?.refreshToken
+      // const shopId = res?.data?.loginUser?.shopId
+
+      // if (accessToken) {
+      //   localStorage.setItem('accounts:accessToken', accessToken)
+      //   localStorage.setItem('accounts:refreshToken', refreshToken)
+      //   localStorage.setItem('shopId', shopId)
+      //   router.replace(`/baker/${shopId}`)
+      // }
     } catch (err: any) {
       console.log(err)
+      setIsLoggingIn(false)
       setGenError(err?.message)
     }
   }
@@ -264,7 +290,7 @@ const SigninForm = () => {
             </div>
 
             <div className='mt-[27px] md:mt-[20px]'>
-              <PrimaryBtn text='Sign In' type='submit' />
+              <PrimaryBtn loading={isLoggingIn} text='Sign In' type='submit' />
             </div>
 
             <div className='flex justify-center items-center  mt-[20px]'>
@@ -346,4 +372,4 @@ const SigninForm = () => {
   )
 }
 
-export default withApollo()(withAuth(SigninForm))
+export default withApollo()(SigninForm)

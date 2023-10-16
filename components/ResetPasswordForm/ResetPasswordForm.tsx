@@ -4,10 +4,8 @@ import React, { useState } from 'react'
 import InputField from '../InputField/InputField'
 import { PrimaryBtn } from '../Buttons'
 import { checkPassword } from 'helpers/validations'
-
 import useResetPasswordOtpVerify from '../../hooks/Authentication/ResetPassword/useResetPasswordOtpVerify'
 import { withApollo } from 'lib/apollo/withApollo'
-import withAuth from 'hocs/withAuth'
 import { useRouter } from 'next/navigation'
 
 interface ResetPasswordProps {
@@ -230,4 +228,4 @@ const ResetPasswordForm: React.FC<ResetPasswordProps> = ({ otp }) => {
   )
 }
 
-export default withApollo()(withAuth(ResetPasswordForm))
+export default withApollo()(ResetPasswordForm)

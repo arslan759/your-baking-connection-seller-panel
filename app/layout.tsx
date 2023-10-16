@@ -9,6 +9,7 @@ import { ThemeProvider, CssBaseline } from '@mui/material'
 import Header from '@/components/Header'
 import { usePathname } from 'next/navigation'
 import Footer from '@/components/Footer/Footer'
+import NextAuthProvider from './nextAuthProvider'
 
 export default function RootLayout({ children }: PropsWithChildren<{}>) {
   const router = usePathname()
@@ -34,13 +35,15 @@ export default function RootLayout({ children }: PropsWithChildren<{}>) {
       </head>
       <ThemeProvider theme={lightTheme}>
         <ContextProvider>
-          <body>
-            <CssBaseline />
-            {/* {showHeader && <Header />} */}
-            {<Header />}
-            {children}
-            {<Footer />}
-          </body>
+          <NextAuthProvider>
+            <body>
+              <CssBaseline />
+              {/* {showHeader && <Header />} */}
+              {<Header />}
+              {children}
+              {<Footer />}
+            </body>
+          </NextAuthProvider>
         </ContextProvider>
       </ThemeProvider>
     </html>

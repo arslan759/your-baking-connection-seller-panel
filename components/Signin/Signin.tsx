@@ -1,3 +1,5 @@
+'use client'
+
 import Navbar from '../NavBar/NavBar'
 import styles from './styles.module.css'
 import SigninForm from '../SigninForm'
