@@ -13,15 +13,20 @@ import { useSession } from 'next-auth/react'
 const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarProps) => {
   const { data: session, status } = useSession()
   const token = localStorage.getItem('accounts:accessToken')
+  const shopId = localStorage.getItem('shopId')
 
   console.log('session', session)
 
   if (status === 'authenticated' && !token) {
-    localStorage.setItem('accounts:accessToken', session?.user?.accessToken)
-    localStorage.setItem('accounts:refreshToken', session?.user?.refreshToken)
+    localStorage.setItem('accounts:accessToken', session?.user?.loginResult?.tokens?.accessToken)
+    localStorage.setItem('accounts:refreshToken', session?.user?.loginResult?.tokens?.refreshToken)
   }
 
-  const shopId = localStorage.getItem('shopId')
+  if (status === 'authenticated' && !shopId) {
+    localStorage.setItem('shopId', session?.user?.shopId)
+  }
+
+  // const shopId = localStorage.getItem('shopId')
 
   const pathName = usePathname()
 

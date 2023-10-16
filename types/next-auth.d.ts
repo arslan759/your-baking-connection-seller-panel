@@ -3,8 +3,13 @@ import nextAuth from 'next-auth'
 declare module 'next-auth' {
   interface Session {
     user: {
-      accessToken: string
-      refreshToken: string
+      shopId: string
+      loginResult: {
+        tokens: {
+          accessToken: string
+          refreshToken: string
+        }
+      }
     }
   }
 }

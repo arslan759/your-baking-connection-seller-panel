@@ -1,4 +1,5 @@
 import useLoginUser from 'hooks/Authentication/Login/useLoginUser'
+import hashPassword from 'lib/utils/hashPassword'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
@@ -18,6 +19,8 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         const { username, password } = credentials as any
+
+        console.log('credentials', credentials)
 
         //  graphql endpoint
         const endpointUrl = 'https://app.staging.yourbakingconnection.com/graphql'
@@ -41,7 +44,7 @@ export const authOptions: NextAuthOptions = {
         const variables = {
           user: {
             email: username,
-            password,
+            password: hashPassword(password),
           },
         }
 
@@ -60,11 +63,17 @@ export const authOptions: NextAuthOptions = {
           body: JSON.stringify(requestBody),
         })
 
+        console.log('res', res)
+
         //  graphql response
         const user = await res.json()
 
+        console.log('user', user)
+
         //  graphql response data
         const accessToken = user?.data?.loginUser?.loginResult?.tokens?.accessToken
+
+        console.log('login -user', user?.data?.loginUser)
 
         // If no error and we have user data, return it
         if (accessToken) {
