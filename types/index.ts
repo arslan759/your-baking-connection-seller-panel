@@ -21,6 +21,10 @@ export interface PrimaryBtnProps {
   disabled?: boolean
   loading?: boolean
   handleClick?: MouseEventHandler<HTMLButtonElement>
+  backgroundColor?: string
+  onHoverBackgroundColor?: string
+  textColor?: string
+  onHoverTextColor?: string
 }
 
 export interface NavBarProps {

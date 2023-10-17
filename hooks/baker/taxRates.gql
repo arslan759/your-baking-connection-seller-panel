@@ -1,0 +1,11 @@
+query taxRatesQuery($shopId: ID!) {
+  taxRates(shopId: $shopId) {
+    totalCount
+    edges {
+      node {
+        _id
+        rate
+      }
+    }
+  }
+}
