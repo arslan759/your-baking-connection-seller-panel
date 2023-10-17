@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { ProductCardProps } from 'types'
 import GalleryProductCardMenu from '../ProductCardMenu/ProductCardMenu'
 import { PrimaryBtn } from '../Buttons'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 const ProductCard = ({
   product,
@@ -24,7 +25,7 @@ ProductCardProps) => {
   const [isDetailsVisible, setIsDetailsVisible] = useState(false) // Toggle More Details for mobile view
 
   const router = useRouter()
-
+  const pathname = usePathname()
   // handle mouse enter and leave
   const handleMouseEnter = () => {
     setIsHovering(true)
@@ -53,7 +54,8 @@ ProductCardProps) => {
 
     // console.log('slug', `/product/${slug}`)
 
-    router.push(`/product/${product?.slug}`)
+    // router.push(`/product/${product?.slug}`)
+    router.push(`${pathname}/product/${product?.slug}`)
   }
 
   // console.log('isDetailsVisible', isDetailsVisible)
