@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation'
 import { SignUpFormProps } from 'types'
 import { getCitiesApi, getStatesApi } from 'helpers/apis'
 import hashPassword from '../../lib/utils/hashPassword'
+import CustomAutocomplete from '../CustomAutocomplete'
 
 const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
   //sign up mutation hook
@@ -24,7 +25,9 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [states, setStates] = useState<any>([])
+  const [isLoadingStates, setIsLoadingStates] = useState(false)
   const [state, setState] = useState<string | null>('')
+  const [isLoadingCities, setIsLoadingCities] = useState(false)
   const [cities, setCities] = useState<any>([])
   const [city, setCity] = useState<string | null>('')
   const [password, setPassword] = useState('')
@@ -245,13 +248,13 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
   }
 
   useEffect(() => {
-    getStatesApi(setStates)
+    getStatesApi(setStates, setIsLoadingStates)
   }, [])
 
   useEffect(() => {
     setCities([])
     setCity('')
-    getCitiesApi(state, setCities)
+    getCitiesApi(state, setCities, setIsLoadingCities)
   }, [state])
 
   return (
@@ -368,28 +371,34 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
               </div>
 
               <div className='w-full md:w-[45%]'>
-                <DropdownField
+                <CustomAutocomplete
                   label='state'
+                  loading={isLoadingStates}
                   required
                   name='state'
-                  errorText={stateError}
-                  value={state}
-                  options={states}
                   inputColor='white'
+                  options={states}
+                  value={state}
+                  errorText={stateError}
+                  // setValue={setState}
                   onChange={handleStateChange}
+                  setError={setStateError}
                 />
               </div>
 
               <div className='w-full md:w-[45%]'>
-                <DropdownField
+                <CustomAutocomplete
                   label='city'
+                  loading={isLoadingCities}
                   required
                   name='city'
-                  errorText={cityError}
-                  value={city}
-                  options={cities}
                   inputColor='white'
+                  options={cities}
+                  value={city}
+                  errorText={cityError}
+                  // setValue={setCity}
                   onChange={handleCityChange}
+                  setError={setCityError}
                 />
               </div>
 

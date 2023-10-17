@@ -1,5 +1,5 @@
 import { Checkbox, FormControl, FormHelperText, Radio, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import InputField from '../InputField/InputField'
 import DropdownField from '../DropdownField/DropdownField'
 import {
@@ -10,12 +10,18 @@ import {
   states,
 } from 'Constants/constants'
 import { PrimaryBtn } from '../Buttons'
+import { getCitiesApi, getStatesApi } from 'helpers/apis'
+import CustomAutocomplete from '../CustomAutocomplete'
 
 const DeliveryDetailsForm = () => {
   const [address, setAddress] = useState('')
   const [country, setCountry] = useState('')
   const [postCode, setPostCode] = useState('')
+  const [states, setStates] = useState<any>([])
+  const [isLoadingStates, setIsLoadingStates] = useState(false)
   const [state, setState] = useState<string | null>('')
+  const [isLoadingCities, setIsLoadingCities] = useState(false)
+  const [cities, setCities] = useState<any>([])
   const [city, setCity] = useState<string | null>('')
   const [additionalNotes, setAdditionalNotes] = useState('')
   const [deliveryMethod, setDeliveryMethod] = useState(true)
@@ -173,6 +179,15 @@ const DeliveryDetailsForm = () => {
     setDeliveryMethodError('')
     setTermsAndConditionsError('')
   }
+  useEffect(() => {
+    getStatesApi(setStates)
+  }, [])
+
+  useEffect(() => {
+    setCities([])
+    setCity('')
+    getCitiesApi(state, setCities)
+  }, [state])
   return (
     <form onSubmit={handleSubmit}>
       <div className='w-full flex flex-wrap gap-y-[24px] md:gap-y-[24px] justify-between'>
@@ -216,9 +231,10 @@ const DeliveryDetailsForm = () => {
         </div>
 
         <div className='w-full md:w-[45%]'>
-          <DropdownField
+          <CustomAutocomplete
             label='state'
             required
+            loading={isLoadingStates}
             name='state'
             errorText={stateError}
             value={state}
@@ -229,9 +245,10 @@ const DeliveryDetailsForm = () => {
         </div>
 
         <div className='w-full md:w-[45%]'>
-          <DropdownField
+          <CustomAutocomplete
             label='city'
             required
+            loading={isLoadingCities}
             name='city'
             errorText={cityError}
             value={city}
