@@ -13,6 +13,7 @@ import { withApollo } from 'lib/apollo/withApollo'
 import useStores from 'hooks/useStores'
 import { AddShopDetailsFormProps } from 'types'
 import useFileUpload from 'hooks/fileUpload/useFileUpload'
+import CustomAutocomplete from '../CustomAutocomplete'
 import { getCitiesApi, getStatesApi } from 'helpers/apis'
 
 import useCreateTaxRate from 'hooks/shop/useCreateTaxRate'
@@ -34,7 +35,11 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
     console.log('logo is ', logo)
   }, [logo])
 
+  const [states, setStates] = useState<any>([])
+  const [isLoadingStates, setIsLoadingStates] = useState(false)
   const [state, setState] = useState<string | null>('')
+  const [isLoadingCities, setIsLoadingCities] = useState(false)
+  const [cities, setCities] = useState<any>([])
   const [city, setCity] = useState<string | null>('')
 
   const [pickupService, setPickupService] = useState(true)
@@ -60,17 +65,17 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
     setCity(account?.city)
   }, [account])
 
-  const [cities, setCities] = useState([])
-  const [states, setStates] = useState([])
+  // const [cities, setCities] = useState([])
+  // const [states, setStates] = useState([])
 
   useEffect(() => {
-    getStatesApi(setStates)
+    getStatesApi(setStates, setIsLoadingStates)
   }, [])
 
   useEffect(() => {
     setCities([])
     setCity('')
-    getCitiesApi(state, setCities)
+    getCitiesApi(state, setCities, setIsLoadingCities)
   }, [state])
 
   // handleChange function for input fields

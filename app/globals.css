@@ -273,3 +273,12 @@
   /* height: 100% !important;
   background-color: transparent !important; */
 }
+
+/* MUI Grouped Buttons */
+
+.MuiButtonGroup-grouped:not(:last-of-type),
+.css-uxd1ve-MuiButtonGroup-root {
+  border: 0px !important;
+  border: transparent !important;
+  border-color: transparent !important;
+}

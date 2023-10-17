@@ -10,8 +10,11 @@ export interface ClientReviewCardProps {
 
 export interface FooterLinksProps {
   header?: string
+  title1?: string
   link1?: string
+  title2?: string
   link2?: string
+  title3?: string
   link3?: string
 }
 
@@ -21,6 +24,10 @@ export interface PrimaryBtnProps {
   disabled?: boolean
   loading?: boolean
   handleClick?: MouseEventHandler<HTMLButtonElement>
+  backgroundColor?: string
+  onHoverBackgroundColor?: string
+  textColor?: string
+  onHoverTextColor?: string
 }
 
 export interface NavBarProps {
