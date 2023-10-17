@@ -7,9 +7,16 @@ import { validateEmail } from 'helpers/validations'
 import DropdownField from '../DropdownField/DropdownField'
 import CustomAutocomplete from '../CustomAutocomplete'
 import { getCitiesApi, getStatesApi } from 'helpers/apis'
+import useViewer from 'hooks/viewer/useViewer'
+import useUploadFile from 'hooks/fileUpload/useFileUpload'
+import useUpdateAccount from 'hooks/Profile/useUpdateAccount'
 
 const EditProfile = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [viewer, loadingViewer] = useViewer()
+
+  //@ts-ignore
+  const [updateAccount, loadingUpdateAccount] = useUpdateAccount()
 
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
@@ -23,6 +30,19 @@ const EditProfile = () => {
   const [city, setCity] = useState<string | null>('')
   const [address, setAddress] = useState('')
   const [picture, setPicture] = useState('')
+
+  const [uploadFile, loadingUploadFile] = useUploadFile()
+
+  // set current viewer data in fields
+  useEffect(() => {
+    setFirstName(viewer?.firstName)
+    setLastName(viewer?.lastName)
+    setCity(viewer?.city)
+    setState(viewer?.state)
+    setPicture(viewer?.picture)
+    setPhone(viewer?.phone)
+    setEmail(viewer?.primaryEmailAddress)
+  }, [viewer])
 
   // Edit Button Modal State
   const [isEdited, setIsEdited] = useState(false)
@@ -85,39 +105,88 @@ const EditProfile = () => {
   }
 
   // handlePictureChange function for picture upload
-  const handlePictureChange = (e: any) => {
+  const handlePictureChange = async (e: any) => {
     const file = e.target.files[0]
 
     console.log('files are ', e.target.files)
     console.log('picture is ', file?.name)
 
-    if (file.size > 1024 * 1024 * 5) {
-      setPictureError('Picture size should be less than 5mb')
+    if (file.size > 1024 * 1024 * 1) {
+      setPictureError('Picture size should be less than 1MB')
       return
     }
 
-    if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
-      setPictureError('Invalid file type')
+    if (file.type === 'application/pdf') {
+      setPictureError('Selected file must be an image')
       return
+    }
+
+    //@ts-ignore
+    const uploadRes = await uploadFile(file, '/profile-images')
+
+    console.log('uploadRes is ', uploadRes)
+
+    if (uploadRes.result.status) {
+      setPicture(uploadRes.result.data[0].availableSizes.thumbnail)
     }
 
     setPictureError('')
-    setPicture(file.name)
+  }
+
+  //reset states
+  const resetStates = () => {
+    // Resets the form fields
+    setFirstName('')
+    setLastName('')
+    setEmail('')
+    setPhone('')
+    setState('')
+    setCity('')
+    setAddress('')
+  }
+
+  // Resets the error states
+  const resetErrorStates = () => {
+    setFirstNameError('')
+    setLastNameError('')
+    setEmailError('')
+    setPhoneError('')
+    setStateError('')
+    setCityError('')
+    setAddressError('')
   }
 
   // handleSubmit function for form submission
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    // Checks if email is valid
+    resetErrorStates()
 
     if (email) {
       const isEmailValid = validateEmail(email)
-
+      console.log('if email check')
       if (!isEmailValid) {
         setEmailError('Email is not valid')
         return
       }
+    }
+
+    const account = await updateAccount({
+      variables: {
+        firstName,
+        lastName,
+        picture,
+        state,
+        city,
+      },
+    })
+
+    console.log('updated account is ', account)
+
+    if (account?.data?.updateAccount?.account?._id) {
+      console.log('updated successfully')
+      setIsEdited(false)
+      resetStates()
     }
 
     // Logs the form data
@@ -129,24 +198,7 @@ const EditProfile = () => {
     console.log('state is ', state)
     console.log('city is ', city)
     console.log('address is ', address)
-
-    // Resets the form fields
-    setFirstName('')
-    setLastName('')
-    setEmail('')
-    setPhone('')
-    setState('')
-    setCity('')
-    setAddress('')
-
-    // Resets the error states
-    setFirstNameError('')
-    setLastNameError('')
-    setEmailError('')
-    setPhoneError('')
-    setStateError('')
-    setCityError('')
-    setAddressError('')
+    console.log('picture')
   }
   useEffect(() => {
     getStatesApi(setStates, setIsLoadingStates)
@@ -205,11 +257,7 @@ const EditProfile = () => {
 
           <div className='w-full flex justify-center mt-[0px] md:mt-[-100px] rounded-full overflow-hidden relative'>
             <img
-              src={
-                picture
-                  ? picture
-                  : `https://image.winudf.com/v2/image1/bmV0LndsbHBwci5naXJsc19wcm9maWxlX3BpY3R1cmVzX3NjcmVlbl8xXzE2Njc3MjczMTZfMDE3/screen-1.webp?fakeurl=1&type=.webp`
-              }
+              src={picture ? picture : ''}
               alt=''
               className='w-[129px] h-[129px] rounded-full object-cover'
             />
@@ -230,7 +278,7 @@ const EditProfile = () => {
                 },
               }}
             >
-              John
+              {firstName} {lastName}
             </Typography>
             <img
               onClick={handleClick}
@@ -344,7 +392,7 @@ const EditProfile = () => {
             </div>
 
             <div className='mt-[24px] md:mt-[23px]'>
-              <PrimaryBtn text='save' type='submit' />
+              <PrimaryBtn text='save' type='submit' loading={loadingUpdateAccount} />
             </div>
           </form>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './styles.module.css'
 import { Typography } from '@mui/material'
 import { PrimaryBtn } from '../Buttons'
@@ -6,6 +6,7 @@ import YourProfileCardItem from '../YourProfileCardItem/YourProfileCardItem'
 import { YourProfileCardItemData } from 'Constants/constants'
 import EditProfile from '../EditProfile/EditProfile'
 import ShowMore from '../ShowMore/ShowMore'
+import useViewer from 'hooks/viewer/useViewer'
 
 const YourProfileCard = () => {
   const [isEdited, setIsEdited] = useState(false)
@@ -13,6 +14,28 @@ const YourProfileCard = () => {
   const handleEditUserProfile = () => {
     setIsEdited(!isEdited)
   }
+
+  const [viewer, loadingViewer] = useViewer()
+
+  //data states
+  const [firstName, setFirstName] = useState<string>('')
+  const [lastName, setLastName] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
+  const [state, setState] = useState<string>('')
+  const [city, setCity] = useState<string>('')
+  const [phone, setPhone] = useState<string>('')
+  const [profileImage, setProfileImage] = useState<string>('')
+
+  useEffect(() => {
+    console.log('baker viewer is ', viewer)
+    setFirstName(viewer?.firstName)
+    setLastName(viewer?.lastName)
+    setEmail(viewer?.primaryEmailAddress)
+    setCity(viewer?.city)
+    setState(viewer?.state)
+    setPhone(viewer?.phone)
+    setProfileImage(viewer?.picture)
+  }, [viewer])
 
   return (
     <div className={styles.card}>
@@ -35,7 +58,7 @@ const YourProfileCard = () => {
 
       <div className='mt-[16px] md:mt-[32px] flex items-start gap-x-[24px]'>
         <img
-          src={`https://image.winudf.com/v2/image1/bmV0LndsbHBwci5naXJsc19wcm9maWxlX3BpY3R1cmVzX3NjcmVlbl8xXzE2Njc3MjczMTZfMDE3/screen-1.webp?fakeurl=1&type=.webp`}
+          src={profileImage}
           alt=''
           className='w-[64px] md:w-[168px] h-[64px] md:h-[168px] rounded-full object-cover'
         />
@@ -58,7 +81,7 @@ const YourProfileCard = () => {
                   },
                 }}
               >
-                Josh Avan
+                {firstName} {lastName}
               </Typography>
 
               <Typography
@@ -78,7 +101,10 @@ const YourProfileCard = () => {
                   },
                 }}
               >
-                <img src='/Images/profile-location.svg' alt='location' /> <span>New York, USA</span>
+                <img src='/Images/profile-location.svg' alt='location' />{' '}
+                <span>
+                  <span style={{ textTransform: 'capitalize' }}>{city}</span>, USA
+                </span>
               </Typography>
             </div>
 

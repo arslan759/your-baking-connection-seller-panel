@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
         console.log('credentials', credentials)
 
         //  graphql endpoint
-        const endpointUrl = 'https://app.staging.yourbakingconnection.com/graphql'
+        const endpointUrl = process.env.BUILD_GRAPHQL_URL ? process.env.BUILD_GRAPHQL_URL : ''
 
         //  graphql mutation
         const mutation = `

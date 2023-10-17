@@ -1,0 +1,26 @@
+mutation updateAccount(
+  $firstName: String
+  $lastName: String
+  $picture: String
+  $state: String
+  $city: String
+) {
+  updateAccount(
+    input: {
+      firstName: $firstName
+      lastName: $lastName
+      picture: $picture
+      city: $city
+      state: $state
+    }
+  ) {
+    account {
+      _id
+      firstName
+      lastName
+      picture
+      city
+      state
+    }
+  }
+}
