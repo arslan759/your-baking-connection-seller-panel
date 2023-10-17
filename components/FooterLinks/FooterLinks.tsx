@@ -1,7 +1,8 @@
 import { Typography } from '@mui/material'
+import Link from 'next/link'
 import { FooterLinksProps } from 'types'
 
-const FooterLinks = ({ header, link1, link2, link3 }: FooterLinksProps) => {
+const FooterLinks = ({ header, title1, link1, title2, link2, title3, link3 }: FooterLinksProps) => {
   // Follow Us Links
 
   if (header === 'Follow Us') {
@@ -57,13 +58,15 @@ const FooterLinks = ({ header, link1, link2, link3 }: FooterLinksProps) => {
           ) : (
             <div className='hidden md:block bg-white shrink-0 w-2.5 h-2.5 relative'></div>
           )}
-          <Typography
-            sx={{ overflowWrap: 'anywhere' }}
-            variant='body1'
-            className='text-blackfor-text text-center md:text-left relative cursor-pointer w-full'
-          >
-            {link1}
-          </Typography>
+          <Link href={`${link1}`}>
+            <Typography
+              sx={{ overflowWrap: 'anywhere' }}
+              variant='body1'
+              className='text-black for-text text-center md:text-left relative cursor-pointer w-full'
+            >
+              {title1}
+            </Typography>
+          </Link>
         </div>
       )}
 
@@ -78,13 +81,14 @@ const FooterLinks = ({ header, link1, link2, link3 }: FooterLinksProps) => {
           ) : (
             <div className='hidden md:block bg-white shrink-0 w-2.5 h-2.5 relative'></div>
           )}
-
-          <Typography
-            variant='body1'
-            className='text-blackfor-text text-center md:text-left relative cursor-pointer'
-          >
-            {link2}
-          </Typography>
+          <Link href={`${link2}`}>
+            <Typography
+              variant='body1'
+              className='text-black for-text text-center md:text-left relative cursor-pointer'
+            >
+              {title2}
+            </Typography>
+          </Link>
         </div>
       )}
 
@@ -99,13 +103,14 @@ const FooterLinks = ({ header, link1, link2, link3 }: FooterLinksProps) => {
           ) : (
             <div className='hidden md:block bg-white shrink-0 w-2.5 h-2.5 relative'></div>
           )}
-
-          <Typography
-            variant='body1'
-            className='text-blackfor-text text-center md:text-left relative cursor-pointer'
-          >
-            {link3}
-          </Typography>
+          <Link href={`${link3}`}>
+            <Typography
+              variant='body1'
+              className='text-black for-text text-center md:text-left relative cursor-pointer'
+            >
+              {title3}
+            </Typography>
+          </Link>
         </div>
       )}
     </div>

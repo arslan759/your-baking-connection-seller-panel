@@ -5,7 +5,8 @@ import InputField from '../InputField/InputField'
 import { PrimaryBtn } from '../Buttons'
 import { validateEmail } from 'helpers/validations'
 import DropdownField from '../DropdownField/DropdownField'
-import { cities, states } from 'Constants/constants'
+import CustomAutocomplete from '../CustomAutocomplete'
+import { getCitiesApi, getStatesApi } from 'helpers/apis'
 
 const EditProfile = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -14,7 +15,11 @@ const EditProfile = () => {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const [states, setStates] = useState<any>([])
+  const [isLoadingStates, setIsLoadingStates] = useState(false)
   const [state, setState] = useState<string | null>('')
+  const [isLoadingCities, setIsLoadingCities] = useState(false)
+  const [cities, setCities] = useState<any>([])
   const [city, setCity] = useState<string | null>('')
   const [address, setAddress] = useState('')
   const [picture, setPicture] = useState('')
@@ -143,6 +148,15 @@ const EditProfile = () => {
     setCityError('')
     setAddressError('')
   }
+  useEffect(() => {
+    getStatesApi(setStates, setIsLoadingStates)
+  }, [])
+
+  useEffect(() => {
+    setCities([])
+    setCity('')
+    getCitiesApi(state, setCities, setIsLoadingCities)
+  }, [state])
 
   return (
     <>
@@ -280,9 +294,10 @@ const EditProfile = () => {
               </div>
 
               <div className='w-full md:w-[45%]'>
-                <DropdownField
+                <CustomAutocomplete
                   label='state'
                   required={false}
+                  loading={isLoadingStates}
                   name='state'
                   errorText={stateError}
                   value={state}
@@ -293,9 +308,10 @@ const EditProfile = () => {
               </div>
 
               <div className='w-full md:w-[45%]'>
-                <DropdownField
+                <CustomAutocomplete
                   label='city'
                   required={false}
+                  loading={isLoadingCities}
                   name='city'
                   errorText={cityError}
                   value={city}
