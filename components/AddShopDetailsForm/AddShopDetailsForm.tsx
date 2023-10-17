@@ -133,19 +133,19 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
           },
           featuredShopImages: {
             URLs: {
-              large: featuredImageUrl,
-              medium: featuredImageUrl,
-              original: featuredImageUrl,
-              small: featuredImageUrl,
-              thumbnail: featuredImageUrl,
+              large: featuredImageUrl?.large,
+              medium: featuredImageUrl?.medium,
+              original: featuredImageUrl?.large,
+              small: featuredImageUrl?.small,
+              thumbnail: featuredImageUrl?.thumbnail,
             },
             priority: 1,
           },
           isPickup: pickupService,
           categories: whatWeOffer?.map((item) => item.title),
           addressBook: {
-            fullName: account?.firstName,
-            phone,
+            fullName: account?.firstName ? account?.firstName : 'N/A',
+            phone: phone ? phone : 'N/A',
             postal: '12345',
             address1: 'sample address',
             city,
@@ -209,7 +209,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
 
   const [uploadFile, loadingUploadFile] = useFileUpload()
   const [logoImageUrl, setLogoImageUrl] = useState<string>()
-  const [featuredImageUrl, setFeaturedImageUrl] = useState<string>()
+  const [featuredImageUrl, setFeaturedImageUrl] = useState<any>()
 
   //handle logo image
   async function handleUploadLogo(e: any) {
@@ -228,7 +228,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
     const uploadRes = await uploadFile(logoImage, '/profile-images')
 
     if (uploadRes.result.status) {
-      setLogoImageUrl(uploadRes.result.data[0].url)
+      setLogoImageUrl(uploadRes.result.data[0].url[0])
     }
   }
 
@@ -247,8 +247,13 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
     //@ts-ignore
     const uploadRes = await uploadFile(featuredImage, '/profile-images')
 
+    console.log(
+      'uploadRes.result.data[0].url.availableSizes',
+      uploadRes.result.data[0].availableSizes,
+    )
+
     if (uploadRes.result.status) {
-      setFeaturedImageUrl(uploadRes.result.data[0].url)
+      setFeaturedImageUrl(uploadRes.result.data[0].availableSizes)
     }
   }
 

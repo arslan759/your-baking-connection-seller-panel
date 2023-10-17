@@ -180,7 +180,7 @@ const EditBakerModal = () => {
     const uploadRes = await uploadFile(featuredImage, '/profile-images')
 
     if (uploadRes.result.status) {
-      setFeaturedImageUrl(uploadRes.result.data[0].url)
+      setFeaturedImageUrl(uploadRes.result.data[0].availableSizes)
     }
   }
 
