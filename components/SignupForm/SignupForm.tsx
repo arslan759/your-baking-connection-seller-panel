@@ -34,15 +34,15 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [checked, setChecked] = useState(false)
 
-  useEffect(() => {
-    getStatesApi(setStates)
-  }, [])
+  // useEffect(() => {
+  //   getStatesApi(setStates)
+  // }, [])
 
-  useEffect(() => {
-    setCities([])
-    setCity('')
-    getCitiesApi(state, setCities)
-  }, [state])
+  // useEffect(() => {
+  //   setCities([])
+  //   setCity('')
+  //   getCitiesApi(state, setCities)
+  // }, [state])
 
   // Error states
   const [firstNameError, setFirstNameError] = useState('')
