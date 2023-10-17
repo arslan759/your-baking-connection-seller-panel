@@ -1,7 +1,7 @@
 import { Button, CircularProgress, Typography } from '@mui/material'
 import { PrimaryBtnProps } from 'types'
 
-const PrimaryBtn = ({ handleClick, type = 'button', text, disabled  , loading}: PrimaryBtnProps) => {
+const PrimaryBtn = ({ handleClick, type = 'button', text, disabled, loading }: PrimaryBtnProps) => {
   return (
     <Button
       // className={`flex items-center justify-center w-full h-full group`}
@@ -28,11 +28,13 @@ const PrimaryBtn = ({ handleClick, type = 'button', text, disabled  , loading}: 
       onClick={handleClick}
     >
       {loading ? (
-        <CircularProgress sx={{
-          color: 'grey',
-          width: '20px !important',
-          height: '20px !important',
-        }} />
+        <CircularProgress
+          sx={{
+            color: 'grey',
+            width: '20px !important',
+            height: '20px !important',
+          }}
+        />
       ) : (
         <Typography className='text-black group-hover:text-white'>{text}</Typography>
       )}
