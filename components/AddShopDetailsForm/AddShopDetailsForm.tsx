@@ -391,7 +391,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
               </div>
 
               <div className='w-full md:w-[45%]'>
-                <DropdownField
+                {/* <DropdownField
                   label='state'
                   required
                   name='state'
@@ -400,11 +400,24 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
                   options={states}
                   inputColor='white'
                   onChange={handleStateChange}
+                /> */}
+                <CustomAutocomplete
+                  label='state'
+                  loading={isLoadingStates}
+                  required
+                  name='state'
+                  inputColor='white'
+                  options={states}
+                  value={state}
+                  errorText={stateError}
+                  // setValue={setState}
+                  onChange={handleStateChange}
+                  setError={setStateError}
                 />
               </div>
 
               <div className='w-full md:w-[45%]'>
-                <DropdownField
+                {/* <DropdownField
                   label='city'
                   required
                   name='city'
@@ -413,6 +426,19 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
                   options={cities}
                   inputColor='white'
                   onChange={handleCityChange}
+                /> */}
+                <CustomAutocomplete
+                  label='city'
+                  loading={isLoadingCities}
+                  required
+                  name='city'
+                  inputColor='white'
+                  options={cities}
+                  value={city}
+                  errorText={cityError}
+                  // setValue={setCity}
+                  onChange={handleCityChange}
+                  setError={setCityError}
                 />
               </div>
 
