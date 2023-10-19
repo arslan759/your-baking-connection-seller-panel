@@ -11,7 +11,7 @@ import CustomBuilder from '../CustomBuilder'
 import useUpdatePublishProduct from 'hooks/product/usePublishProduct'
 
 import { withApollo } from 'lib/apollo/withApollo'
-import { ProductMediaInterface } from 'types'
+import { ProductMediaInterface, ProductMediaURLsInterface } from 'types'
 import { useRouter } from 'next/navigation'
 import useCatalogItems from 'hooks/Products/useCatalogItems'
 import DropdownFieldChecked from '../DropdownFieldChecked'
@@ -306,7 +306,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
 
   //update product images
 
-  const handleUpdateProductMedia = (image: string) => {
+  const handleUpdateProductMedia = (image: ProductMediaURLsInterface) => {
     console.log('image in parent is ', image)
 
     setProductImagesError('')
@@ -317,17 +317,15 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
       ...productMedia,
       {
         productId: '',
-        URLs: {
-          large: image,
-          medium: image,
-          original: image,
-          small: image,
-          thumbnail: image,
-        },
+        URLs: image,
         priority: mediaPriority,
       },
     ])
   }
+
+  useEffect(() => {
+    console.log('product media is ', productMedia)
+  }, [productMedia])
 
   const resetForm = () => {
     setProductTitle('')

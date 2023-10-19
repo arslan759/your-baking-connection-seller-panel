@@ -99,8 +99,13 @@ const AddBakerProductImages = ({
       //@ts-ignore
       const uploadRes = await uploadFile(image, '/product-images')
       if (uploadRes.result.status) {
-        console.log('setting product media', uploadRes.result.data[0].url)
-        handleUpdateProductMedia(uploadRes.result.data[0].url)
+        console.log('setting product media', uploadRes.result.data[0].availableSizes)
+        const availableSizes = uploadRes.result.data[0].availableSizes
+        availableSizes['original'] = availableSizes.large
+
+        const { image, ...rest } = availableSizes
+
+        handleUpdateProductMedia(rest)
       }
 
       setUploadError('')
