@@ -7,8 +7,10 @@ import customOrdersByShopQuery from './customOrdersByShop.gql'
  *
  * @returns {Array} the custom Order's list
  */
-export default function useCustomOrdersByShop() {
-  const { data, loading, refetch } = useQuery(customOrdersByShopQuery)
+export default function useCustomOrdersByShop(input) {
+  const { data, loading, refetch } = useQuery(customOrdersByShopQuery, {
+    variables: input,
+  })
 
   console.log('custom orders are ', data)
 

@@ -26,7 +26,7 @@ const PrimaryBtn = ({
         width: '100%',
         height: '100%',
         textTransform: 'capitalize',
-        backgroundColor: backgroundColor ? backgroundColor : '#7DDEC1',
+        backgroundColor: disabled ? 'grey' : backgroundColor ? backgroundColor : '#7DDEC1',
         borderRadius: '5px',
         padding: '10px',
         color: textColor ? textColor : '#000',

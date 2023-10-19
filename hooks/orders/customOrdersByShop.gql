@@ -1,13 +1,13 @@
-query customOrdersByShopQuery {
-  customOrdersByShop {
+query customOrdersByShopQuery($first: ConnectionLimitInt, $offset: Int) {
+  customOrdersByShop(first: $first, offset: $offset) {
     totalCount
     nodes {
       _id
       referenceId
       shopId
-      itemName
+      # itemName
       email
-      phoneNumber
+      # phoneNumber
       quantity
       details
       createdAt
