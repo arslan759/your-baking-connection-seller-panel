@@ -255,7 +255,7 @@ export interface ProductMediaInterface {
 export interface AddBakerProductImagesProps {
   productMedia: ProductMediaInterface[]
   setProductMedia: any
-  handleUpdateProductMedia: (image: string) => void
+  handleUpdateProductMedia: (image: ProductMediaURLsInterface) => void
 }
 
 export interface PaginatorProps {
