@@ -215,6 +215,7 @@ export interface YourProfileCardItemProps {
   image: string
   title: string
   description: string
+  isClickable: boolean
 }
 
 export interface CustomSwitchProps {
@@ -254,7 +255,7 @@ export interface ProductMediaInterface {
 export interface AddBakerProductImagesProps {
   productMedia: ProductMediaInterface[]
   setProductMedia: any
-  handleUpdateProductMedia: (image: ProductMediaURLsInterface) => void
+  handleUpdateProductMedia: any
 }
 
 export interface PaginatorProps {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './styles.module.css'
 import { CircularProgress, Typography } from '@mui/material'
 import InputField from '../InputField/InputField'
@@ -9,10 +9,31 @@ import OrderManagementTable from '../OrderManagementTable/OrderManagementTable'
 import ProfileBreadCrumbs from '../ProfileBreadCrumbs/ProfileBreadCrumbs'
 import useCustomOrdersByShop from 'hooks/orders/useCustomOrdersByShop'
 import CustomOrdersTable from '../CustomOrdersTable/CustomOrdersTable'
+import CustomPagination from '../CustomPagination'
 
 const CustomOrderManagementCard = () => {
+  //items per page to display
+  const [itemsPerPage, setItemsPerPage] = useState<number>(5)
+
+  //total number of pages for the paginator
+  const [pageCount, setPageCount] = useState<number>(0)
+
+  //we are using this state to display the current page, which differs from the offset value
+  const [page, setCurrentPage] = useState(1)
+
+  //for the offset filter
+  const [offset, setOffset] = useState(0)
+
+  const handlePageClick = (pageNum: number) => {
+    setOffset((pageNum - 1) * itemsPerPage)
+    setCurrentPage(pageNum)
+  }
+
   const [customOrders, loadingCustomOrders, totalCount, refetchCustomOrders] =
-    useCustomOrdersByShop()
+    useCustomOrdersByShop({
+      first: itemsPerPage,
+      offset,
+    })
 
   console.log('customOrders', customOrders)
 
@@ -86,6 +107,11 @@ const CustomOrderManagementCard = () => {
 
     console.log('form submitted')
   }
+
+  useEffect(() => {
+    let page = Math.ceil(totalCount / itemsPerPage)
+    setPageCount(page)
+  }, [totalCount])
 
   return (
     <div className={styles.card}>
@@ -213,9 +239,20 @@ const CustomOrderManagementCard = () => {
           />
         </div>
       ) : (
-        <div className='mt-[56px] md:mt-[64px]'>
-          <CustomOrdersTable orders={customOrders} />
-        </div>
+        <>
+          <div className='mt-[56px] md:mt-[64px]'>
+            <CustomOrdersTable orders={customOrders} refetchOrders={refetchCustomOrders} />
+          </div>
+          <div className='mt-[32px] md:mt-[56px] flex justify-center'>
+            <CustomPagination
+              count={pageCount}
+              boundaryCount={1}
+              siblingCount={1}
+              page={page}
+              onChange={handlePageClick}
+            />
+          </div>
+        </>
       )}
     </div>
   )

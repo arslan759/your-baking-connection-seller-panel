@@ -203,6 +203,7 @@ const YourProfileCard = () => {
                 key={title}
                 title={title}
                 image={image}
+                isClickable={true}
                 description={description}
               />
             )

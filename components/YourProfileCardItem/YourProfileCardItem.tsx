@@ -4,7 +4,12 @@ import { Typography } from '@mui/material'
 import styles from './styles.module.css'
 import { YourProfileCardItemProps } from 'types'
 
-const YourProfileCardItem = ({ image, title, description }: YourProfileCardItemProps) => {
+const YourProfileCardItem = ({
+  image,
+  title,
+  description,
+  isClickable,
+}: YourProfileCardItemProps) => {
   const router = useRouter()
 
   // function to handle card item click for redirecting
@@ -14,7 +19,12 @@ const YourProfileCardItem = ({ image, title, description }: YourProfileCardItemP
   }
 
   return (
-    <div className={`${styles.cardItem}`} onClick={() => handleCardItemClick(title)}>
+    <div
+      className={`${styles.cardItem} ${
+        isClickable ? 'cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out' : ''
+      } }`}
+      onClick={isClickable ? () => handleCardItemClick(title) : () => null}
+    >
       <img src={image} alt='card-img' className='w-[48px] md:w-[64px] h-[48px] md:h-[64px]' />
       <div>
         <Typography
