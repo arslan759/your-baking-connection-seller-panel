@@ -6,15 +6,15 @@
   /* width: 31%; */
   /* height: auto; */
   width: calc(100% / 3 - 16px);
-  cursor: pointer;
+  /* cursor: pointer; */
   display: flex;
   gap: 16px;
   transition: transform 0.2s ease-in-out;
 }
 
-.cardItem:hover {
+/* .cardItem:hover {
   transform: scale(1.05);
-}
+} */
 
 @media screen and (min-width: 868px) and (max-width: 1299px) {
   .cardItem {

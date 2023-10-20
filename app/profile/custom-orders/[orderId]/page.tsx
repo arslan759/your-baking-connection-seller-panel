@@ -1,6 +1,6 @@
 'use client'
 
-import OrderDetail from '@/components/OrderDetail/OrderDetail'
+import CustomOrderDetail from '@/components/CustomOrderDetail/CustomOrderDetail'
 
 export default function CustomOrderDetailPage({ params }: { params: { orderId: string } }) {
   let { orderId } = params
@@ -8,7 +8,7 @@ export default function CustomOrderDetailPage({ params }: { params: { orderId: s
   console.log('order id is ', orderId)
   return (
     <>
-      <OrderDetail orderId={orderId} />
+      <CustomOrderDetail orderId={orderId} />
     </>
   )
 }

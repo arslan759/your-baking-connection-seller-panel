@@ -215,6 +215,7 @@ export interface YourProfileCardItemProps {
   image: string
   title: string
   description: string
+  isClickable: boolean
 }
 
 export interface CustomSwitchProps {
