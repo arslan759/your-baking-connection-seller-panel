@@ -6,6 +6,7 @@ import styles from './styles.module.css'
 import { SignupSuccessProps } from 'types'
 import useStores from 'hooks/useStores'
 import { useRouter } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 
 const SignupSuccess = ({ setIsSuccess }: SignupSuccessProps) => {
   //@ts-ignore
@@ -22,9 +23,11 @@ const SignupSuccess = ({ setIsSuccess }: SignupSuccessProps) => {
   //   setLoadingAccount(false)
   // }, [account])
 
-  const handleNavigateToBakery = () => {
+  const handleNavigateToBakery = async () => {
     const shopId = localStorage.getItem('shopId')
-    router.replace(`/baker/${shopId}`)
+    localStorage.clear()
+    await signOut()
+    router.replace(`/signin`)
   }
 
   return (
