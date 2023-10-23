@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './styles.module.css'
 import { Typography } from '@mui/material'
 import InputField from '../InputField/InputField'
@@ -7,10 +7,11 @@ import DropdownField from '../DropdownField/DropdownField'
 import { BakeryNameOptions, DurationOptions, RatingOptions } from 'Constants/constants'
 import OrderManagementTable from '../OrderManagementTable/OrderManagementTable'
 import ProfileBreadCrumbs from '../ProfileBreadCrumbs/ProfileBreadCrumbs'
+import useOrders from 'hooks/orders/useOrders'
 
 const OrderManagementCard = () => {
   const [search, setSearch] = useState('')
-
+  const [getOrdersData, loadingOrders, orders] = useOrders()
   const [duration, setDuration] = useState('')
   const [bakeryName, setBakeryName] = useState('')
   const [rating, setRating] = useState('')
@@ -79,6 +80,27 @@ const OrderManagementCard = () => {
 
     console.log('form submitted')
   }
+
+  const fetchOrders = async () => {
+    try {
+      await getOrdersData({
+        variables: {
+          shopIds: [localStorage.getItem('shopId')],
+        },
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    console.log('running fetch orders')
+    fetchOrders()
+  }, [])
+
+  useEffect(() => {
+    console.log('orders are ', orders)
+  }, [orders])
 
   return (
     <div className={styles.card}>
@@ -198,7 +220,7 @@ const OrderManagementCard = () => {
       </div>
 
       <div className='mt-[56px] md:mt-[64px]'>
-        <OrderManagementTable />
+        <OrderManagementTable orders={orders} />
       </div>
     </div>
   )

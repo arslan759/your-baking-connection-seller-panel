@@ -21,7 +21,7 @@ const rows = [
   createData('AKN12508', 'Fondant Delight', '04.12.23', 'Credit Card', '14', '4.5'),
 ]
 
-const OrderManagementTable = () => {
+const OrderManagementTable = ({ orders }: any) => {
   return (
     <>
       <TableContainer sx={{ maxHeight: 440 }}>
@@ -44,8 +44,10 @@ const OrderManagementTable = () => {
               <TableCell>Bakery Name</TableCell>
               <TableCell>Order Placed</TableCell>
               <TableCell>Payment Method</TableCell>
+              <TableCell>Ordered By</TableCell>
               <TableCell>Total</TableCell>
-              <TableCell>Star Rating</TableCell>
+
+              {/* <TableCell>Star Rating</TableCell> */}
               <TableCell></TableCell>
             </TableRow>
           </TableHead>
@@ -63,16 +65,19 @@ const OrderManagementTable = () => {
               },
             }}
           >
-            {rows.map((row, index) => (
+            {orders?.orders?.edges?.map((row: any, index: any) => (
               <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                 <TableCell component='th' scope='row'>
-                  {row.orderdId}
+                  {row?.node?.referenceId}
                 </TableCell>
-                <TableCell>{row.bakeryName}</TableCell>
-                <TableCell>{row.orderPlaced}</TableCell>
-                <TableCell>{row.paymentMethod}</TableCell>
-                <TableCell>${row.total}</TableCell>
+                <TableCell>{row?.node?.shop?.name}</TableCell>
                 <TableCell>
+                  {new Date(row?.node?.updatedAt).toLocaleDateString('en-US').replace(/\//g, '.')}
+                </TableCell>
+                <TableCell>{'Card'}</TableCell>
+                <TableCell>{row?.node?.account?.primaryEmailAddress}</TableCell>
+                <TableCell>${row?.node?.summary?.total?.amount}</TableCell>
+                {/* <TableCell>
                   <div
                     style={{
                       display: 'flex',
@@ -83,7 +88,7 @@ const OrderManagementTable = () => {
                     <img src='/Images/star.svg' alt='details' className='h-[15px] w-[15px]' />{' '}
                     {row.rating}
                   </div>
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                   <img
                     src='/Images/purchase-details.svg'
@@ -98,7 +103,7 @@ const OrderManagementTable = () => {
       </TableContainer>
 
       <div className='mt-[32px] md:mt-[56px] flex justify-center'>
-      <CustomPagination onChange={() => console.log('test')} />
+        <CustomPagination onChange={() => console.log('test')} />
       </div>
     </>
   )
