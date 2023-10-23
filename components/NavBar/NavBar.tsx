@@ -17,12 +17,12 @@ const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarPro
 
   console.log('session', session)
 
-  if (status === 'authenticated') {
+  if (status === 'authenticated' && token !== session?.user?.loginResult?.tokens?.accessToken) {
     localStorage.setItem('accounts:accessToken', session?.user?.loginResult?.tokens?.accessToken)
     localStorage.setItem('accounts:refreshToken', session?.user?.loginResult?.tokens?.refreshToken)
   }
 
-  if (status === 'authenticated') {
+  if (status === 'authenticated' && shopId !== session?.user?.shopId) {
     localStorage.setItem('shopId', session?.user?.shopId)
   }
 
