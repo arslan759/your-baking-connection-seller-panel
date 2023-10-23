@@ -1,13 +1,5 @@
 mutation updateCustomOrderMutation($input: UpdateCustomOrderInput!) {
   updateCustomOrder(input: $input) {
     _id
-    shopId
-    referenceId
-    itemName
-    email
-    quantity
-    workflow
-    rejectionReason
-    details
   }
 }
