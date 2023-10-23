@@ -25,8 +25,8 @@ const SignupSuccess = ({ setIsSuccess }: SignupSuccessProps) => {
 
   const handleNavigateToBakery = async () => {
     const shopId = localStorage.getItem('shopId')
-    localStorage.clear()
-    await signOut()
+    // localStorage.clear()
+    // await signOut()
     router.replace(`/signin`)
   }
 

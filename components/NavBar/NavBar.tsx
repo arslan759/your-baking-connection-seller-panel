@@ -17,12 +17,12 @@ const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarPro
 
   console.log('session', session)
 
-  if (status === 'authenticated' && !token) {
+  if (status === 'authenticated') {
     localStorage.setItem('accounts:accessToken', session?.user?.loginResult?.tokens?.accessToken)
     localStorage.setItem('accounts:refreshToken', session?.user?.loginResult?.tokens?.refreshToken)
   }
 
-  if (status === 'authenticated' && !shopId) {
+  if (status === 'authenticated') {
     localStorage.setItem('shopId', session?.user?.shopId)
   }
 
@@ -44,7 +44,7 @@ const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarPro
     { name: 'ABOUT BAKERS', path: '/about-bakers' },
     { name: 'MEMBERSHIP', path: '/membership' },
     // { name: 'GALLERY', path: '/gallery' },
-    { name: 'BAKER', path: `/baker/${shopId}` },
+    { name: 'BAKER', path: `/baker/${session?.user?.shopId}` },
   ]
 
   return (
