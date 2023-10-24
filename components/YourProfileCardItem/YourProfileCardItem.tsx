@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import { Typography } from '@mui/material'
 import styles from './styles.module.css'
 import { YourProfileCardItemProps } from 'types'
+import Link from 'next/link'
 
 const YourProfileCardItem = ({
   image,
@@ -18,52 +19,108 @@ const YourProfileCardItem = ({
     router.push(`/profile/${slug}`)
   }
 
-  return (
-    <div
-      className={`${styles.cardItem} ${
-        isClickable ? 'cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out' : ''
-      } }`}
-      onClick={isClickable ? () => handleCardItemClick(title) : () => null}
-    >
-      <img src={image} alt='card-img' className='w-[48px] md:w-[64px] h-[48px] md:h-[64px]' />
-      <div>
-        <Typography
-          sx={{
-            fontSize: '24px !important',
-            fontWeight: '600 !important',
-            lineHeight: '32px',
-            fontFamily: 'Josefin Sans',
-            // textTransform: 'capitalize',
-            color: '#090909',
-            fontFeatureSettings: "'clig' off, 'liga' off",
-            '@media (max-width: 767px)': {
-              fontSize: '16px !important',
-              lineHeight: '24px',
-            },
-          }}
-        >
-          {title}
-        </Typography>
-        <Typography
-          sx={{
-            fontSize: '18px !important',
-            fontWeight: '500 !important',
-            lineHeight: '22px',
-            fontFamily: 'Josefin Sans',
-            // textTransform: 'capitalize',
-            color: '#888',
-            fontFeatureSettings: "'clig' off, 'liga' off",
-            '@media (max-width: 767px)': {
-              fontSize: '12px !important',
-              lineHeight: '16px',
-            },
-          }}
-        >
-          {description}
-        </Typography>
+  const slug = title.toLowerCase().replace(/\s+/g, '-')
+
+  if (isClickable)
+    return (
+      <Link
+        href={`/profile/${slug}`}
+        className={`${styles.cardItem} ${
+          isClickable
+            ? 'cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out'
+            : ''
+        }`}
+        // onClick={isClickable ? () => handleCardItemClick(title) : () => null}
+      >
+        <img src={image} alt='card-img' className='w-[48px] md:w-[64px] h-[48px] md:h-[64px]' />
+        <div>
+          <Typography
+            sx={{
+              fontSize: '24px !important',
+              fontWeight: '600 !important',
+              lineHeight: '32px',
+              fontFamily: 'Josefin Sans',
+              // textTransform: 'capitalize',
+              color: '#090909',
+              fontFeatureSettings: "'clig' off, 'liga' off",
+              '@media (max-width: 767px)': {
+                fontSize: '16px !important',
+                lineHeight: '24px',
+              },
+            }}
+          >
+            {title}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: '18px !important',
+              fontWeight: '500 !important',
+              lineHeight: '22px',
+              fontFamily: 'Josefin Sans',
+              // textTransform: 'capitalize',
+              color: '#888',
+              fontFeatureSettings: "'clig' off, 'liga' off",
+              '@media (max-width: 767px)': {
+                fontSize: '12px !important',
+                lineHeight: '16px',
+              },
+            }}
+          >
+            {description}
+          </Typography>
+        </div>
+      </Link>
+    )
+  else
+    return (
+      <div
+        // href={`/profile/${slug}`}
+        className={`${styles.cardItem} ${
+          isClickable
+            ? 'cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out'
+            : ''
+        }`}
+        // onClick={isClickable ? () => handleCardItemClick(title) : () => null}
+      >
+        <img src={image} alt='card-img' className='w-[48px] md:w-[64px] h-[48px] md:h-[64px]' />
+        <div>
+          <Typography
+            sx={{
+              fontSize: '24px !important',
+              fontWeight: '600 !important',
+              lineHeight: '32px',
+              fontFamily: 'Josefin Sans',
+              // textTransform: 'capitalize',
+              color: '#090909',
+              fontFeatureSettings: "'clig' off, 'liga' off",
+              '@media (max-width: 767px)': {
+                fontSize: '16px !important',
+                lineHeight: '24px',
+              },
+            }}
+          >
+            {title}
+          </Typography>
+          <Typography
+            sx={{
+              fontSize: '18px !important',
+              fontWeight: '500 !important',
+              lineHeight: '22px',
+              fontFamily: 'Josefin Sans',
+              // textTransform: 'capitalize',
+              color: '#888',
+              fontFeatureSettings: "'clig' off, 'liga' off",
+              '@media (max-width: 767px)': {
+                fontSize: '12px !important',
+                lineHeight: '16px',
+              },
+            }}
+          >
+            {description}
+          </Typography>
+        </div>
       </div>
-    </div>
-  )
+    )
 }
 
 export default YourProfileCardItem

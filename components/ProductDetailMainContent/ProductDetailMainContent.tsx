@@ -132,9 +132,9 @@ const ProductDetailMainContent = ({
         </Typography>
       </div>
 
-      <div className=' mt-[16px] md:mt-[18px]'>
+      {/* <div className=' mt-[16px] md:mt-[18px]'>
         <ProductDetailForm />
-      </div>
+      </div> */}
 
       <div className='mt-[24px] md:mt-[20px] bg-[#000] h-[1px] w-full' />
 

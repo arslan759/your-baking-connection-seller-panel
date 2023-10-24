@@ -11,6 +11,7 @@ import { withApollo } from 'lib/apollo/withApollo'
 
 interface ProductDetailProps {
   slug: string
+  shopId?: string
 }
 
 const ProductDetail = ({ slug }: ProductDetailProps) => {

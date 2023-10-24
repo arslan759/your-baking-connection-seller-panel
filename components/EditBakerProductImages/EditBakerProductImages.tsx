@@ -5,14 +5,17 @@ import DeleteIcon from '@mui/icons-material/Delete'
 
 import { AddBakerProductImagesProps } from 'types'
 
-const AddBakerProductImages = ({
+const EditBakerProductImages = ({
   productMedia,
   handleUpdateProductMedia,
   setProductMedia,
 }: AddBakerProductImagesProps) => {
   const [imageUploadCounter, setImageUploadCounter] = useState<number>(0)
   const [images, setImages] = useState<any[]>([])
-  const [imageLoading, setImageLoading] = useState([true, true, true, true, true])
+  // const [imageLoading, setImageLoading] = useState([true, true, true, true, true])
+  const [imageLoading, setImageLoading] = useState([false, false, false, false, false])
+
+  const [isloading, setIsLoading] = useState(false)
 
   const imageUploadRef = useRef<any>(null)
 
@@ -23,12 +26,16 @@ const AddBakerProductImages = ({
   useEffect(() => {
     const updatedLoadingArray = [...imageLoading]
     updatedLoadingArray[productMedia?.length - 1] = false
-    setImageUploadCounter(productMedia?.length)
-    setImageLoading(updatedLoadingArray)
 
-    if (!productMedia?.length) {
+    console.log('product media length in addproductImages is ', productMedia.length)
+
+    setImageUploadCounter(productMedia.length)
+    // setImageLoading(updatedLoadingArray)
+
+    if (!productMedia?.length || productMedia?.length === 0) {
       setImages([])
-      setImageLoading([true, true, true, true, true])
+      setProductMedia([])
+      // setImageLoading([true, true, true, true, true])
       setImageUploadCounter(0)
     }
 
@@ -42,25 +49,36 @@ const AddBakerProductImages = ({
   const [uploadError, setUploadError] = useState<string>('')
 
   const handleFileDelete = (index: number) => {
+    console.log('index is ', index)
     const updatedImages = [...images]
-    const updatedLoading = imageLoading.map((item, i) => {
-      if (i < imageUploadCounter - 1) {
-        return false
-      } else {
-        return true
-      }
-    })
+    const updatedMedia = [...productMedia]
+    // const updatedLoading = imageLoading.map((item, i) => {
+    //   if (i < imageUploadCounter - 1) {
+    //     return false
+    //   } else {
+    //     return true
+    //   }
+    // })
 
-    console.log('updated image loading is ', updatedLoading)
+    // console.log('updated image loading is ', updatedLoading)
 
-    updatedImages.splice(index, 1)
+    // updatedImages.splice(index, 1)
+    console.log('updated images are ', updatedImages)
+
+    console.log('product media is ', productMedia)
+
+    updatedMedia.splice(index, 1)
+
+    console.log('new images are ', updatedMedia)
     setImages(updatedImages)
-    setImageLoading(updatedLoading)
-    setProductMedia(updatedImages)
+    // setImageLoading(updatedLoading)
+    // setProductMedia(updatedImages)
+    setProductMedia(updatedMedia)
     setImageUploadCounter(imageUploadCounter - 1)
   }
 
   async function handleFileUpload(e: ChangeEvent<HTMLInputElement>) {
+    setIsLoading(true)
     try {
       setUploadError('')
       //@ts-ignore
@@ -106,15 +124,19 @@ const AddBakerProductImages = ({
 
         const { image, ...rest } = availableSizes
 
+        console.log('rest is , ', rest)
         handleUpdateProductMedia(rest)
       }
 
       setUploadError('')
+      setIsLoading(false)
     } catch (err: any) {
       setUploadError(err?.message)
+      setIsLoading(false)
     }
   }
-
+  console.log('product media with images is ', productMedia)
+  console.log('images are ', images)
   return (
     <div className='w-full'>
       <Typography
@@ -201,7 +223,7 @@ const AddBakerProductImages = ({
           </Typography>
         </div>
         <div className='w-full md:w-[48%] flex flex-col gap-y-[12px]'>
-          {images?.map((image: any, index: any) => (
+          {productMedia?.map((image: any, index: any) => (
             <div
               key={index}
               className={`rounded-[4px] flex gap-x-[10px] py-[10px] px-[16px] ${
@@ -209,13 +231,13 @@ const AddBakerProductImages = ({
               }`}
             >
               <img
-                src={image?.image}
-                alt={image?.name}
+                src={image?.URLs?.thumbnail}
+                alt={image?.URLs?.thumbnail}
                 className='w-[38px] h-[44px] object-cover rounded-[2px]'
               />
               <div className='w-full flex justify-between'>
                 <div className='h-full'>
-                  <Typography
+                  {/* <Typography
                     sx={{
                       color: !imageLoading[index] ? '#fff' : '212529',
                       fontSize: '16px !important',
@@ -228,8 +250,8 @@ const AddBakerProductImages = ({
                     }}
                   >
                     {image?.name}
-                  </Typography>
-                  <Typography
+                  </Typography> */}
+                  {/* <Typography
                     sx={{
                       color: '#747474',
                       fontSize: '14px !important',
@@ -242,7 +264,7 @@ const AddBakerProductImages = ({
                     }}
                   >
                     {image?.size?.toFixed(2)} MB
-                  </Typography>
+                  </Typography> */}
                 </div>
                 <div className='h-full flex items-center'>
                   {!imageLoading[index] ? (
@@ -275,6 +297,17 @@ const AddBakerProductImages = ({
               </div>
             </div>
           ))}
+          {isloading && (
+            <div className='w-full flex justify-center items-center'>
+              <CircularProgress
+                sx={{
+                  color: '#7DDEC1',
+                  height: '20px !important',
+                  width: '20px !important',
+                }}
+              />
+            </div>
+          )}
           <div className='w-full hidden md:block'>
             <Typography
               sx={{
@@ -295,4 +328,4 @@ const AddBakerProductImages = ({
   )
 }
 
-export default AddBakerProductImages
+export default EditBakerProductImages

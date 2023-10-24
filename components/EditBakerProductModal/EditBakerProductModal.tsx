@@ -14,6 +14,7 @@ import { ProductMediaInterface } from 'types'
 import { useRouter } from 'next/navigation'
 import CustomBuilder from '../CustomBuilder'
 import { validateDates } from 'helpers/validations'
+import EditBakerProductImages from '../EditBakerProductImages'
 
 interface EditBakerProductModalProps {
   product: any
@@ -113,11 +114,13 @@ const EditBakerProductModal = ({
     console.log('product in edit product modal is ', product)
     console.log('variant in edit product modal is ', variants)
 
+    console.log('media is', product?.media)
     const updatedMedia = filterMedia(product?.media)
     const updatedAttributes = filterAttributes(product?.productAttributes)
 
     setProductMedia(updatedMedia)
     setProductAttributes(updatedAttributes)
+    // setMediaPriority(updatedMedia.length + 1)
 
     console.log('updated media is ', updatedMedia)
     console.log('updated attributes is ', updatedAttributes)
@@ -167,8 +170,39 @@ const EditBakerProductModal = ({
     loadingPublishProduct,
   ])
 
+  function ensureUniquePriorities(arr: any) {
+    // Create an object to keep track of existing priorities
+    const priorityCounts = {} as any
+
+    // Loop through the array and check for duplicate priorities
+    for (const item of arr) {
+      if (item.priority in priorityCounts) {
+        // Priority is not unique, generate a random number from 1 to 10
+        let randomPriority
+        do {
+          randomPriority = Math.floor(Math.random() * 10) + 1
+        } while (randomPriority in priorityCounts)
+
+        // Update the item's priority and priorityCounts
+        item.priority = randomPriority
+        priorityCounts[randomPriority] = true
+      } else {
+        // Priority is unique, add it to priorityCounts
+        priorityCounts[item.priority] = true
+      }
+    }
+
+    setProductMedia(arr)
+    return arr
+  }
+
   //step 1: update Product
   const updateProduct = async () => {
+    // const updatedProductMedia = ensureUniquePriorities(productMedia)
+
+    // console.log('updated product media is ', updatedProductMedia)
+
+    // return
     try {
       let variables = {
         shopId: shopId,
@@ -330,25 +364,32 @@ const EditBakerProductModal = ({
 
   //update product images
 
-  const handleUpdateProductMedia = (image: string) => {
+  const handleUpdateProductMedia = (image: any) => {
     console.log('image in parent is ', image)
 
     setMediaPriority((prev) => prev + 1)
 
-    setProductMedia([
+    console.log('before updated media ', [
       ...productMedia,
       {
         productId: '',
-        URLs: {
-          large: image,
-          medium: image,
-          original: image,
-          small: image,
-          thumbnail: image,
-        },
+        URLs: image,
         priority: mediaPriority,
       },
     ])
+
+    const updatedProductMedia = ensureUniquePriorities([
+      ...productMedia,
+      {
+        productId: '',
+        URLs: image,
+        priority: mediaPriority,
+      },
+    ])
+
+    console.log('updated product media is ', updatedProductMedia)
+
+    setProductMedia(updatedProductMedia)
   }
 
   const validateProductAttributes = () => {
@@ -434,6 +475,10 @@ const EditBakerProductModal = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    console.log('product media is ', productMedia)
+
+    // return
 
     if (
       !productTitle ||
@@ -590,11 +635,17 @@ const EditBakerProductModal = ({
               </div>
 
               <div className='w-full'>
-                <AddBakerProductImages
+                {/* <AddBakerProductImages
+                  productMedia={productMedia}
+                  handleUpdateProductMedia={handleUpdateProductMedia}
+                  setProductMedia={setProductMedia}
+                /> */}
+                <EditBakerProductImages
                   productMedia={productMedia}
                   handleUpdateProductMedia={handleUpdateProductMedia}
                   setProductMedia={setProductMedia}
                 />
+
                 {productImagesError && (
                   <span className='text-red-500 text-xs'>{productImagesError}</span>
                 )}
