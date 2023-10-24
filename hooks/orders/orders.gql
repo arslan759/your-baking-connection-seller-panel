@@ -1,5 +1,6 @@
-query orders($shopIds: [ID]) {
-  orders(shopIds: $shopIds) {
+query orders($shopIds: [ID], $first: ConnectionLimitInt, $offset: Int) {
+  orders(shopIds: $shopIds, first: $first, offset: $offset) {
+    totalCount
     edges {
       node {
         _id

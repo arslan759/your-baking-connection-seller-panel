@@ -1,30 +1,13 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import React from 'react'
-import CustomPagination from '../CustomPagination/CustomPagination'
-
-function createData(
-  orderdId: string,
-  bakeryName: string,
-  orderPlaced: string,
-  paymentMethod: string,
-  total: string,
-  rating: string,
-) {
-  return { orderdId, bakeryName, orderPlaced, paymentMethod, total, rating }
-}
-
-const rows = [
-  createData('AKN12508', 'Fondant Delight', '04.12.23', 'Credit Card', '14', '4.5'),
-  createData('AKN12508', 'Fondant Delight', '04.12.23', 'Credit Card', '14', '4.5'),
-  createData('AKN12508', 'Fondant Delight', '04.12.23', 'Credit Card', '14', '4.5'),
-  createData('AKN12508', 'Fondant Delight', '04.12.23', 'Credit Card', '14', '4.5'),
-  createData('AKN12508', 'Fondant Delight', '04.12.23', 'Credit Card', '14', '4.5'),
-]
+import moment from 'moment'
+import Link from 'next/link'
 
 const OrderManagementTable = ({ orders }: any) => {
   return (
     <>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      {/* <TableContainer sx={{ maxHeight: 440 }}> */}
+      <TableContainer>
         <Table stickyHeader>
           <TableHead
             sx={{
@@ -71,9 +54,7 @@ const OrderManagementTable = ({ orders }: any) => {
                   {row?.node?.referenceId}
                 </TableCell>
                 <TableCell>{row?.node?.shop?.name}</TableCell>
-                <TableCell>
-                  {new Date(row?.node?.updatedAt).toLocaleDateString('en-US').replace(/\//g, '.')}
-                </TableCell>
+                <TableCell>{moment(row?.node?.updatedAt).format('DD MMM YYYY')}</TableCell>
                 <TableCell>{'Card'}</TableCell>
                 <TableCell>{row?.node?.account?.primaryEmailAddress}</TableCell>
                 <TableCell>${row?.node?.summary?.total?.amount}</TableCell>
@@ -90,11 +71,13 @@ const OrderManagementTable = ({ orders }: any) => {
                   </div>
                 </TableCell> */}
                 <TableCell>
-                  <img
-                    src='/Images/purchase-details.svg'
-                    alt='details'
-                    className='h-[24px] md:h-[32px] w-[24px] md:w-[32px]'
-                  />
+                  <Link href={`/profile/order-management/${row?.node._id}`}>
+                    <img
+                      src='/Images/purchase-details.svg'
+                      alt='details'
+                      className='h-[24px] md:h-[32px] w-[24px] md:w-[32px]'
+                    />
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}
@@ -102,9 +85,9 @@ const OrderManagementTable = ({ orders }: any) => {
         </Table>
       </TableContainer>
 
-      <div className='mt-[32px] md:mt-[56px] flex justify-center'>
+      {/* <div className='mt-[32px] md:mt-[56px] flex justify-center'>
         <CustomPagination onChange={() => console.log('test')} />
-      </div>
+      </div> */}
     </>
   )
 }
