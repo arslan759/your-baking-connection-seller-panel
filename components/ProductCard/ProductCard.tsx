@@ -5,6 +5,7 @@ import GalleryProductCardMenu from '../ProductCardMenu/ProductCardMenu'
 import { PrimaryBtn } from '../Buttons'
 // import { useRouter } from 'next/navigation'
 import { usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 const ProductCard = ({
   product,
@@ -14,7 +15,7 @@ const ProductCard = ({
   // title,
   // description,
   // category,
-  // slug,
+  slug,
   // oldPrice,
   // newPrice,
   width,
@@ -55,7 +56,7 @@ ProductCardProps) => {
     // console.log('slug', `/product/${slug}`)
 
     // router.push(`/product/${product?.slug}`)
-    router.push(`${pathname}/product/${product?.slug}`)
+    // router.push(`${pathname}/product/${product?.slug}`)
   }
 
   // console.log('isDetailsVisible', isDetailsVisible)
@@ -128,7 +129,9 @@ ProductCardProps) => {
               transform: 'translate(-50%, -50%)',
             }}
           >
-            <PrimaryBtn text='More details' handleClick={handleMoreDetailsClick} />
+            <Link href={`${pathname}/product/${slug}`}>
+              <PrimaryBtn text='More details' />
+            </Link>
           </div>
         )}
 

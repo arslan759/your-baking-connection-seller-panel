@@ -436,6 +436,8 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
 
     // console.log('product attributes error is ', productAttributesError)
 
+    console.log('product Images are ', productMedia)
+
     // return
 
     if (

@@ -1,6 +1,7 @@
 import { Breadcrumbs, Typography } from '@mui/material'
 import React from 'react'
 import { usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 interface ProductDetailBreadCrumbsProps {
   title: string
@@ -11,9 +12,9 @@ const ProductDetailBreadCrumbs = ({ title }: ProductDetailBreadCrumbsProps) => {
 
   const shopId = localStorage.getItem('shopId')
 
-  const handleBreadCrumbs = () => {
-    router.push(`/baker/${shopId}`)
-  }
+  // const handleBreadCrumbs = () => {
+  //   router.push(`/baker/${shopId}`)
+  // }
 
   return (
     <Breadcrumbs
@@ -23,24 +24,26 @@ const ProductDetailBreadCrumbs = ({ title }: ProductDetailBreadCrumbsProps) => {
         },
       }}
     >
-      <Typography
-        sx={{
-          fontSize: '18px !important',
-          fontWeight: '600 !important',
-          lineHeight: '28px',
-          fontFamily: 'Josefin Sans',
-          textTransform: 'capitalize',
-          color: '#fff',
-          cursor: 'pointer',
-          fontFeatureSettings: "'clig' off, 'liga' off",
-          '@media (max-width: 767px)': {
-            fontSize: '16px !important',
-          },
-        }}
-        onClick={handleBreadCrumbs}
-      >
-        Baker
-      </Typography>
+      <Link href={`/baker/${shopId}`}>
+        <Typography
+          sx={{
+            fontSize: '18px !important',
+            fontWeight: '600 !important',
+            lineHeight: '28px',
+            fontFamily: 'Josefin Sans',
+            textTransform: 'capitalize',
+            color: '#fff',
+            cursor: 'pointer',
+            fontFeatureSettings: "'clig' off, 'liga' off",
+            '@media (max-width: 767px)': {
+              fontSize: '16px !important',
+            },
+          }}
+          // onClick={handleBreadCrumbs}
+        >
+          Baker
+        </Typography>
+      </Link>
 
       <Typography
         sx={{

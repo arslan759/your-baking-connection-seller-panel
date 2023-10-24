@@ -32,7 +32,7 @@ const FooterDesktop = () => {
           header='Quick Links'
           title1='About Your Baking Connection'
           link1={`${process.env.NEXT_PUBLIC_BLOG_URL}/about-your-baking-connection/`}
-          title2='About Your Baking Connection'
+          title2='About the bakers'
           link2={`${process.env.NEXT_PUBLIC_BLOG_URL}/about-the-bakers/`}
           title3='FAQs'
           link3={`${process.env.NEXT_PUBLIC_BLOG_URL}/faqs/`}
