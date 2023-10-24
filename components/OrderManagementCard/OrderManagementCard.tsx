@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from './styles.module.css'
-import { Typography } from '@mui/material'
+import { CircularProgress, Typography } from '@mui/material'
 import InputField from '../InputField/InputField'
 import { PrimaryBtn } from '../Buttons'
 import DropdownField from '../DropdownField/DropdownField'
@@ -8,10 +8,31 @@ import { BakeryNameOptions, DurationOptions, RatingOptions } from 'Constants/con
 import OrderManagementTable from '../OrderManagementTable/OrderManagementTable'
 import ProfileBreadCrumbs from '../ProfileBreadCrumbs/ProfileBreadCrumbs'
 import useOrders from 'hooks/orders/useOrders'
+import CustomPagination from '../CustomPagination'
 
 const OrderManagementCard = () => {
+  //items per page to display
+  const [itemsPerPage, setItemsPerPage] = useState<number>(5)
+
+  //total number of pages for the paginator
+  const [pageCount, setPageCount] = useState<number>(0)
+
+  //we are using this state to display the current page, which differs from the offset value
+  const [page, setCurrentPage] = useState(1)
+
+  //for the offset filter
+  const [offset, setOffset] = useState(0)
+
+  const handlePageClick = (pageNum: number) => {
+    setOffset((pageNum - 1) * itemsPerPage)
+    setCurrentPage(pageNum)
+  }
+
   const [search, setSearch] = useState('')
-  const [getOrdersData, loadingOrders, orders] = useOrders()
+  const [getOrdersData, loadingOrders, orders, totalCount] = useOrders({
+    first: itemsPerPage,
+    offset,
+  })
   const [duration, setDuration] = useState('')
   const [bakeryName, setBakeryName] = useState('')
   const [rating, setRating] = useState('')
@@ -101,6 +122,11 @@ const OrderManagementCard = () => {
   useEffect(() => {
     console.log('orders are ', orders)
   }, [orders])
+
+  useEffect(() => {
+    let page = Math.ceil(totalCount / itemsPerPage)
+    setPageCount(page)
+  }, [totalCount])
 
   return (
     <div className={styles.card}>
@@ -219,9 +245,30 @@ const OrderManagementCard = () => {
         </form>
       </div>
 
-      <div className='mt-[56px] md:mt-[64px]'>
-        <OrderManagementTable orders={orders} />
-      </div>
+      {loadingOrders ? (
+        <div className='w-full flex justify-center items-center mt-[56px] md:mt-[64px]'>
+          <CircularProgress
+            sx={{
+              color: '#7DDEC1',
+            }}
+          />
+        </div>
+      ) : (
+        <>
+          <div className='mt-[56px] md:mt-[64px]'>
+            <OrderManagementTable orders={orders} />
+          </div>
+          <div className='mt-[32px] md:mt-[56px] flex justify-center'>
+            <CustomPagination
+              count={pageCount}
+              boundaryCount={1}
+              siblingCount={1}
+              page={page}
+              onChange={handlePageClick}
+            />
+          </div>
+        </>
+      )}
     </div>
   )
 }
