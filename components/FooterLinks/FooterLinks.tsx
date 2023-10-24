@@ -47,7 +47,7 @@ const FooterLinks = ({ header, title1, link1, title2, link2, title3, link3 }: Fo
         {header}
       </Typography>
 
-      {link1 && (
+      {title1 && (
         <div className='flex flex-row gap-[12px] items-center justify-start shrink-0 relative'>
           {header === 'Contact Us' ? (
             <img
@@ -58,19 +58,27 @@ const FooterLinks = ({ header, title1, link1, title2, link2, title3, link3 }: Fo
           ) : (
             <div className='hidden md:block bg-white shrink-0 w-2.5 h-2.5 relative'></div>
           )}
-          <Link href={`${link1}`}>
+          {header === 'Contact Us' ? (
             <Typography
-              sx={{ overflowWrap: 'anywhere' }}
               variant='body1'
-              className='text-black for-text text-center md:text-left relative cursor-pointer w-full'
+              className='text-black for-text text-center md:text-left relative'
             >
               {title1}
             </Typography>
-          </Link>
+          ) : (
+            <Link href={`${link1}`}>
+              <Typography
+                variant='body1'
+                className='text-black for-text text-center md:text-left relative cursor-pointer'
+              >
+                {title1}
+              </Typography>
+            </Link>
+          )}
         </div>
       )}
 
-      {link2 && (
+      {title2 && (
         <div className='flex flex-row gap-[12px] items-center justify-start shrink-0 relative'>
           {header === 'Contact Us' ? (
             <img
@@ -81,18 +89,27 @@ const FooterLinks = ({ header, title1, link1, title2, link2, title3, link3 }: Fo
           ) : (
             <div className='hidden md:block bg-white shrink-0 w-2.5 h-2.5 relative'></div>
           )}
-          <Link href={`${link2}`}>
+          {header === 'Contact Us' ? (
             <Typography
               variant='body1'
-              className='text-black for-text text-center md:text-left relative cursor-pointer'
+              className='text-black for-text text-center md:text-left relative'
             >
               {title2}
             </Typography>
-          </Link>
+          ) : (
+            <Link href={`${link2}`}>
+              <Typography
+                variant='body1'
+                className='text-black for-text text-center md:text-left relative cursor-pointer'
+              >
+                {title2}
+              </Typography>
+            </Link>
+          )}
         </div>
       )}
 
-      {link3 && (
+      {title3 && (
         <div className='flex flex-row gap-[12px] items-center justify-start shrink-0 relative'>
           {header === 'Contact Us' ? (
             <img
@@ -103,14 +120,23 @@ const FooterLinks = ({ header, title1, link1, title2, link2, title3, link3 }: Fo
           ) : (
             <div className='hidden md:block bg-white shrink-0 w-2.5 h-2.5 relative'></div>
           )}
-          <Link href={`${link3}`}>
+          {header === 'Contact Us' ? (
             <Typography
               variant='body1'
-              className='text-black for-text text-center md:text-left relative cursor-pointer'
+              className='text-black for-text text-center md:text-left relative'
             >
               {title3}
             </Typography>
-          </Link>
+          ) : (
+            <Link href={`${link3}`}>
+              <Typography
+                variant='body1'
+                className='text-black for-text text-center md:text-left relative cursor-pointer'
+              >
+                {title3}
+              </Typography>
+            </Link>
+          )}
         </div>
       )}
     </div>
