@@ -615,6 +615,12 @@ export const YourProfileCardItemData = [
     description: 'Regular automatic billing, exclusive content access',
     image: '/Images/profile-subscription.svg',
   },
+  {
+    id: 7,
+    title: 'Settings',
+    description: 'Order confirmation, payment reminder, account balance update',
+    image: '/Images/profile-settings.svg',
+  },
 ]
 
 export const DurationOptions = [
