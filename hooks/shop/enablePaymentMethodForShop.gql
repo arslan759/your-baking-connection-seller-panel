@@ -1,0 +1,10 @@
+mutation enablePaymentMethodForShop($shopId: ID!, $paymentMethodName: String, $isEnabled: boolean) {
+  enablePaymentMethodForShop(
+    input: { shopId: $shopId, paymentMethodName: $paymentMethodName, isEnabled: $isEnabled }
+  ) {
+    paymentMethods {
+      name
+      pluginName
+    }
+  }
+}
