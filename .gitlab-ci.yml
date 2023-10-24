@@ -50,7 +50,6 @@ deploy-staging:
     - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY "cd /home/ubuntu/sp-staging && pm2 delete sp-staging"
     - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY "cd /home/ubuntu/sp-staging && pm2 start 'npm start' --name sp-staging"
 
-
 # THIS IS THE PIPELINE FOR MAIN BRANCH
 build-main: # This job runs in the build stage, which runs first.
   stage: build
