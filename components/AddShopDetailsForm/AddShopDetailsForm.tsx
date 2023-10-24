@@ -15,7 +15,7 @@ import { AddShopDetailsFormProps } from 'types'
 import useFileUpload from 'hooks/fileUpload/useFileUpload'
 import CustomAutocomplete from '../CustomAutocomplete'
 import { getCitiesApi, getStatesApi } from 'helpers/apis'
-
+import useEnablePaymentMethodForShop from 'hooks/shop/useEnablePaymentMethodForShop'
 import useCreateTaxRate from 'hooks/shop/useCreateTaxRate'
 const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   // auth store
@@ -127,6 +127,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   const [updateShop, loadingUpdateShop] = useUpdateShop()
 
   const [createTax, loadingCreateTaxRate] = useCreateTaxRate()
+  const [enablePayment, loadingEnablePayment] = useEnablePaymentMethodForShop()
 
   const handleUpdateShop = async (shopId: string) => {
     const shopUpdated = await updateShop({
@@ -174,6 +175,24 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
     }
   }
 
+  const handleEnablePayment = async (shopId: string) => {
+    try {
+      const enabledPayment = await enablePayment({
+        variables: {
+          shopId,
+          paymentMethodName: 'iou_example',
+          isEnabled: true,
+        },
+      })
+
+      console.log('enablePayment', enabledPayment)
+      if (enabledPayment) {
+        openSuccess()
+      }
+    } catch (err:any) {
+      setError(err.message)
+    }
+  }
   const handleCreateTaxRate = async (shopId: string) => {
     try {
       const taxRate = await createTax({
@@ -187,7 +206,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       console.log('tax rate is ', taxRate)
 
       if (taxRate?.data?.createTaxRate?.taxRate?._id) {
-        openSuccess()
+        handleEnablePayment(shopId)
       }
     } catch (err: any) {
       console.log('err', err)

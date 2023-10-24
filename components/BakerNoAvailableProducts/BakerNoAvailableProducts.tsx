@@ -28,11 +28,11 @@ const BakerNoAvailableProducts = () => {
               },
             }}
           >
-            {`No current available products listed`}
+            {`No current available products`}
           </Typography>
         </div>
 
-        <div
+        {/* <div
           className='mt-[24px] md:mt-[60px] py-[40px] px-[16px] w-[100%] md:w-[70%]'
           style={{
             border: '1px dashed #6C6C6C',
@@ -62,7 +62,7 @@ const BakerNoAvailableProducts = () => {
               <span>{`Upload Product Images`}</span>
             </Typography>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

@@ -24,7 +24,7 @@ const useFileUpload = () => {
 
       return { result }
     } catch (error) {
-      return { result }
+      console.log(error)
     }
   }
 
