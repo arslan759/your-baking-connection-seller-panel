@@ -54,7 +54,7 @@ deploy-staging:
 build-main: # This job runs in the build stage, which runs first.
   stage: build
   only:
-    - main
+    - master
   before_script:
     - apt update
     - touch .env
@@ -63,7 +63,7 @@ build-main: # This job runs in the build stage, which runs first.
     - echo "$PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - chmod 700 /root/.ssh
     - ssh-keyscan -H "$PUBLIC_KEY" >> ~/.ssh/known_hosts
-    - echo "$ENV_FILE_MAIN" > .env
+    - echo "$ENV_FILE_MASTER" > .env
   script:
     - pwd
 #    - ls
@@ -74,13 +74,13 @@ build-main: # This job runs in the build stage, which runs first.
     - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY "cd /home/ubuntu/sp-main && git checkout master"
     - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY "cd /home/ubuntu/sp-main && rm -rf .env"
     - scp -r /builds/Codistan/yourbakingconnection/baker-seller-panel/.env $HOSTNAME@$PUBLIC_KEY:/home/ubuntu/sp-main
-    - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY "cd /home/ubuntu/sp-main && sed -i 's/next start/PORT=4001 next start/g' package.json"
+    - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY "cd /home/ubuntu/sp-main && sed -i 's/next start/PORT=4003 next start/g' package.json"
     - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY "cd /home/ubuntu/sp-main && npm install --legacy-peer-deps"
     - ssh -o StrictHostKeyChecking=no $HOSTNAME@$PUBLIC_KEY "cd /home/ubuntu/sp-main && npm run build"
 
 deploy-main:
   only:
-    - main
+    - master
   stage: deploy
   before_script:
     - apt update
