@@ -7,10 +7,11 @@ import DropdownField from '../DropdownField/DropdownField'
 import { cities, states, weOfferData } from 'Constants/constants'
 import MultiSelectDropdownField from '../MultiSelectDropdownField/MultiSelectDropdownField'
 import CancelBtn from '../Buttons/CancelBtn'
-
+import { getCitiesApi, getStatesApi } from 'helpers/apis'
 import useBaker from 'hooks/baker/useBaker'
 import useFileUpload from 'hooks/fileUpload/useFileUpload'
 import useUpdateShop from 'hooks/shop/useUpdateShop'
+import CustomAutocomplete from '../CustomAutocomplete'
 
 const EditBakerModal = () => {
   // Edit Button Modal State
@@ -33,7 +34,11 @@ const EditBakerModal = () => {
   const [featuredImage, setFeaturedImage] = useState<File | null>(null)
   const [featuredImageUrl, setFeaturedImageUrl] = useState<string>()
 
+  const [states, setStates] = useState<any>([])
+  const [isLoadingStates, setIsLoadingStates] = useState(false)
   const [state, setState] = useState<string | null>('')
+  const [isLoadingCities, setIsLoadingCities] = useState(false)
+  const [cities, setCities] = useState<any>([])
   const [city, setCity] = useState<string | null>('')
 
   const [PickupService, setPickupService] = useState(true)
@@ -106,6 +111,15 @@ const EditBakerModal = () => {
       </div>
     )
   }
+  useEffect(() => {
+    getStatesApi(setStates, setIsLoadingStates)
+  }, [])
+
+  useEffect(() => {
+    setCities([])
+    setCity('')
+    getCitiesApi(state, setCities, setIsLoadingCities)
+  }, [state])
 
   // handle Radio Button change  for pickup service
   const handlePickupServiceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -364,28 +378,34 @@ const EditBakerModal = () => {
                 </div>
 
                 <div className='w-full'>
-                  <DropdownField
+                  <CustomAutocomplete
                     label='state'
-                    required={false}
+                    loading={isLoadingStates}
+                    required
                     name='state'
-                    errorText={stateError}
-                    value={state}
-                    options={states}
                     inputColor='#212529'
+                    options={states}
+                    value={state}
+                    errorText={stateError}
+                    // setValue={setState}
                     onChange={handleStateChange}
+                    setError={setStateError}
                   />
                 </div>
 
                 <div className='w-full'>
-                  <DropdownField
+                  <CustomAutocomplete
                     label='city'
-                    required={false}
+                    loading={isLoadingCities}
+                    required
                     name='city'
-                    errorText={cityError}
-                    value={city}
-                    options={cities}
                     inputColor='#212529'
+                    options={cities}
+                    value={city}
+                    errorText={cityError}
+                    // setValue={setCity}
                     onChange={handleCityChange}
+                    setError={setCityError}
                   />
                 </div>
 
