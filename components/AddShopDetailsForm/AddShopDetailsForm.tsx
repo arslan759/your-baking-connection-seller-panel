@@ -177,19 +177,21 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
 
   const handleEnablePayment = async (shopId: string) => {
     try {
-      const enablePayment = await {
+      const enabledPayment = await enablePayment({
         variables: {
           shopId,
           paymentMethodName: 'iou_example',
           isEnabled: true,
         },
-      }
+      })
 
-      console.log('enablePayment', enablePayment)
-      if (enablePayment) {
+      console.log('enablePayment', enabledPayment)
+      if (enabledPayment) {
         openSuccess()
       }
-    } catch (err) {}
+    } catch (err:any) {
+      setError(err.message)
+    }
   }
   const handleCreateTaxRate = async (shopId: string) => {
     try {
