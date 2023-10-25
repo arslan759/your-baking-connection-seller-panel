@@ -347,7 +347,7 @@ const SigninForm = () => {
                   color: '#fff',
                 }}
               >
-                Are you a baker? &nbsp;
+                Are you a customer? &nbsp;
                 <a
                   href='/signin'
                   style={{
