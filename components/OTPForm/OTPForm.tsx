@@ -172,13 +172,13 @@ const OTPForm = ({ closeOtp, type, email, tokens, setStep }: OTPFormProps) => {
               />
             </div>
 
-            {loadingVerifyOtp && (
+            {/* {loadingVerifyOtp && (
               <div className={'mt-[10px]'}>
                 <p style={{ color: 'white' }}>Loading...</p>
               </div>
-            )}
+            )} */}
             <div className='mt-[36px] md:mt-[40px]'>
-              <PrimaryBtn text='Enter verification code' type='submit' />
+              <PrimaryBtn text='Enter verification code' type='submit' loading={loadingVerifyOtp} />
             </div>
 
             <div className='w-full flex justify-center mt-[12px] md:mt-[24px]'>

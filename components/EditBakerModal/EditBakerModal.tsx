@@ -1,4 +1,4 @@
-import { Chip, Modal, Radio, Typography } from '@mui/material'
+import { Chip, CircularProgress, Modal, Radio, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { PrimaryBtn } from '../Buttons'
 import InputField from '../InputField/InputField'
@@ -18,7 +18,7 @@ const EditBakerModal = () => {
   const [isEdited, setIsEdited] = useState(false)
 
   const shopId = localStorage.getItem('shopId')
-  const [baker, loadingBaker] = useBaker(shopId)
+  const [baker, loadingBaker, refetchBaker] = useBaker(shopId)
 
   // handleEdit function for edit button
   const handleEditShop = () => {
@@ -29,10 +29,12 @@ const EditBakerModal = () => {
   const [shopName, setShopName] = useState('')
   const [shopDescription, setShopDescription] = useState('')
   const [logo, setLogo] = useState<File | null>(null)
-  const [logoUrl, setLogoUrl] = useState<string>()
+  const [logoUrl, setLogoUrl] = useState<any>()
+  const [isLoadingLogo, setIsLoadingLogo] = useState(false)
 
   const [featuredImage, setFeaturedImage] = useState<File | null>(null)
-  const [featuredImageUrl, setFeaturedImageUrl] = useState<string>()
+  const [featuredImageUrl, setFeaturedImageUrl] = useState<any>()
+  const [isLoadingFeaturedImage, setIsLoadingFeaturedImage] = useState(false)
 
   const [states, setStates] = useState<any>([])
   const [isLoadingStates, setIsLoadingStates] = useState(false)
@@ -45,8 +47,14 @@ const EditBakerModal = () => {
 
   const [whatWeOffer, setWhatWeOffer] = useState<any[]>([])
 
+  const populateCity = async (state: string, city: string) => {
+    await getCitiesApi(state, setCities, setIsLoadingCities, city, setCity)
+  }
+
   useEffect(() => {
     if (loadingBaker) return
+
+    console.log('baker in edit baker modal is ', baker)
 
     setShopName(baker?.name)
     setShopDescription(baker?.description)
@@ -56,8 +64,9 @@ const EditBakerModal = () => {
     setWhatWeOffer(baker?.categories)
     setLogoUrl(baker?.shopLogoUrls?.primaryShopLogoUrl)
     if (baker?.featuredShopImages && baker?.featuredShopImages?.length !== 0) {
-      setFeaturedImageUrl(baker?.featuredShopImages[0]?.URLs?.thumbnail)
+      setFeaturedImageUrl(baker?.featuredShopImages[0]?.URLs)
     }
+    populateCity(baker?.addressBook[0]?.region, baker?.addressBook[0]?.city)
   }, [baker])
 
   // Error states
@@ -169,12 +178,23 @@ const EditBakerModal = () => {
       return
     }
 
+    setIsLoadingLogo(true)
     //@ts-ignore
     const uploadRes = await uploadFile(logoImage, '/profile-images')
 
+    console.log('upload res is ', uploadRes)
+
     if (uploadRes.result.status) {
-      setLogoUrl(uploadRes.result.data[0].url)
+      const availableSizes = uploadRes.result.data[0].availableSizes
+      availableSizes['original'] = availableSizes.large
+      availableSizes['small'] = availableSizes.thumbnail
+
+      console.log('available sizes are ', availableSizes)
+
+      setIsLoadingLogo(false)
+      setLogoUrl(availableSizes?.medium)
     }
+    setIsLoadingLogo(false)
   }
 
   //handle featured image
@@ -190,12 +210,21 @@ const EditBakerModal = () => {
       return
     }
 
+    setIsLoadingFeaturedImage(true)
     //@ts-ignore
     const uploadRes = await uploadFile(featuredImage, '/profile-images')
 
     if (uploadRes.result.status) {
-      setFeaturedImageUrl(uploadRes.result.data[0].availableSizes)
+      const availableSizes = uploadRes.result.data[0].availableSizes
+      availableSizes['original'] = availableSizes.large
+      availableSizes['small'] = availableSizes.thumbnail
+
+      console.log('available sizes are ', availableSizes)
+
+      setIsLoadingFeaturedImage(false)
+      setFeaturedImageUrl(availableSizes)
     }
+    setIsLoadingFeaturedImage(false)
   }
 
   // handleSubmit function for form submission
@@ -214,12 +243,13 @@ const EditBakerModal = () => {
           },
           featuredShopImages: {
             URLs: {
-              large: featuredImageUrl,
-              medium: featuredImageUrl,
-              original: featuredImageUrl,
-              small: featuredImageUrl,
-              thumbnail: featuredImageUrl,
+              thumbnail: featuredImageUrl?.thumbnail,
+              medium: featuredImageUrl?.medium,
+              large: featuredImageUrl?.large,
+              small: featuredImageUrl?.small,
+              original: featuredImageUrl?.original,
             },
+
             priority: 1,
           },
           isPickup: PickupService,
@@ -242,6 +272,7 @@ const EditBakerModal = () => {
     if (shopId2) {
       // localStorage.setItem('shopId', shopId2)
       // openSuccess()
+      refetchBaker()
       handleEditShop()
     }
 
@@ -387,7 +418,7 @@ const EditBakerModal = () => {
                     options={states}
                     value={state}
                     errorText={stateError}
-                    // setValue={setState}
+                    // onClick={() => setIsPrefetch(false)}
                     onChange={handleStateChange}
                     setError={setStateError}
                   />
@@ -401,9 +432,9 @@ const EditBakerModal = () => {
                     name='city'
                     inputColor='#212529'
                     options={cities}
-                    value={city}
+                    value={city ? city : ''}
                     errorText={cityError}
-                    // setValue={setCity}
+                    // onClick={() => setIsPrefetch(false)}
                     onChange={handleCityChange}
                     setError={setCityError}
                   />
@@ -415,16 +446,32 @@ const EditBakerModal = () => {
                     inputColor='#212529'
                     name='logo'
                     // value={shopName}
-                    errorText={shopNameError}
+                    // errorText={shopNameError}
                     required={false}
-                    onChange={handleChange}
-                  />
+                    // onChange={handleChange}
+                  >
+                    <input
+                      className='w-full bg-transparent'
+                      type='file'
+                      onChange={(e) => handleUploadLogo(e)}
+                    />
+                  </UploadInputField>
                 </div>
-                <div>
-                  <img style={{ height: '80px', borderRadius: '10px' }} src={logoUrl} />
-                </div>
-
-                <input type='file' onChange={(e) => handleUploadLogo(e)} />
+                {isLoadingLogo ? (
+                  <div>
+                    <CircularProgress
+                      sx={{
+                        color: '#7DDEC1',
+                        height: '20px !important',
+                        width: '20px !important',
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <img style={{ height: '80px', borderRadius: '10px' }} src={logoUrl} />
+                  </div>
+                )}
 
                 <div className='w-full'>
                   <UploadInputField
@@ -432,16 +479,35 @@ const EditBakerModal = () => {
                     inputColor='#212529'
                     name='shopName'
                     // value={shopName}
-                    errorText={shopNameError}
+                    // errorText={shopNameError}
                     required={false}
-                    onChange={handleChange}
-                  />
+                    // onChange={handleChange}
+                  >
+                    <input
+                      className='w-full bg-transparent'
+                      type='file'
+                      onChange={(e) => handleUploadFeatureImage(e)}
+                    />
+                  </UploadInputField>
                 </div>
-                <div>
-                  <img style={{ height: '80px', borderRadius: '10px' }} src={featuredImageUrl} />
-                </div>
-
-                <input type='file' onChange={(e) => handleUploadFeatureImage(e)} />
+                {isLoadingFeaturedImage ? (
+                  <div>
+                    <CircularProgress
+                      sx={{
+                        color: '#7DDEC1',
+                        height: '20px !important',
+                        width: '20px !important',
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div>
+                    <img
+                      style={{ height: '80px', borderRadius: '10px' }}
+                      src={featuredImageUrl?.thumbnail}
+                    />
+                  </div>
+                )}
 
                 <div className='w-full'>
                   <div className='flex flex-col capitalize'>
@@ -589,17 +655,22 @@ const EditBakerModal = () => {
                 </div>
               </div>
 
-              {loadingUpdateShop && (
+              {/* {loadingUpdateShop && (
                 <div className='mt-[12px]'>
                   <p>Loading...</p>
                 </div>
-              )}
+              )} */}
               <div className='mt-[24px] md:mt-[23px]'>
-                <PrimaryBtn text='Save and Continue' type='submit' disabled={loadingUpdateShop} />
+                <PrimaryBtn text='Save and Continue' type='submit' loading={loadingUpdateShop} />
               </div>
 
               <div className='mt-[24px] md:mt-[23px]'>
-                <CancelBtn text='cancel' type='button' handleClick={handleEditShop} />
+                <CancelBtn
+                  text='cancel'
+                  type='button'
+                  handleClick={handleEditShop}
+                  disabled={loadingUpdateShop}
+                />
               </div>
             </form>
           </div>

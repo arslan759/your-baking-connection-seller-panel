@@ -103,7 +103,8 @@ const YourProfileCard = () => {
               >
                 <img src='/Images/profile-location.svg' alt='location' />{' '}
                 <span>
-                  <span style={{ textTransform: 'capitalize' }}>{city}</span>, USA
+                  <span style={{ textTransform: 'capitalize' }}>{state}</span>,
+                  <span style={{ textTransform: 'capitalize' }}> {city}</span>, USA
                 </span>
               </Typography>
             </div>

@@ -1,7 +1,7 @@
 import { Button, Typography } from '@mui/material'
 import { PrimaryBtnProps } from 'types'
 
-const CancelBtn = ({ handleClick, type = 'button', text }: PrimaryBtnProps) => {
+const CancelBtn = ({ handleClick, type = 'button', text, disabled }: PrimaryBtnProps) => {
   return (
     <Button
       // className={`flex items-center justify-center w-full h-full group`}
@@ -27,6 +27,7 @@ const CancelBtn = ({ handleClick, type = 'button', text }: PrimaryBtnProps) => {
         },
       }}
       onClick={handleClick}
+      disabled={disabled}
     >
       {<Typography className='text-black group-hover:text-white'>{text}</Typography>}
     </Button>

@@ -13,7 +13,7 @@ import useUpdateAccount from 'hooks/Profile/useUpdateAccount'
 
 const EditProfile = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [viewer, loadingViewer] = useViewer()
+  const [viewer, loadingViewer, refetchViewer] = useViewer()
 
   //@ts-ignore
   const [updateAccount, loadingUpdateAccount] = useUpdateAccount()
@@ -33,6 +33,10 @@ const EditProfile = () => {
 
   const [uploadFile, loadingUploadFile] = useUploadFile()
 
+  const populateCity = (state: string, city: string) => {
+    getCitiesApi(state, setCities, setIsLoadingCities, city, setCity)
+  }
+
   // set current viewer data in fields
   useEffect(() => {
     setFirstName(viewer?.firstName)
@@ -42,6 +46,9 @@ const EditProfile = () => {
     setPicture(viewer?.picture)
     setPhone(viewer?.phone)
     setEmail(viewer?.primaryEmailAddress)
+    setAddress(viewer?.currentAddress)
+
+    populateCity(viewer?.state, viewer?.city)
   }, [viewer])
 
   // Edit Button Modal State
@@ -178,6 +185,7 @@ const EditProfile = () => {
         picture,
         state,
         city,
+        currentAddress: address,
       },
     })
 
@@ -186,7 +194,8 @@ const EditProfile = () => {
     if (account?.data?.updateAccount?.account?._id) {
       console.log('updated successfully')
       setIsEdited(false)
-      resetStates()
+      refetchViewer()
+      // resetStates()
     }
 
     // Logs the form data

@@ -71,7 +71,7 @@ export interface UploadInputFieldProps {
   required: boolean
   placeholder?: string
   value?: File | null
-  onChange: (name: string, value: string) => void
+  children?: React.ReactNode
 }
 
 export interface PasswordFieldProps {

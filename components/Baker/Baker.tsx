@@ -19,6 +19,7 @@ const Baker = ({ slug }: BakerProps) => {
   const [baker, loadingBaker] = useBaker(slug)
 
   const [bakerName, setBakerName] = useState<string>()
+  const [bakerLogo, setBakerLogo] = useState<string>()
   const [bakerDescription, setBakerDescription] = useState<string>()
   const [categories, setCategories] = useState<string[] | null | undefined>()
   const [featuredImages, setFeaturedImages] = useState<string[] | null>()
@@ -28,6 +29,7 @@ const Baker = ({ slug }: BakerProps) => {
     setBakerName(baker?.name)
     setBakerDescription(baker?.description)
     setCategories(baker?.categories)
+    setBakerLogo(baker?.shopLogoUrls?.primaryShopLogoUrl)
     setFeaturedImages(baker?.featuredShopImages)
   }, [baker])
 
@@ -50,7 +52,12 @@ const Baker = ({ slug }: BakerProps) => {
               </div>
             </div>
             <div className='relative w-[100%] lg:w-[50%] px-[20px] lg:px-[40px]'>
-              <BakerMainContent bakerName={bakerName} description={bakerDescription} slug={slug} />
+              <BakerMainContent
+                bakerLogo={bakerLogo}
+                bakerName={bakerName}
+                description={bakerDescription}
+                slug={slug}
+              />
 
               {/* We Offer section for Desktop View */}
               <div className='mt-[60px] hidden lg:block'>

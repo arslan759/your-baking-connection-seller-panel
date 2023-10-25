@@ -461,14 +461,14 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
               </FormControl>
             </div>
 
-            {loadingSignUp && (
+            {/* {loadingSignUp && (
               <div className='mt-[10px]'>
                 <p style={{ color: 'white' }}>Loading...</p>
               </div>
-            )}
+            )} */}
 
             <div className='mt-[24px] md:mt-[23px]'>
-              <PrimaryBtn text='Register' type='submit' />
+              <PrimaryBtn text='Register' type='submit' loading={loadingSignUp} />
               <div className='text-sm text-[#d32f2f] w-full h-full '>{finalError}</div>
             </div>
 
