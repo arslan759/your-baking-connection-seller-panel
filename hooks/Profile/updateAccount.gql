@@ -4,6 +4,7 @@ mutation updateAccount(
   $picture: String
   $state: String
   $city: String
+  $currentAddress: String
 ) {
   updateAccount(
     input: {
@@ -12,6 +13,7 @@ mutation updateAccount(
       picture: $picture
       city: $city
       state: $state
+      currentAddress: $currentAddress
     }
   ) {
     account {

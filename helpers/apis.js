@@ -21,7 +21,7 @@ export async function getStatesApi(setStates, setLoading) {
   }
 }
 
-export async function getCitiesApi(state, setCities, setLoading) {
+export async function getCitiesApi(state, setCities, setLoading, city, setCity) {
   try {
     setLoading(true)
     fetch('https://countriesnow.space/api/v0.1/countries/state/cities', {
@@ -37,6 +37,9 @@ export async function getCitiesApi(state, setCities, setLoading) {
       .then((response) => response.json())
       .then((json) => {
         setCities(json?.data)
+        if (city) {
+          setCity(city)
+        }
         setLoading(false)
       })
   } catch (error) {

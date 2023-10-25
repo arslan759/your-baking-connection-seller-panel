@@ -7,7 +7,7 @@ interface CustomAutocompleteProps {
   options: string[]
   loading: boolean
   value: string | null
-  // setValue: (value: string) => void
+  onClick?: any
   setError?: (value: string) => void
   required: boolean
   label?: string
@@ -28,6 +28,7 @@ export default function CustomAutocomplete({
   required,
   label,
   onChange,
+  onClick,
   errorText,
   inputColor,
   name,
@@ -78,6 +79,7 @@ export default function CustomAutocomplete({
           onChange={handleChange}
           disabled={loading || !options}
           options={options ? options : []}
+          onClick={onClick}
           // sx={{
           //   '& .MuiOutlinedInput-root': {
           //     color: inputColor,

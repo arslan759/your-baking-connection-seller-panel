@@ -1,4 +1,4 @@
-import { Chip, Radio, Typography } from '@mui/material'
+import { Chip, CircularProgress, Radio, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import InputField from '../InputField/InputField'
 import DropdownField from '../DropdownField/DropdownField'
@@ -139,11 +139,11 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
           },
           featuredShopImages: {
             URLs: {
-              large: featuredImageUrl?.large,
-              medium: featuredImageUrl?.medium,
-              original: featuredImageUrl?.large,
-              small: featuredImageUrl?.small,
               thumbnail: featuredImageUrl?.thumbnail,
+              medium: featuredImageUrl?.medium,
+              large: featuredImageUrl?.large,
+              small: featuredImageUrl?.small,
+              original: featuredImageUrl?.original,
             },
             priority: 1,
           },
@@ -189,7 +189,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       if (enabledPayment) {
         openSuccess()
       }
-    } catch (err:any) {
+    } catch (err: any) {
       setError(err.message)
     }
   }
@@ -233,7 +233,9 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
 
   const [uploadFile, loadingUploadFile] = useFileUpload()
   const [logoImageUrl, setLogoImageUrl] = useState<string>()
+  const [isLoadingLogo, setIsLoadingLogo] = useState(false)
   const [featuredImageUrl, setFeaturedImageUrl] = useState<any>()
+  const [isLoadingFeaturedImage, setIsLoadingFeaturedImage] = useState(false)
 
   //handle logo image
   async function handleUploadLogo(e: any) {
@@ -248,12 +250,24 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       return
     }
 
+    setIsLoadingLogo(true)
     //@ts-ignore
     const uploadRes = await uploadFile(logoImage, '/profile-images')
 
     if (uploadRes.result.status) {
-      setLogoImageUrl(uploadRes.result.data[0].url[0])
+      const availableSizes = uploadRes.result.data[0].availableSizes
+      availableSizes['original'] = availableSizes.large
+      availableSizes['small'] = availableSizes.thumbnail
+
+      console.log('available sizes are ', availableSizes)
+
+      setLogoImageUrl(availableSizes?.medium)
+      setIsLoadingLogo(false)
+
+      // setLogoImageUrl(uploadRes.result.data[0].url[0])
     }
+
+    setIsLoadingLogo(false)
   }
 
   async function handleUploadFeatureImage(e: any) {
@@ -268,6 +282,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       return
     }
 
+    setIsLoadingFeaturedImage(true)
     //@ts-ignore
     const uploadRes = await uploadFile(featuredImage, '/profile-images')
 
@@ -277,8 +292,17 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
     )
 
     if (uploadRes.result.status) {
-      setFeaturedImageUrl(uploadRes.result.data[0].availableSizes)
+      const availableSizes = uploadRes.result.data[0].availableSizes
+      availableSizes['original'] = availableSizes.large
+      availableSizes['small'] = availableSizes.thumbnail
+
+      console.log('available sizes are ', availableSizes)
+
+      setIsLoadingFeaturedImage(false)
+      setFeaturedImageUrl(availableSizes)
+      // setFeaturedImageUrl(uploadRes.result.data[0].availableSizes)
     }
+    setIsLoadingFeaturedImage(false)
   }
 
   // handleSubmit function for form submission
@@ -507,27 +531,69 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
                   label='upload logo'
                   inputColor='white'
                   name='logo'
-                  value={logo}
-                  errorText={logoError}
+                  // value={logo}
+                  // errorText={logoError}
                   required={false}
-                  onChange={handleChange}
-                />
-
-                <input type='file' onChange={handleUploadLogo} />
+                  // onChange={handleChange}
+                >
+                  <input
+                    className='w-full bg-transparent'
+                    type='file'
+                    onChange={handleUploadLogo}
+                  />
+                </UploadInputField>
               </div>
+              {isLoadingLogo ? (
+                <div>
+                  <CircularProgress
+                    sx={{
+                      color: '#7DDEC1',
+                      height: '20px !important',
+                      width: '20px !important',
+                    }}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <img style={{ height: '80px', borderRadius: '10px' }} src={logoImageUrl} />
+                </div>
+              )}
 
               <div className='w-full md:w-[45%]'>
                 <UploadInputField
                   label='featured image'
                   inputColor='white'
                   name='featuredImage'
-                  value={featuredImage}
-                  errorText={featuredImageError}
+                  // value={featuredImage}
+                  // errorText={featuredImageError}
                   required={false}
-                  onChange={handleChange}
-                />
-                <input type='file' onChange={handleUploadFeatureImage} />
+                  // onChange={handleChange}
+                >
+                  <input
+                    className='w-full bg-transparent'
+                    type='file'
+                    onChange={handleUploadFeatureImage}
+                  />
+                </UploadInputField>
               </div>
+              {isLoadingFeaturedImage ? (
+                <div>
+                  <CircularProgress
+                    sx={{
+                      color: '#7DDEC1',
+                      height: '20px !important',
+                      width: '20px !important',
+                    }}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <img
+                    style={{ height: '80px', borderRadius: '10px' }}
+                    src={featuredImageUrl?.thumbnail}
+                  />
+                </div>
+              )}
 
               <div className='w-full md:w-[45%]'>
                 <div className='flex flex-col capitalize'>
@@ -661,17 +727,17 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
               </div>
             </div>
 
-            {loadingCreateShop || loadingUpdateShop ? (
+            {/* {loadingCreateShop || loadingUpdateShop ? (
               <div className='mt-[10px]'>
                 <p style={{ color: 'white' }}>Loading...</p>
               </div>
-            ) : null}
+            ) : null} */}
 
             <div className='mt-[24px] md:mt-[23px]'>
               <PrimaryBtn
                 text='Save and Continue'
                 type='submit'
-                disabled={loadingCreateShop || loadingUpdateShop}
+                loading={loadingCreateShop || loadingUpdateShop}
               />
             </div>
           </form>

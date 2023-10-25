@@ -34,5 +34,6 @@ query viewer {
     name
     picture
     primaryEmailAddress
+    currentAddress
   }
 }
