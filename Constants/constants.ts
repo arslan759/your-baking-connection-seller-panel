@@ -399,12 +399,12 @@ export const BakerNavigationData = [
     id: 3,
     title: 'Terms & Conditions',
   },
+  // {
+  //   id: 4,
+  //   title: 'Allergen Information',
+  // },
   {
-    id: 4,
-    title: 'Allergen Information',
-  },
-  {
-    id: 5,
+    id:5,
     title: 'reviews',
   },
 ]
@@ -591,12 +591,12 @@ export const YourProfileCardItemData = [
     description: 'Customer management, financial and inventory management',
     image: '/Images/profile-shop-management.svg',
   },
-  {
-    id: 3,
-    title: 'Notifications',
-    description: 'Order confirmation, payment reminder, account balance update',
-    image: '/Images/profile-notifications.svg',
-  },
+  // {
+  //   id: 3,
+  //   title: 'Notifications',
+  //   description: 'Order confirmation, payment reminder, account balance update',
+  //   image: '/Images/profile-notifications.svg',
+  // },
   {
     id: 4,
     title: 'Order Management',
