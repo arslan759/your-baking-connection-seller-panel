@@ -245,7 +245,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       return
     }
 
-    if (logoImage.type !== 'image/jpeg' && logoImage.type !== 'image/png') {
+    if (logoImage?.type !== 'image/jpeg' && logoImage?.type !== 'image/png') {
       setLogoError('Selected file must be an image')
       return
     }
@@ -254,10 +254,10 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
     //@ts-ignore
     const uploadRes = await uploadFile(logoImage, '/profile-images')
 
-    if (uploadRes.result.status) {
-      const availableSizes = uploadRes.result.data[0].availableSizes
-      availableSizes['original'] = availableSizes.large
-      availableSizes['small'] = availableSizes.thumbnail
+    if (uploadRes?.result?.status) {
+      const availableSizes = uploadRes?.result?.data[0]?.availableSizes
+      availableSizes['original'] = availableSizes?.large
+      availableSizes['small'] = availableSizes?.thumbnail
 
       console.log('available sizes are ', availableSizes)
 
@@ -272,12 +272,12 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
 
   async function handleUploadFeatureImage(e: any) {
     const featuredImage = e.target.files[0]
-    if (featuredImage.size > 1024 * 1024 * 1) {
+    if (featuredImage?.size > 1024 * 1024 * 1) {
       setFeaturedImageError('Picture size should be less than 1MB')
       return
     }
 
-    if (featuredImage.type !== 'image/jpeg' && featuredImage.type !== 'image/png') {
+    if (featuredImage?.type !== 'image/jpeg' && featuredImage?.type !== 'image/png') {
       setFeaturedImageError('Selected file must be an image')
       return
     }
@@ -288,13 +288,13 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
 
     console.log(
       'uploadRes.result.data[0].url.availableSizes',
-      uploadRes.result.data[0].availableSizes,
+      uploadRes?.result?.data[0]?.availableSizes,
     )
 
-    if (uploadRes.result.status) {
-      const availableSizes = uploadRes.result.data[0].availableSizes
-      availableSizes['original'] = availableSizes.large
-      availableSizes['small'] = availableSizes.thumbnail
+    if (uploadRes?.result?.status) {
+      const availableSizes = uploadRes?.result?.data[0]?.availableSizes
+      availableSizes['original'] = availableSizes?.large
+      availableSizes['small'] = availableSizes?.thumbnail
 
       console.log('available sizes are ', availableSizes)
 
@@ -682,9 +682,9 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
                   setValue={setWhatWeOffer}
                 />
 
-                {whatWeOffer.length > 0 && (
+                {whatWeOffer?.length > 0 && (
                   <div className='flex flex-wrap gap-x-[24px] gap-y-[10px] mt-[15px]'>
-                    {whatWeOffer.map((chip, index) => (
+                    {whatWeOffer?.map((chip, index) => (
                       <Chip
                         key={index}
                         label={chip.title}

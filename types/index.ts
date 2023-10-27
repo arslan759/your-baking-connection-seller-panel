@@ -17,7 +17,18 @@ export interface FooterLinksProps {
   title3?: string
   link3?: string
 }
-
+export interface DropdownAttributeProps {
+  name: string
+  label?: string
+  placeholder?: string
+  required: boolean
+  error?: boolean
+  options: any[]
+  errorText?: string
+  inputColor?: string
+  value: any
+  onChange: (attribute: string, optionLabel: string, price: string) => void
+}
 export interface PrimaryBtnProps {
   text: string
   type?: 'button' | 'submit' | 'reset'
@@ -277,7 +288,11 @@ export interface ProductDetailMainContentProps {
   newPrice: number
   reviews: number
   description: string
+  shopId: any
   rating: number
+  productAttributes: any[]
+  productId: string
+  productVariantId: string
 }
 
 export interface AccountDropdownProps {

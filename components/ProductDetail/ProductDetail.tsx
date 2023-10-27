@@ -14,7 +14,7 @@ interface ProductDetailProps {
   shopId?: string
 }
 
-const ProductDetail = ({ slug }: ProductDetailProps) => {
+const ProductDetail = ({ slug, shopId }: ProductDetailProps) => {
   const [catalogItemProduct, loadingProduct, refetchProduct] = useCatalogItemProduct({
     slugOrId: slug,
   })
@@ -44,8 +44,8 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
   console.log('slug', slug)
   console.log('catalogItemProduct', catalogItemProduct)
 
-  const { title, description, media, variants } = catalogItemProduct
-  const { pricing, inventoryInStock } = variants[0]
+  const { title, description, media, variants, productAttributes, productId } = catalogItemProduct
+  const { pricing, inventoryInStock,variantId } = variants[0]
   const { URLs } = media[0]
 
   return (
@@ -98,9 +98,13 @@ const ProductDetail = ({ slug }: ProductDetailProps) => {
                 description={description}
                 oldPrice={pricing[0].compareAtPrice?.amount}
                 newPrice={pricing[0].price}
+                productAttributes={productAttributes}
+                productId={productId}
+                productVariantId={variantId}
                 rating={3}
                 reviews={10}
                 stock={inventoryInStock}
+                shopId={shopId}
               />
             </div>
           </div>
