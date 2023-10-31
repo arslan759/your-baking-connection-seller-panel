@@ -7,19 +7,19 @@ const CartTable = () => {
   }
 
   const handleAddQuantity = (name: string, quantity: number) => {
-    console.log('add clicked for', name)
+    // console.log('add clicked for', name)
 
     quantity = quantity + 1
 
-    console.log('quantity is now', quantity)
+    // console.log('quantity is now', quantity)
   }
 
   const handleSubtractQuantity = (name: string, quantity: number) => {
-    console.log('subtract clicked for', name)
+    // console.log('subtract clicked for', name)
 
     quantity = quantity - 1
 
-    console.log('quantity is now', quantity)
+    // console.log('quantity is now', quantity)
   }
 
   const rows = [

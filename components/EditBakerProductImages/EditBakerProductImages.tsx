@@ -27,7 +27,7 @@ const EditBakerProductImages = ({
     const updatedLoadingArray = [...imageLoading]
     updatedLoadingArray[productMedia?.length - 1] = false
 
-    console.log('product media length in addproductImages is ', productMedia.length)
+    // console.log('product media length in addproductImages is ', productMedia.length)
 
     setImageUploadCounter(productMedia.length)
     // setImageLoading(updatedLoadingArray)
@@ -39,9 +39,9 @@ const EditBakerProductImages = ({
       setImageUploadCounter(0)
     }
 
-    console.log('product media in addproductImages is ', productMedia)
-    console.log('image loading is ', imageLoading)
-    console.log('image upload counter is ', imageUploadCounter)
+    // console.log('product media in addproductImages is ', productMedia)
+    // console.log('image loading is ', imageLoading)
+    // console.log('image upload counter is ', imageUploadCounter)
   }, [productMedia])
 
   const [uploadFile, loadingUploadFile] = useFileUpload()
@@ -49,7 +49,7 @@ const EditBakerProductImages = ({
   const [uploadError, setUploadError] = useState<string>('')
 
   const handleFileDelete = (index: number) => {
-    console.log('index is ', index)
+    // console.log('index is ', index)
     const updatedImages = [...images]
     const updatedMedia = [...productMedia]
     // const updatedLoading = imageLoading.map((item, i) => {
@@ -63,13 +63,13 @@ const EditBakerProductImages = ({
     // console.log('updated image loading is ', updatedLoading)
 
     // updatedImages.splice(index, 1)
-    console.log('updated images are ', updatedImages)
+    // console.log('updated images are ', updatedImages)
 
-    console.log('product media is ', productMedia)
+    // console.log('product media is ', productMedia)
 
     updatedMedia.splice(index, 1)
 
-    console.log('new images are ', updatedMedia)
+    // console.log('new images are ', updatedMedia)
     setImages(updatedImages)
     // setImageLoading(updatedLoading)
     // setProductMedia(updatedImages)
@@ -84,9 +84,9 @@ const EditBakerProductImages = ({
       //@ts-ignore
       const image = e.target.files[0]
 
-      console.log('image is ', image)
+      // console.log('image is ', image)
 
-      console.log('picture is ', image?.name)
+      // console.log('picture is ', image?.name)
 
       if (!image) return
 
@@ -117,14 +117,14 @@ const EditBakerProductImages = ({
       //@ts-ignore
       const uploadRes = await uploadFile(image, '/product-images')
       if (uploadRes.result.status) {
-        console.log('setting product media', uploadRes.result.data[0].availableSizes)
+        // console.log('setting product media', uploadRes.result.data[0].availableSizes)
         const availableSizes = uploadRes.result.data[0].availableSizes
         availableSizes['original'] = availableSizes.large
         availableSizes['small'] = availableSizes.thumbnail
 
         const { image, ...rest } = availableSizes
 
-        console.log('rest is , ', rest)
+        // console.log('rest is , ', rest)
         handleUpdateProductMedia(rest)
       }
 
@@ -135,8 +135,8 @@ const EditBakerProductImages = ({
       setIsLoading(false)
     }
   }
-  console.log('product media with images is ', productMedia)
-  console.log('images are ', images)
+  // console.log('product media with images is ', productMedia)
+  // console.log('images are ', images)
   return (
     <div className='w-full'>
       <Typography

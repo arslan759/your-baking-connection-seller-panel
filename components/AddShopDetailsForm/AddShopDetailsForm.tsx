@@ -32,7 +32,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   const [featuredImage, setFeaturedImage] = useState<File | null>(null)
 
   useEffect(() => {
-    console.log('logo is ', logo)
+    // console.log('logo is ', logo)
   }, [logo])
 
   const [states, setStates] = useState<any>([])
@@ -162,7 +162,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
         },
       },
     })
-    console.log('updated shop is ', shopUpdated)
+    // console.log('updated shop is ', shopUpdated)
     const shopId2 = shopUpdated?.data?.updateShop?.shop?._id
     if (shopId2) {
       localStorage.setItem('shopId', shopId2)
@@ -225,7 +225,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       if (shopId) {
         handleUpdateShop(shopId)
       }
-      console.log('shop created is ', shop)
+      // console.log('shop created is ', shop)
     } catch (err: any) {
       setError(err.message)
     }
@@ -259,7 +259,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       availableSizes['original'] = availableSizes?.large
       availableSizes['small'] = availableSizes?.thumbnail
 
-      console.log('available sizes are ', availableSizes)
+      // console.log('available sizes are ', availableSizes)
 
       setLogoImageUrl(availableSizes?.medium)
       setIsLoadingLogo(false)
@@ -286,17 +286,17 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
     //@ts-ignore
     const uploadRes = await uploadFile(featuredImage, '/profile-images')
 
-    console.log(
-      'uploadRes.result.data[0].url.availableSizes',
-      uploadRes?.result?.data[0]?.availableSizes,
-    )
+    // console.log(
+    //   'uploadRes.result.data[0].url.availableSizes',
+    //   uploadRes?.result?.data[0]?.availableSizes,
+    // )
 
     if (uploadRes?.result?.status) {
       const availableSizes = uploadRes?.result?.data[0]?.availableSizes
       availableSizes['original'] = availableSizes?.large
       availableSizes['small'] = availableSizes?.thumbnail
 
-      console.log('available sizes are ', availableSizes)
+      // console.log('available sizes are ', availableSizes)
 
       setIsLoadingFeaturedImage(false)
       setFeaturedImageUrl(availableSizes)
@@ -327,15 +327,15 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
     await handleCreateShop()
 
     // Logs the form data
-    console.log('form submitted')
-    console.log('shop name is ', shopName)
-    console.log('shop description is ', shopDescription)
-    console.log('logo is ', logo)
-    console.log('featured image is ', featuredImage)
-    console.log('state is ', state)
-    console.log('city is ', city)
-    console.log('what we offer is ', whatWeOffer)
-    console.log('pickup service is ', pickupService)
+    // console.log('form submitted')
+    // console.log('shop name is ', shopName)
+    // console.log('shop description is ', shopDescription)
+    // console.log('logo is ', logo)
+    // console.log('featured image is ', featuredImage)
+    // console.log('state is ', state)
+    // console.log('city is ', city)
+    // console.log('what we offer is ', whatWeOffer)
+    // console.log('pickup service is ', pickupService)
 
     // // Resets the form fields
     // setShopName('')

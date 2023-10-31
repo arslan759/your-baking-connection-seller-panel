@@ -66,7 +66,7 @@ const EditProfile = () => {
 
   // handleEditUserProfile function for edit button
   const handleEditUserProfile = () => {
-    console.log('edit button clicked')
+    // console.log('edit button clicked')
     setIsEdited(!isEdited)
   }
 
@@ -115,8 +115,8 @@ const EditProfile = () => {
   const handlePictureChange = async (e: any) => {
     const file = e.target.files[0]
 
-    console.log('files are ', e.target.files)
-    console.log('picture is ', file?.name)
+    // console.log('files are ', e.target.files)
+    // console.log('picture is ', file?.name)
 
     if (file.size > 1024 * 1024 * 1) {
       setPictureError('Picture size should be less than 1MB')
@@ -131,7 +131,7 @@ const EditProfile = () => {
     //@ts-ignore
     const uploadRes = await uploadFile(file, '/profile-images')
 
-    console.log('uploadRes is ', uploadRes)
+    // console.log('uploadRes is ', uploadRes)
 
     if (uploadRes.result.status) {
       setPicture(uploadRes.result.data[0].availableSizes.thumbnail)
@@ -141,16 +141,16 @@ const EditProfile = () => {
   }
 
   //reset states
-  const resetStates = () => {
-    // Resets the form fields
-    setFirstName('')
-    setLastName('')
-    setEmail('')
-    setPhone('')
-    setState('')
-    setCity('')
-    setAddress('')
-  }
+  // const resetStates = () => {
+  //   // Resets the form fields
+  //   setFirstName('')
+  //   setLastName('')
+  //   setEmail('')
+  //   setPhone('')
+  //   setState('')
+  //   setCity('')
+  //   setAddress('')
+  // }
 
   // Resets the error states
   const resetErrorStates = () => {
@@ -171,7 +171,7 @@ const EditProfile = () => {
 
     if (email) {
       const isEmailValid = validateEmail(email)
-      console.log('if email check')
+      // console.log('if email check')
       if (!isEmailValid) {
         setEmailError('Email is not valid')
         return
@@ -189,25 +189,25 @@ const EditProfile = () => {
       },
     })
 
-    console.log('updated account is ', account)
+    // console.log('updated account is ', account)
 
     if (account?.data?.updateAccount?.account?._id) {
-      console.log('updated successfully')
+      // console.log('updated successfully')
       setIsEdited(false)
       refetchViewer()
       // resetStates()
     }
 
     // Logs the form data
-    console.log('form submitted')
-    console.log('firstname is ', firstName)
-    console.log('lastname is ', lastName)
-    console.log('email is ', email)
-    console.log('phone is ', phone)
-    console.log('state is ', state)
-    console.log('city is ', city)
-    console.log('address is ', address)
-    console.log('picture')
+    // console.log('form submitted')
+    // console.log('firstname is ', firstName)
+    // console.log('lastname is ', lastName)
+    // console.log('email is ', email)
+    // console.log('phone is ', phone)
+    // console.log('state is ', state)
+    // console.log('city is ', city)
+    // console.log('address is ', address)
+    // console.log('picture')
   }
   useEffect(() => {
     getStatesApi(setStates, setIsLoadingStates)

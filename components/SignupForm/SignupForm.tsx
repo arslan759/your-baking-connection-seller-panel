@@ -233,9 +233,9 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
         setTokens(accessToken, refreshToken)
       }
     } catch (err: any) {
-      setFinalError(err.message)
-      console.log('clicked yes')
-      console.log(err)
+      setFinalError(err?.message)
+      // console.log('clicked yes')
+      // console.log(err)
     }
   }
 

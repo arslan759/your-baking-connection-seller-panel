@@ -147,16 +147,16 @@ const DeliveryDetailsForm = () => {
     }
 
     // Logs the form data
-    console.log('address is ', address)
-    console.log('country is ', country)
-    console.log('postCode is ', postCode)
-    console.log('state is ', state)
-    console.log('city is ', city)
-    console.log('additionalNotes is ', additionalNotes)
-    console.log('deliveryMethod is ', deliveryMethod)
-    console.log('pickupDay is ', pickupDay)
-    console.log('pickupHours is ', pickupHours)
-    console.log('termsAndConditions is ', termsAndConditions)
+    // console.log('address is ', address)
+    // console.log('country is ', country)
+    // console.log('postCode is ', postCode)
+    // console.log('state is ', state)
+    // console.log('city is ', city)
+    // console.log('additionalNotes is ', additionalNotes)
+    // console.log('deliveryMethod is ', deliveryMethod)
+    // console.log('pickupDay is ', pickupDay)
+    // console.log('pickupHours is ', pickupHours)
+    // console.log('termsAndConditions is ', termsAndConditions)
 
     // Resets the form fields
     setAddress('')
