@@ -1,8 +1,7 @@
-import React, { useState, useEffect, ChangeEvent, useRef } from 'react'
+import { useState, useEffect, ChangeEvent, useRef } from 'react'
 import { CircularProgress, Typography } from '@mui/material'
 import useFileUpload from 'hooks/fileUpload/useFileUpload'
 import DeleteIcon from '@mui/icons-material/Delete'
-
 import { AddBakerProductImagesProps } from 'types'
 
 const AddBakerProductImages = ({
@@ -32,9 +31,9 @@ const AddBakerProductImages = ({
       setImageUploadCounter(0)
     }
 
-    console.log('product media in addproductImages is ', productMedia)
-    console.log('image loading is ', imageLoading)
-    console.log('image upload counter is ', imageUploadCounter)
+    // console.log('product media in addproductImages is ', productMedia)
+    // console.log('image loading is ', imageLoading)
+    // console.log('image upload counter is ', imageUploadCounter)
   }, [productMedia])
 
   const [uploadFile, loadingUploadFile] = useFileUpload()
@@ -51,7 +50,7 @@ const AddBakerProductImages = ({
       }
     })
 
-    console.log('updated image loading is ', updatedLoading)
+    // console.log('updated image loading is ', updatedLoading)
 
     updatedImages.splice(index, 1)
     setImages(updatedImages)
@@ -66,9 +65,9 @@ const AddBakerProductImages = ({
       //@ts-ignore
       const image = e.target.files[0]
 
-      console.log('image is ', image)
+      // console.log('image is ', image)
 
-      console.log('picture is ', image?.name)
+      // console.log('picture is ', image?.name)
 
       if (!image) return
 
@@ -99,7 +98,7 @@ const AddBakerProductImages = ({
       //@ts-ignore
       const uploadRes = await uploadFile(image, '/product-images')
       if (uploadRes.result.status) {
-        console.log('setting product media', uploadRes.result.data[0].availableSizes)
+        // console.log('setting product media', uploadRes.result.data[0].availableSizes)
         const availableSizes = uploadRes.result.data[0].availableSizes
         availableSizes['original'] = availableSizes.large
         availableSizes['small'] = availableSizes.thumbnail

@@ -72,7 +72,7 @@ const OrderManagementCard = () => {
 
   //   handleFilters function for filters icon
   const handleFilters = () => {
-    console.log('filters clicked')
+    // console.log('filters clicked')
   }
 
   //   handleFiltersSubmit function for filters form
@@ -80,18 +80,18 @@ const OrderManagementCard = () => {
     e.preventDefault()
 
     // form logs
-    console.log('duration is ', duration)
-    console.log('bakery name is ', bakeryName)
-    console.log('rating is ', rating)
+    // console.log('duration is ', duration)
+    // console.log('bakery name is ', bakeryName)
+    // console.log('rating is ', rating)
 
-    console.log('filters submitted')
+    // console.log('filters submitted')
   }
 
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     // form logs
-    console.log('search is ', search)
+    // console.log('search is ', search)
 
     // Reset form
     setSearch('')
@@ -99,7 +99,7 @@ const OrderManagementCard = () => {
     // Reset error state
     setSearchError('')
 
-    console.log('form submitted')
+    // console.log('form submitted')
   }
 
   const fetchOrders = async () => {
@@ -115,12 +115,12 @@ const OrderManagementCard = () => {
   }
 
   useEffect(() => {
-    console.log('running fetch orders')
+    // console.log('running fetch orders')
     fetchOrders()
   }, [])
 
   useEffect(() => {
-    console.log('orders are ', orders)
+    // console.log('orders are ', orders)
   }, [orders])
 
   useEffect(() => {

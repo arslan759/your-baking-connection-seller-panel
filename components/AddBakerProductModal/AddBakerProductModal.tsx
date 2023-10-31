@@ -9,6 +9,7 @@ import useUpdateProductVariant from 'hooks/product/useUpdateProductVariant'
 import useUpdateSimpleInventory from 'hooks/product/useUpdateSimpleInventory'
 import CustomBuilder from '../CustomBuilder'
 import useUpdatePublishProduct from 'hooks/product/usePublishProduct'
+import toast from 'react-hot-toast'
 
 import { withApollo } from 'lib/apollo/withApollo'
 import { ProductMediaInterface, ProductMediaURLsInterface } from 'types'
@@ -53,7 +54,6 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
   const [productPrice, setProductPrice] = useState('')
   const [compareAtPrice, setCompareAtPrice] = useState('')
   const [customField, setCustomField] = useState('')
-
   const [isSalesTax, setIsSalesTax] = useState(false)
   const [salesTaxRate, setSalesTaxRate] = useState('')
   const [productQuantity, setProductQuantity] = useState(1)
@@ -78,7 +78,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
 
   //test effect remove later
   useEffect(() => {
-    console.log('productMedia is ', productMedia)
+    // console.log('productMedia is ', productMedia)
   }, [productMedia])
 
   // error states
@@ -160,11 +160,12 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
       const variantId = createdProduct?.data?.createProduct?.product?.variants[0]?._id
 
       if (productId) {
-        console.log('product Id', productId)
+        // console.log('product Id', productId)
         await updateProductVariant(productId, variantId)
       }
-    } catch (err) {
-      console.log('createproduct error', err)
+    } catch (err: any) {
+      toast.error(`Error is ', ${err?.message}`)
+      // console.log('createproduct error', err)
     }
   }
 
@@ -186,13 +187,14 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
 
       const updatedProductVariant = await updateProductVariantFunction({ variables })
 
-      console.log('updated product variant is ', updatedProductVariant)
+      // console.log('updated product variant is ', updatedProductVariant)
 
       if (updatedProductVariant?.data?.updateProductVariant?.variant?._id) {
         await publishProduct([productId], variantId)
       }
-    } catch (err) {
-      console.log('error in updating variant', err)
+    } catch (err: any) {
+      // console.log('error in updating variant', err)
+      toast.error(`Error is ', ${err?.message}`)
     }
   }
 
@@ -210,9 +212,10 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
       }
       const updatedInventory = await updateSimpleInventoryFunction({ variables })
 
-      console.log('updated Inventory is ', updatedInventory)
-    } catch (err) {
-      console.log('updating inventory error ', err)
+      // console.log('updated Inventory is ', updatedInventory)
+    } catch (err: any) {
+      // console.log('updating inventory error ', err)
+      toast.error(`Error is ', ${err?.message}`)
     }
   }
 
@@ -231,13 +234,14 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
         },
       })
       if (publish.data.publishProductsToCatalog[0]._id) {
-        console.log('coming to this condition')
+        // console.log('coming to this condition')
         window.location.reload()
         handleAddProduct()
       }
-      console.log('publish product success', publish)
-    } catch (err) {
-      console.log('error publishing product', err)
+      // console.log('publish product success', publish)
+    } catch (err: any) {
+      toast.error(`Error is ', ${err?.message}`)
+      // console.log('error publishing product', err)
     }
   }
 
@@ -307,7 +311,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
   //update product images
 
   const handleUpdateProductMedia = (image: ProductMediaURLsInterface) => {
-    console.log('image in parent is ', image)
+    // console.log('image in parent is ', image)
 
     setProductImagesError('')
 
@@ -324,7 +328,7 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
   }
 
   useEffect(() => {
-    console.log('product media is ', productMedia)
+    // console.log('product media is ', productMedia)
   }, [productMedia])
 
   const resetForm = () => {
@@ -427,19 +431,6 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    // console.log('add button clicked')
-
-    // console.log('product attributes are ', productAttributes)
-
-    // console.log('is valid attributes ', isValidAttributes)
-
-    // console.log('product attributes error is ', productAttributesError)
-
-    console.log('product Images are ', productMedia)
-
-    // return
-
     if (
       !productTitle ||
       !productDescription ||
@@ -461,18 +452,18 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
       setProductListingError,
     )
 
-    console.log('listing start date is ', listingStartDate)
-    console.log('listing end date is ', listingEndDate)
-    console.log('fullfillment date is ', fulfillmentDate)
+    // console.log('listing start date is ', listingStartDate)
+    // console.log('listing end date is ', listingEndDate)
+    // console.log('fullfillment date is ', fulfillmentDate)
 
     // return
 
     const isValidFulfillmentDate = validateDates(fulfillmentDate, '', setFulfillmentDateError)
     const isValidAttributes = validateProductAttributes()
 
-    console.log('is valid listing dates ', isValidListingDates)
-    console.log('is valid fulfillment date ', isValidFulfillmentDate)
-    console.log('is valid attributes ', isValidAttributes)
+    // console.log('is valid listing dates ', isValidListingDates)
+    // console.log('is valid fulfillment date ', isValidFulfillmentDate)
+    // console.log('is valid attributes ', isValidAttributes)
 
     if (!isValidListingDates || !isValidFulfillmentDate || !isValidAttributes) {
       return
@@ -494,12 +485,12 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
     // console.log('listing end date is ', listingEndDate)
     // console.log('fulfillment date is ', fulfillmentDate)
 
-    console.log('add product form submitted')
+    // console.log('add product form submitted')
   }
 
   useEffect(() => {
-    console.log('product attributes are ', productAttributes)
-    console.log('show check', showPriceFields)
+    // console.log('product attributes are ', productAttributes)
+    // console.log('show check', showPriceFields)
   }, [productAttributes, showPriceFields])
 
   return (

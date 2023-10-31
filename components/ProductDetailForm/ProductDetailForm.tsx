@@ -51,17 +51,17 @@ const ProductDetailForm = ({
   const [flavorError, setFlavorError] = useState('')
 
   const handleDropdownChange = (attribute: string, optionLabel: string, price: string) => {
-    console.log('attribute is ', attribute)
-    console.log('name is ', optionLabel)
-    console.log('value is ', price)
+    // console.log('attribute is ', attribute)
+    // console.log('name is ', optionLabel)
+    // console.log('value is ', price)
 
     const updatedAttributes = [...productAttributes]
 
-    console.log('updatedAttributes', updatedAttributes)
+    // console.log('updatedAttributes', updatedAttributes)
 
     const attributeToUpdate = updatedAttributes.filter((item) => item.attribute === attribute)[0]
 
-    console.log('attributeToUpdate is ', attributeToUpdate)
+    // console.log('attributeToUpdate is ', attributeToUpdate)
 
     attributeToUpdate!.option = {
       optionLabel,
@@ -74,13 +74,13 @@ const ProductDetailForm = ({
       totalPrice.push(Number(item.option.price))
     })
 
-    console.log('totalPrice is ', totalPrice)
+    // console.log('totalPrice is ', totalPrice)
 
     const reducer = (accumulator: number, currentValue: number) => accumulator + currentValue
 
     const newTotalPrice = totalPrice.reduce(reducer)
 
-    console.log('newTotalPrice is ', newTotalPrice)
+    // console.log('newTotalPrice is ', newTotalPrice)
 
     updatePrice(newPrice + newTotalPrice)
 
@@ -89,13 +89,13 @@ const ProductDetailForm = ({
     setProductAttributes(updatedAttributes)
   }
 
-  console.log('props are ', restProps)
+  // console.log('props are ', restProps)
 
   const { addItemsToCart, onChangeCartItemsQuantity, onRemoveCartItems } = restProps
 
-  console.log('cartMutation addItemsToCart is ', addItemsToCart)
-  console.log('cartMutation onChangeCartItemsQuantity is ', onChangeCartItemsQuantity)
-  console.log('cartMutation onRemoveCartItems is ', onRemoveCartItems)
+  // console.log('cartMutation addItemsToCart is ', addItemsToCart)
+  // console.log('cartMutation onChangeCartItemsQuantity is ', onChangeCartItemsQuantity)
+  // console.log('cartMutation onRemoveCartItems is ', onRemoveCartItems)
 
   //   onClick function for serves
   // const handleServesChange = (serves: string) => {
@@ -239,7 +239,7 @@ const ProductDetailForm = ({
     setIsFavorite(false)
     const updatedAttributes = filterDetails(attributes)
 
-    console.log('updatedDetails', updatedAttributes)
+    // console.log('updatedDetails', updatedAttributes)
 
     setProductAttributes(updatedAttributes)
   }
@@ -247,13 +247,13 @@ const ProductDetailForm = ({
   useEffect(() => {
     const updatedAttributes = filterDetails(attributes)
 
-    console.log('updatedDetails', updatedAttributes)
+    // console.log('updatedDetails', updatedAttributes)
 
     setProductAttributes(updatedAttributes)
   }, [attributes])
 
   useEffect(() => {
-    console.log('productAttributes', productAttributes)
+    // console.log('productAttributes', productAttributes)
   }, [productAttributes])
 
   return (
@@ -306,9 +306,9 @@ const ProductDetailForm = ({
 
       <div className='w-full flex flex-wrap mt-[18px] gap-[18px]'>
         {attributes?.map((item, index) => {
-          console.log('attribute is', item)
+          // console.log('attribute is', item)
 
-          console.log('attribute option value is ', productAttributes[index]?.option)
+          // console.log('attribute option value is ', productAttributes[index]?.option)
           return (
             <div key={index} className='max-[400px]:w-[100%] w-[60%] md:w-[25%]'>
               <DropdownFieldAttributes

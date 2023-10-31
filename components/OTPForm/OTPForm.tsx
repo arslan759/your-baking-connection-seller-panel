@@ -24,7 +24,7 @@ const OTPForm = ({ closeOtp, type, email, tokens, setStep }: OTPFormProps) => {
     const userId = localStorage.getItem('userId')
     e.preventDefault()
 
-    console.log('testtesttest')
+    // console.log('testtesttest')
 
     // Checks if email is empty or Less than 4 characters
     if (!otp || otp.length !== 4) {
@@ -56,7 +56,7 @@ const OTPForm = ({ closeOtp, type, email, tokens, setStep }: OTPFormProps) => {
         return err
       }
     } else if (type === 'forgotPassword') {
-      console.log('firing otp function', email)
+      // console.log('firing otp function', email)
 
       const res = await verifyOtp({
         variables: {

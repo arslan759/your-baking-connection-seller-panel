@@ -128,7 +128,7 @@ const SigninForm = () => {
       //   router.replace(`/baker/${shopId}`)
       // }
     } catch (err: any) {
-      console.log(err)
+      // console.log(err)
       setIsLoggingIn(false)
       setGenError(err?.message)
     }

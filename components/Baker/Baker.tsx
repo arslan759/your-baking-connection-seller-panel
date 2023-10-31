@@ -25,7 +25,7 @@ const Baker = ({ slug }: BakerProps) => {
   const [featuredImages, setFeaturedImages] = useState<string[] | null>()
 
   useEffect(() => {
-    console.log('baker is', baker)
+    // console.log('baker is', baker)
     setBakerName(baker?.name)
     setBakerDescription(baker?.description)
     setCategories(baker?.categories)

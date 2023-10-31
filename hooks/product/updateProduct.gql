@@ -2,10 +2,38 @@ mutation updateProduct($shopId: ID!, $productId: ID!, $product: ProductInput!) {
   updateProduct(input: { shopId: $shopId, productId: $productId, product: $product }) {
     product {
       _id
+      description
+      pageTitle
       slug
       title
+      pricing {
+        compareAtPrice {
+          amount
+          displayAmount
+        }
+        displayPrice
+        maxPrice
+        minPrice
+        price
+      }
       variants {
         _id
+        media {
+          URLs {
+            large
+            medium
+            original
+            small
+            thumbnail
+          }
+        }
+      }
+      productAttributes {
+        attribute
+        options {
+          optionLabel
+          price
+        }
       }
     }
   }

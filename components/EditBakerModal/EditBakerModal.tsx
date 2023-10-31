@@ -1,6 +1,7 @@
 import { Chip, CircularProgress, Modal, Radio, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { PrimaryBtn } from '../Buttons'
+import toast from 'react-hot-toast'
 import InputField from '../InputField/InputField'
 import UploadInputField from '../UploadInputField/UploadInputField'
 import DropdownField from '../DropdownField/DropdownField'
@@ -22,7 +23,7 @@ const EditBakerModal = () => {
 
   // handleEdit function for edit button
   const handleEditShop = () => {
-    console.log('edit button clicked')
+    // console.log('edit button clicked')
     setIsEdited(!isEdited)
   }
 
@@ -219,7 +220,7 @@ const EditBakerModal = () => {
       availableSizes['original'] = availableSizes.large
       availableSizes['small'] = availableSizes.thumbnail
 
-      console.log('available sizes are ', availableSizes)
+      // console.log('available sizes are ', availableSizes)
 
       setIsLoadingFeaturedImage(false)
       setFeaturedImageUrl(availableSizes)
@@ -232,51 +233,54 @@ const EditBakerModal = () => {
   const handleUpdateShop = async () => {
     const shopId = localStorage.getItem('shopId')
 
-    const shopUpdated = await updateShop({
-      variables: {
-        input: {
-          name: shopName,
-          description: shopDescription,
-          shopId,
-          shopLogoUrls: {
-            primaryShopLogoUrl: logoUrl,
-          },
-          featuredShopImages: {
-            URLs: {
-              thumbnail: featuredImageUrl?.thumbnail,
-              medium: featuredImageUrl?.medium,
-              large: featuredImageUrl?.large,
-              small: featuredImageUrl?.small,
-              original: featuredImageUrl?.original,
+    try {
+      const shopUpdated = await updateShop({
+        variables: {
+          input: {
+            name: shopName,
+            description: shopDescription,
+            shopId,
+            shopLogoUrls: {
+              primaryShopLogoUrl: logoUrl,
             },
+            featuredShopImages: {
+              URLs: {
+                thumbnail: featuredImageUrl?.thumbnail,
+                medium: featuredImageUrl?.medium,
+                large: featuredImageUrl?.large,
+                small: featuredImageUrl?.small,
+                original: featuredImageUrl?.original,
+              },
 
-            priority: 1,
-          },
-          isPickup: PickupService,
-          categories: whatWeOffer,
-          addressBook: {
-            fullName: 'test name',
-            phone: '+1200120123',
-            address1: 'test1',
-            region: state,
-            city: city,
-            country: 'USA',
-            isCommercial: false,
-            postal: '12345',
+              priority: 1,
+            },
+            isPickup: PickupService,
+            categories: whatWeOffer,
+            addressBook: {
+              fullName: 'test name',
+              phone: '+1200120123',
+              address1: 'test1',
+              region: state,
+              city: city,
+              country: 'USA',
+              isCommercial: false,
+              postal: '12345',
+            },
           },
         },
-      },
-    })
-    console.log('updated shop is ', shopUpdated)
-    const shopId2 = shopUpdated?.data?.updateShop?.shop?._id
-    if (shopId2) {
-      // localStorage.setItem('shopId', shopId2)
-      // openSuccess()
-      refetchBaker()
-      handleEditShop()
-    }
+      })
+      // console.log('updated shop is ', shopUpdated)
+      const shopId2 = shopUpdated?.data?.updateShop?.shop?._id
+      if (shopId2) {
+        // localStorage.setItem('shopId', shopId2)
+        // openSuccess()
+        // refetchBaker()
+        handleEditShop()
+        // console.log("reached inside if")
+        toast.success('Updated successfully')
+      }
+      // console.log("reached outside if")
 
-    try {
     } catch (err: any) {
       setError(err.message)
     }
@@ -286,15 +290,15 @@ const EditBakerModal = () => {
     e.preventDefault()
 
     // Logs the form data
-    console.log('form submitted')
-    console.log('shop name is ', shopName)
-    console.log('shop description is ', shopDescription)
-    console.log('logo is ', logo)
-    console.log('featured image is ', featuredImage)
-    console.log('state is ', state)
-    console.log('city is ', city)
-    console.log('what we offer is ', whatWeOffer)
-    console.log('pickup service is ', PickupService)
+    // console.log('form submitted')
+    // console.log('shop name is ', shopName)
+    // console.log('shop description is ', shopDescription)
+    // console.log('logo is ', logo)
+    // console.log('featured image is ', featuredImage)
+    // console.log('state is ', state)
+    // console.log('city is ', city)
+    // console.log('what we offer is ', whatWeOffer)
+    // console.log('pickup service is ', PickupService)
 
     try {
       await handleUpdateShop()
