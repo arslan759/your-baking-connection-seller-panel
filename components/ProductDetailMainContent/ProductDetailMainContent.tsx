@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import ProductDetailForm from '../ProductDetailForm/ProductDetailForm'
 import CartCardDetailsItem from '../CartCardDetailsItem/CartCardDetailsItem'
 import { ProductDetailMainContentProps } from 'types'
+import ShowMore from '../ShowMore'
 
 const ProductDetailMainContent = ({
   title,
@@ -127,6 +128,7 @@ const ProductDetailMainContent = ({
 
       <div className='w-[100%] lg:w-[95%] mt-[16px] lg:mt-[18px]'>
         <Typography
+          component='div'
           sx={{
             fontFamily: 'Open Sans',
             fontSize: '18px !important',
@@ -139,7 +141,15 @@ const ProductDetailMainContent = ({
             },
           }}
         >
-          {description}
+          <ShowMore
+            lineHeight='normal'
+            color='#090909'
+            fontFamily='Open Sans'
+            fontWeight={400}
+            fontSize={18}
+            text={description || ''}
+            words={500}
+          />
         </Typography>
       </div>
 
