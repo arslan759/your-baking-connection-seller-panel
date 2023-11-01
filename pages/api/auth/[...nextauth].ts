@@ -48,6 +48,8 @@ export const authOptions: NextAuthOptions = {
           },
         }
 
+        console.log('variables', variables)
+
         //  graphql request body
         const requestBody = {
           query: mutation,

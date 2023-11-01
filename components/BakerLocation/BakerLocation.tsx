@@ -24,7 +24,7 @@ const BakerLocation = () => {
             },
           }}
         >
-          {`OUR LOCATION`}
+          {`BAKERY INFO`}
         </Typography>
         <div className='mt-[28px] lg:mt-[24px] flex flex-col gap-y-[12px] w-[82%] lg:w-full'>
           {/* <div className='flex gap-x-[12px] items-center'>

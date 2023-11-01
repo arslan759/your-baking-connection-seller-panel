@@ -1,4 +1,4 @@
-import { Modal, Typography } from '@mui/material'
+import { CircularProgress, Modal, Typography } from '@mui/material'
 
 import React, { useEffect, useRef, useState } from 'react'
 import InputField from '../InputField/InputField'
@@ -111,33 +111,43 @@ const EditProfile = () => {
     }
   }
 
+  const [loadingImage, setLoadingImage] = useState(false)
+
   // handlePictureChange function for picture upload
   const handlePictureChange = async (e: any) => {
-    const file = e.target.files[0]
+    try {
+      setLoadingImage(true)
 
-    console.log('files are ', e.target.files)
-    console.log('picture is ', file?.name)
+      const file = e.target.files[0]
 
-    if (file.size > 1024 * 1024 * 1) {
-      setPictureError('Picture size should be less than 1MB')
-      return
+      console.log('files are ', e.target.files)
+      console.log('picture is ', file?.name)
+
+      if (file.size > 1024 * 1024 * 1) {
+        setPictureError('Picture size should be less than 1MB')
+        return
+      }
+
+      if (file.type === 'application/pdf') {
+        setPictureError('Selected file must be an image')
+        return
+      }
+
+      //@ts-ignore
+      const uploadRes = await uploadFile(file, '/profile-images')
+
+      console.log('uploadRes is ', uploadRes)
+
+      if (uploadRes.result.status) {
+        setPicture(uploadRes.result.data[0].availableSizes.thumbnail)
+      }
+
+      setPictureError('')
+      setLoadingImage(false)
+    } catch (error) {
+      console.log(error)
+      setLoadingImage(false)
     }
-
-    if (file.type === 'application/pdf') {
-      setPictureError('Selected file must be an image')
-      return
-    }
-
-    //@ts-ignore
-    const uploadRes = await uploadFile(file, '/profile-images')
-
-    console.log('uploadRes is ', uploadRes)
-
-    if (uploadRes.result.status) {
-      setPicture(uploadRes.result.data[0].availableSizes.thumbnail)
-    }
-
-    setPictureError('')
   }
 
   //reset states
@@ -265,11 +275,25 @@ const EditProfile = () => {
           />
 
           <div className='w-full flex justify-center mt-[0px] md:mt-[-100px] rounded-full overflow-hidden relative'>
-            <img
-              src={picture ? picture : ''}
-              alt=''
-              className='w-[129px] h-[129px] rounded-full object-cover'
-            />
+            {loadingImage ? (
+              <div
+                className={`w-[129px] h-[129px] rounded-full bg-[#fff] flex items-center justify-center`}
+              >
+                <CircularProgress
+                  sx={{
+                    color: '#7DDEC1',
+                    height: '20px !important',
+                    width: '20px !important',
+                  }}
+                />
+              </div>
+            ) : (
+              <img
+                src={picture ? picture : '/Images/DefaultAvatar.jpg'}
+                alt=''
+                className='w-[129px] h-[129px] rounded-full object-cover'
+              />
+            )}
           </div>
           <div className='w-full flex gap-[12px] justify-center items-center mt-[8px]'>
             <Typography
