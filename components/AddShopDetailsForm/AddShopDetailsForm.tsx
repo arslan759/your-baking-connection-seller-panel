@@ -59,10 +59,18 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   //phone number state for shop creation/updation
   const [phone, setPhone] = useState<string>()
 
+  const populateCity = (state: string, city: string) => {
+    getCitiesApi(state, setCities, setIsLoadingCities, city, setCity)
+  }
+
   useEffect(() => {
+    console.log('account is ', account)
+
     setPhone(account?.phone)
     setState(account?.state)
     setCity(account?.city)
+
+    populateCity(account?.state, account?.city)
   }, [account])
 
   // const [cities, setCities] = useState([])
@@ -409,13 +417,13 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
             </Typography>
           </div>
         </div>
-        <Image
+        {/* <Image
           src='/Images/x-square.svg'
           alt='x-square'
           width={24}
           height={24}
           className='absolute top-[20px] right-[20px] cursor-pointer'
-        />
+        /> */}
         {/* </div> */}
         <div className='mt-[24px] md:mt-[42px]'>
           <form onSubmit={handleSubmit}>

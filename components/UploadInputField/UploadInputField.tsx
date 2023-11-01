@@ -39,6 +39,7 @@ const UploadInputField = ({
       <Button
         className={`${label ? 'mt-[5px]' : 'mt-[0px]'}`}
         sx={{
+          color: inputColor,
           border: `1px solid ${inputColor}`,
           height: '35px',
           padding: '5px',
