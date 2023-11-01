@@ -6,6 +6,7 @@ import { PrimaryBtn } from '../Buttons'
 // import { useRouter } from 'next/navigation'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import MoreDetails from '../MoreDetails'
 
 const ProductCard = ({
   product,
@@ -193,7 +194,17 @@ ProductCardProps) => {
             },
           }}
         >
-          {product?.description}
+          <Link href={`${pathname}/product/${slug}`}>
+            <MoreDetails
+              lineHeight='normal'
+              color='#090909'
+              fontFamily='Open Sans'
+              fontWeight={400}
+              fontSize={12}
+              text={product?.description}
+              words={100}
+            />
+          </Link>
         </Typography>
         <div className='flex gap-x-[14px] items-center'>
           {variants?.pricing[0]?.compareAtPrice?.amount ? (

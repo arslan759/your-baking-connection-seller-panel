@@ -14,7 +14,7 @@ interface ShowMoreProps {
   textTransform?: string
 }
 
-const ShowMore = ({
+const MoreDetails = ({
   text,
   words,
   textAlign,
@@ -28,9 +28,9 @@ const ShowMore = ({
 }: ShowMoreProps) => {
   const [showAll, setShowAll] = useState(false)
 
-  const toggleShowAll = () => {
-    setShowAll(!showAll)
-  }
+  // const toggleShowAll = () => {
+  //   setShowAll(!showAll)
+  // }
 
   const displayText = showAll ? text : text?.slice(0, words)
   return (
@@ -60,7 +60,7 @@ const ShowMore = ({
               fontWeight: '700',
               cursor: 'pointer',
             }}
-            onClick={toggleShowAll}
+            // onClick={toggleShowAll}
           >
             Show more
           </span>
@@ -73,7 +73,7 @@ const ShowMore = ({
               fontWeight: '700',
               cursor: 'pointer',
             }}
-            onClick={toggleShowAll}
+            // onClick={toggleShowAll}
           >
             Show less
           </span>
@@ -83,4 +83,4 @@ const ShowMore = ({
   )
 }
 
-export default ShowMore
+export default MoreDetails

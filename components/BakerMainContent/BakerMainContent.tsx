@@ -2,6 +2,7 @@ import { Typography } from '@mui/material'
 import React from 'react'
 import EditBakerModal from '../EditBakerModal/EditBakerModal'
 import AddBakerProductModal from '../AddBakerProductModal/AddBakerProductModal'
+import ShowMore from '../ShowMore'
 
 interface BakerMainContent {
   bakerName?: string | undefined
@@ -101,7 +102,16 @@ const BakerMainContent = ({ bakerName, description, slug, bakerLogo }: BakerMain
             },
           }}
         >
-          {description}
+          <ShowMore
+            textTransform='capitalize'
+            lineHeight='normal'
+            color='#090909'
+            fontFamily='Open Sans'
+            fontWeight={500}
+            fontSize={18}
+            text={description || ''}
+            words={500}
+          />
         </Typography>
       </div>
 
