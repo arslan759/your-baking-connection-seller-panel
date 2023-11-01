@@ -1,5 +1,5 @@
 import { Rating, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ProductDetailForm from '../ProductDetailForm/ProductDetailForm'
 import CartCardDetailsItem from '../CartCardDetailsItem/CartCardDetailsItem'
 import { ProductDetailMainContentProps } from 'types'
@@ -11,8 +11,17 @@ const ProductDetailMainContent = ({
   newPrice,
   reviews,
   rating,
+  shopId,
   description,
+  productId,
+  productVariantId,
+  productAttributes,
 }: ProductDetailMainContentProps) => {
+  const [priceToDisplay, setPriceToDisplay] = useState<number>(newPrice)
+
+  useEffect(() => {
+    console.log('newPrice is ', priceToDisplay)
+  }, [priceToDisplay])
   return (
     <div className='pb-[12px] lg:pb-[0px] bg-[#fff]'>
       <div className='w-full flex justify-between items-center'>
@@ -58,21 +67,23 @@ const ProductDetailMainContent = ({
       </div>
 
       <div className='mt-[6px] md:mt-[9px] flex gap-x-[12px] items-center'>
-        <Typography
-          sx={{
-            color: '#888',
-            fontSize: '28px !important',
-            fontWeight: '400',
-            lineHeight: 'normal',
-            fontFamily: 'Open Sans',
-            textDecoration: 'line-through',
-            '@media (max-width:767px)': {
-              fontSize: '24px !important',
-            },
-          }}
-        >
-          {oldPrice}$
-        </Typography>
+        {oldPrice && (
+          <Typography
+            sx={{
+              color: '#888',
+              fontSize: '28px !important',
+              fontWeight: '400',
+              lineHeight: 'normal',
+              fontFamily: 'Open Sans',
+              textDecoration: 'line-through',
+              '@media (max-width:767px)': {
+                fontSize: '24px !important',
+              },
+            }}
+          >
+            ${oldPrice}
+          </Typography>
+        )}
         <Typography
           sx={{
             color: '#090909',
@@ -85,7 +96,7 @@ const ProductDetailMainContent = ({
             },
           }}
         >
-          {newPrice}$
+          ${priceToDisplay.toFixed(2)}
         </Typography>
       </div>
 
@@ -132,9 +143,17 @@ const ProductDetailMainContent = ({
         </Typography>
       </div>
 
-      {/* <div className=' mt-[16px] md:mt-[18px]'>
-        <ProductDetailForm />
-      </div> */}
+      <div className=' mt-[16px] md:mt-[18px]'>
+        <ProductDetailForm
+          attributes={productAttributes}
+          newPrice={newPrice}
+          updatePrice={setPriceToDisplay}
+          stock={stock}
+          productId={productId}
+          shopId={shopId}
+          productVariantId={productVariantId}
+        />
+      </div>
 
       <div className='mt-[24px] md:mt-[20px] bg-[#000] h-[1px] w-full' />
 

@@ -7,6 +7,8 @@ import { checkPassword } from 'helpers/validations'
 import useResetPasswordOtpVerify from '../../hooks/Authentication/ResetPassword/useResetPasswordOtpVerify'
 import { withApollo } from 'lib/apollo/withApollo'
 import { useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
+
 
 interface ResetPasswordProps {
   otp: string // Change `any` to the appropriate type for `otp`
@@ -74,14 +76,15 @@ const ResetPasswordForm: React.FC<ResetPasswordProps> = ({ otp }) => {
         router.push('/signin')
       }
 
-      console.log('reset pass response is ', res)
-    } catch (err) {
-      console.log('err', err)
+      // console.log('reset pass response is ', res)
+    } catch (err: any) {
+      toast.error(`Error is ', ${err?.message}`)
+      // console.log('err', err)
     }
 
     // Logs form data
-    console.log('password is ', password)
-    console.log('confirm password is ', confirmPassword)
+    // console.log('password is ', password)
+    // console.log('confirm password is ', confirmPassword)
 
     // Reset form fields
     setPassword('')

@@ -1,15 +1,14 @@
 'use client'
 import './globals.css'
-
 import { PropsWithChildren } from 'react'
 import { lightTheme } from './theme/themes'
 import ContextProvider from './context-provider'
-
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import Header from '@/components/Header'
 import { usePathname } from 'next/navigation'
 import Footer from '@/components/Footer/Footer'
 import NextAuthProvider from './nextAuthProvider'
+import { Toaster } from 'react-hot-toast'
 
 export default function RootLayout({ children }: PropsWithChildren<{}>) {
   const router = usePathname()
@@ -42,6 +41,23 @@ export default function RootLayout({ children }: PropsWithChildren<{}>) {
               {<Header />}
               {children}
               {<Footer />}
+              <Toaster
+                position='bottom-center'
+                reverseOrder={false}
+                gutter={8}
+                containerClassName=''
+                containerStyle={{}}
+                toastOptions={{
+                  // Define default options
+                  className: '',
+                  duration: 5000,
+                  style: {
+                    fontFamily: 'Open Sans',
+                    background: '#fff',
+                    color: '#363636',
+                  },
+                }}
+              />
             </body>
           </NextAuthProvider>
         </ContextProvider>

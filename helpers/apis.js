@@ -1,7 +1,7 @@
 export async function getStatesApi(setStates, setLoading) {
   try {
     setLoading(true)
-    fetch('https://countriesnow.space/api/v0.1/countries/states', {
+    await fetch('https://countriesnow.space/api/v0.1/countries/states', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
@@ -24,7 +24,7 @@ export async function getStatesApi(setStates, setLoading) {
 export async function getCitiesApi(state, setCities, setLoading, city, setCity) {
   try {
     setLoading(true)
-    fetch('https://countriesnow.space/api/v0.1/countries/state/cities', {
+    await fetch('https://countriesnow.space/api/v0.1/countries/state/cities', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
