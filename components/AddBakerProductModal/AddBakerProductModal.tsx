@@ -45,7 +45,9 @@ interface CustomBuilderProps {
 
 const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
   const [isAdded, setIsAdded] = useState(false)
-  const [, , refetchCatalogItems, _] = useCatalogItems()
+  const [, , refetchCatalogItems, _] = useCatalogItems({
+    shopIds: [slug],
+  })
 
   const router = useRouter()
   // input states
@@ -236,8 +238,12 @@ const AddBakerProductModal = ({ slug }: AddBakerProductModalProps) => {
       if (publish.data.publishProductsToCatalog[0]._id) {
         // console.log('coming to this condition')
         window.location.reload()
+        // refetchCatalogItems()
+
         handleAddProduct()
+        toast.success('Product added successfully')
       }
+
       // console.log('publish product success', publish)
     } catch (err: any) {
       toast.error(`Error is ', ${err?.message}`)
