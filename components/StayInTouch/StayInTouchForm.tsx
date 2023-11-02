@@ -66,7 +66,7 @@ const StayInTouchForm = (): JSX.Element => {
             onSubmit={handleSubmit}
             className='flex flex-row gap-x-[16px] justify-center items-center  mt-[8px] md:mt-[32px]'
           >
-            <div className='w-[193px] md:w-[551px] text-white'>
+            <div className='w-[193px] md:w-[551px] text-white h-[58px]'>
               <InputField
                 // label='email'
                 type='text'
@@ -80,7 +80,7 @@ const StayInTouchForm = (): JSX.Element => {
                 onChange={handleChange}
               />
             </div>
-            <div className='rounded-[12px] overflow-hidden w-[4.56rem] md:w-[10rem]'>
+            <div className='rounded-[12px] overflow-hidden w-[4.56rem] md:w-[10rem] mt-[-5px]'>
               <PrimaryBtn type='submit' text='Submit' />
             </div>
           </form>
