@@ -17,6 +17,8 @@ import CustomAutocomplete from '../CustomAutocomplete'
 import { getCitiesApi, getStatesApi } from 'helpers/apis'
 import useEnablePaymentMethodForShop from 'hooks/shop/useEnablePaymentMethodForShop'
 import useCreateTaxRate from 'hooks/shop/useCreateTaxRate'
+import useCreateFlatRateFulfillmentMethod from 'hooks/shop/useCreateFlatRateFulfillmentMethod'
+
 const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   // auth store
   //@ts-ignore
@@ -137,6 +139,40 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   const [createTax, loadingCreateTaxRate] = useCreateTaxRate()
   const [enablePayment, loadingEnablePayment] = useEnablePaymentMethodForShop()
 
+  const [createFlatRate, loadingCreateFlatRate] = useCreateFlatRateFulfillmentMethod()
+
+  const handleCreateFlatRate = async (shopId: string) => {
+    const input = {
+      method: {
+        cost: 0,
+        fulfillmentTypes: 'shipping',
+        handling: 0,
+        isEnabled: true,
+        label: 'test',
+        name: 'shipping-test',
+        rate: 0,
+        group: 'free-shipping',
+      },
+      shopId,
+    }
+
+    try {
+      // @ts-ignore
+      const flatRate = await createFlatRate({
+        variables: {
+          input,
+        },
+      })
+      console.log('flat rate is ', flatRate)
+
+      if (flatRate?.data?.createFlatRateFulfillmentMethod?.method?._id) {
+        openSuccess()
+      }
+    } catch (err: any) {
+      console.log('err', err)
+    }
+  }
+
   const handleUpdateShop = async (shopId: string) => {
     const shopUpdated = await updateShop({
       variables: {
@@ -195,7 +231,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
 
       console.log('enablePayment', enabledPayment)
       if (enabledPayment) {
-        openSuccess()
+        handleCreateFlatRate(shopId)
       }
     } catch (err: any) {
       setError(err.message)
