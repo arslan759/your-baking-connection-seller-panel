@@ -4,6 +4,7 @@ import useFileUpload from 'hooks/fileUpload/useFileUpload'
 import DeleteIcon from '@mui/icons-material/Delete'
 
 import { AddBakerProductImagesProps } from 'types'
+import FileDropzone from '../FileDropzone'
 
 const EditBakerProductImages = ({
   productMedia,
@@ -77,12 +78,12 @@ const EditBakerProductImages = ({
     setImageUploadCounter(imageUploadCounter - 1)
   }
 
-  async function handleFileUpload(e: ChangeEvent<HTMLInputElement>) {
+  async function handleFileUpload(file: any) {
     setIsLoading(true)
     try {
       setUploadError('')
       //@ts-ignore
-      const image = e.target.files[0]
+      const image = file[0]
 
       // console.log('image is ', image)
 
@@ -184,7 +185,13 @@ const EditBakerProductImages = ({
           )}
         </div>
         <div className='w-full flex flex-col items-center justify-center md:w-[48%] h-[225px] p-[8px] border-dashed rounded-[4px] border-[0.5px] border-[#888]'>
-          <Typography
+          <FileDropzone
+            handleFileUpload={handleFileUpload}
+            handleImageUploadClick={handleImageUploadClick}
+            imageUploadRef={imageUploadRef}
+            uploadError={uploadError}
+          />
+          {/* <Typography
             sx={{
               fontSize: '14px !important',
               fontFamily: 'Open Sans',
@@ -220,7 +227,7 @@ const EditBakerProductImages = ({
             />
 
             <span style={{ color: 'red' }}>{uploadError}</span>
-          </Typography>
+          </Typography> */}
         </div>
         <div className='w-full md:w-[48%] flex flex-col gap-y-[12px]'>
           {productMedia?.map((image: any, index: any) => (
