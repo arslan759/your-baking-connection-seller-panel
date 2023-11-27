@@ -218,7 +218,7 @@ ProductCardProps) => {
                 textDecoration: 'line-through',
               }}
             >
-              ${parseInt(variants?.pricing[0]?.compareAtPrice?.amount)}
+              ${parseFloat(variants?.pricing[0]?.compareAtPrice?.amount).toFixed(2)}
             </Typography>
           ) : null}
           <Typography
@@ -230,7 +230,7 @@ ProductCardProps) => {
               fontFamily: 'Open Sans',
             }}
           >
-            ${parseInt(variants?.pricing[0].price)}
+            ${parseFloat(variants?.pricing[0].price).toFixed(2)}
           </Typography>
         </div>
       </CardContent>
