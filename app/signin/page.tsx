@@ -1,20 +1,20 @@
 'use client'
 
 import Signin from '@/components/Signin'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+// import { useSession } from 'next-auth/react'
+// import { useRouter } from 'next/navigation'
+// import { useEffect } from 'react'
 
 export default function SignIn() {
-  const { data: session, status } = useSession()
+  // const { data: session, status } = useSession()
 
-  const router = useRouter()
+  // const router = useRouter()
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      router.push('/')
-    }
-  }, [status])
+  // useEffect(() => {
+  //   if (status === 'authenticated') {
+  //     router.push('/')
+  //   }
+  // }, [status])
 
   return (
     <>

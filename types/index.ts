@@ -55,6 +55,8 @@ export interface SecondaryBtnProps {
   text: string
   color: string
   handleClick: MouseEventHandler<HTMLDivElement>
+  loading?: boolean
+  disabled?: boolean
 }
 export interface InputFieldProps {
   type: string

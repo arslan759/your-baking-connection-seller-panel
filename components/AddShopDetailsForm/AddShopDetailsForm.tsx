@@ -18,6 +18,8 @@ import { getCitiesApi, getStatesApi } from 'helpers/apis'
 import useEnablePaymentMethodForShop from 'hooks/shop/useEnablePaymentMethodForShop'
 import useCreateTaxRate from 'hooks/shop/useCreateTaxRate'
 import useCreateFlatRateFulfillmentMethod from 'hooks/shop/useCreateFlatRateFulfillmentMethod'
+import useCreateConnectedAccount from 'hooks/shop/useCreateConnectedAccount'
+import useViewer from 'hooks/viewer/useViewer'
 
 const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   // auth store
@@ -133,6 +135,8 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
 
   const [error, setError] = useState<string>()
 
+  const [viewer, loadingViewer, refetchViewer] = useViewer()
+
   const [createShop, loadingCreateShop] = useCreateShop()
   const [updateShop, loadingUpdateShop] = useUpdateShop()
 
@@ -140,6 +144,36 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   const [enablePayment, loadingEnablePayment] = useEnablePaymentMethodForShop()
 
   const [createFlatRate, loadingCreateFlatRate] = useCreateFlatRateFulfillmentMethod()
+  const [createConnectAccount, loadingCreateConnectAccount] = useCreateConnectedAccount()
+
+  console.log('viewer is ', viewer)
+
+  const handleCreateConnectAccount = async (email: string) => {
+    try {
+      const input = {
+        businessType: 'individual',
+        country: 'USA',
+        email: email,
+        type: 'express',
+      }
+
+      // @ts-ignore
+      const connectAccount = await createConnectAccount({
+        variables: {
+          input,
+        },
+      })
+
+      console.log('connectAccount', connectAccount)
+
+      if (connectAccount?.data?.createConnectedAccount) {
+        const url = connectAccount.data.createConnectedAccount
+        window.location.href = url
+      }
+    } catch (err: any) {
+      console.log('err', err)
+    }
+  }
 
   const handleCreateFlatRate = async (shopId: string) => {
     const input = {
@@ -166,7 +200,8 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       console.log('flat rate is ', flatRate)
 
       if (flatRate?.data?.createFlatRateFulfillmentMethod?.method?._id) {
-        openSuccess()
+        // openSuccess()
+        handleCreateConnectAccount(viewer?.primaryEmailAddress)
       }
     } catch (err: any) {
       console.log('err', err)

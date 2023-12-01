@@ -1,0 +1,3 @@
+mutation createConnectedAccount($input: CreateStripeAccountInput!) {
+  createConnectedAccount(input: $input)
+}

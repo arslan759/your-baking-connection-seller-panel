@@ -7,8 +7,10 @@ import { useState } from 'react'
 import AddShopDetailsForm from '../AddShopDetailsForm/AddShopDetailsForm'
 import OTPForm from '../OTPForm/OTPForm'
 import SignupSuccess from '../SignupSuccess/SignupSuccess'
+import withAuth from 'hocs/withAuth'
+import { withApollo } from 'lib/apollo/withApollo'
 
-export default function ForgetPassword() {
+const Signup = () => {
   const [isOtp, setIsOtp] = useState(false)
   const [step, setStep] = useState(1)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -119,3 +121,5 @@ export default function ForgetPassword() {
       </div>
     )
 }
+
+export default withApollo()(withAuth(Signup))

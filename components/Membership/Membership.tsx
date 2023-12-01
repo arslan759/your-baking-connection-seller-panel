@@ -7,6 +7,8 @@ import PremiumMembershipCard from '../PremiumMembershipCard/PremiumMembershipCar
 import MembershipVideoPlayer from '../MembershipVideoPlayer/MembershipVideoPlayer'
 import FullfillmentSection from '../FullfillmentSection/FullfillmentSection'
 import StayInTouchForm from '../StayInTouch'
+import withAuth from 'hocs/withAuth'
+import { withApollo } from 'lib/apollo/withApollo'
 
 const Membership = () => {
   return (
@@ -287,4 +289,4 @@ const Membership = () => {
   )
 }
 
-export default Membership
+export default withApollo()(withAuth(Membership))

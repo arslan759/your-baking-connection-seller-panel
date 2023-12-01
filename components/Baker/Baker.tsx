@@ -10,6 +10,7 @@ import Loader from '@/components/Loader/Loader'
 import useBaker from 'hooks/baker/useBaker'
 
 import { withApollo } from 'lib/apollo/withApollo'
+import withAuth from 'hocs/withAuth'
 
 interface BakerProps {
   slug: string
@@ -84,4 +85,4 @@ const Baker = ({ slug }: BakerProps) => {
   )
 }
 
-export default withApollo()(Baker)
+export default withApollo()(withAuth(Baker))
