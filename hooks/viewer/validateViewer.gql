@@ -1,0 +1,9 @@
+query lazyViewer {
+  viewer {
+    _id
+    validStripeConnect
+    adminUIShops {
+      _id
+    }
+  }
+}

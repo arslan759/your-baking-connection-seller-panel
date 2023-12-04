@@ -8,6 +8,7 @@ import useCatalogItemProduct from '../../hooks/product/useCatalogItemProduct'
 import Spinner from '../Spinner'
 import ProductSwiper from '../ProductSwiper'
 import { withApollo } from 'lib/apollo/withApollo'
+import withAuth from 'hocs/withAuth'
 
 interface ProductDetailProps {
   slug: string
@@ -45,7 +46,7 @@ const ProductDetail = ({ slug, shopId }: ProductDetailProps) => {
   console.log('catalogItemProduct', catalogItemProduct)
 
   const { title, description, media, variants, productAttributes, productId } = catalogItemProduct
-  const { pricing, inventoryInStock,variantId } = variants[0]
+  const { pricing, inventoryInStock, variantId } = variants[0]
   const { URLs } = media[0]
 
   return (
@@ -124,4 +125,4 @@ const ProductDetail = ({ slug, shopId }: ProductDetailProps) => {
   )
 }
 
-export default withApollo()(ProductDetail)
+export default withApollo()(withAuth(ProductDetail))

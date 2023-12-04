@@ -4,6 +4,7 @@ query viewer {
     phone
     state
     city
+    validStripeConnect
     adminUIShops {
       _id
     }

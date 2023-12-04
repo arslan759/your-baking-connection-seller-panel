@@ -55,6 +55,8 @@ export interface SecondaryBtnProps {
   text: string
   color: string
   handleClick: MouseEventHandler<HTMLDivElement>
+  loading?: boolean
+  disabled?: boolean
 }
 export interface InputFieldProps {
   type: string
@@ -149,11 +151,11 @@ interface Tokens {
   refreshToken: string
 }
 export interface OTPFormProps {
-  closeOtp: () => void
+  closeOtp?: () => void
   type: string
-  email: string
+  email?: string
   tokens: Tokens
-  setStep: (step: number) => void
+  // setStep?: (step: number) => void
 }
 
 export interface SectionheadingProps {

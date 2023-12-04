@@ -1,15 +1,45 @@
 import React, { useState, useEffect } from 'react'
 import styles from './styles.module.css'
 import { Typography } from '@mui/material'
-import { PrimaryBtn } from '../Buttons'
+import { PrimaryBtn, SecondaryBtn } from '../Buttons'
 import YourProfileCardItem from '../YourProfileCardItem/YourProfileCardItem'
 import { YourProfileCardItemData } from 'Constants/constants'
 import EditProfile from '../EditProfile/EditProfile'
 import ShowMore from '../ShowMore/ShowMore'
 import useViewer from 'hooks/viewer/useViewer'
+import useCreateConnectedAccount from 'hooks/shop/useCreateConnectedAccount'
 
 const YourProfileCard = () => {
   const [isEdited, setIsEdited] = useState(false)
+
+  const [createConnectAccount, loadingCreateConnectAccount] = useCreateConnectedAccount()
+
+  const handleCreateConnectAccount = async (email: string) => {
+    try {
+      const input = {
+        businessType: 'individual',
+        country: 'USA',
+        email: email,
+        type: 'express',
+      }
+
+      // @ts-ignore
+      const connectAccount = await createConnectAccount({
+        variables: {
+          input,
+        },
+      })
+
+      console.log('connectAccount', connectAccount)
+
+      if (connectAccount?.data?.createConnectedAccount) {
+        const url = connectAccount.data.createConnectedAccount
+        window.location.href = url
+      }
+    } catch (err: any) {
+      console.log('err', err)
+    }
+  }
 
   const handleEditUserProfile = () => {
     setIsEdited(!isEdited)
@@ -39,6 +69,27 @@ const YourProfileCard = () => {
 
   return (
     <div className={styles.card}>
+      {!viewer?.validStripeConnect && (
+        <div
+          className='flex flex-wrap items-center justify-between p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300'
+          role='alert'
+        >
+          <div>
+            <span className='font-medium'>Warning alert! </span> You have not completed Connect
+            Account onboarding, you cannot receive payouts unless you complete it.
+          </div>
+          <span>
+            <SecondaryBtn
+              text='Complete Onboarding!'
+              color='red'
+              handleClick={() => handleCreateConnectAccount(viewer?.primaryEmailAddress)}
+              // @ts-ignore
+              loading={loadingCreateConnectAccount}
+            />
+          </span>
+        </div>
+      )}
+
       <Typography
         sx={{
           fontSize: '48px !important',

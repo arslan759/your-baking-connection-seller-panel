@@ -1,9 +1,8 @@
-import { Button, Typography } from '@mui/material'
+import { Button, CircularProgress, Typography } from '@mui/material'
 import { useEffect } from 'react'
 import { SecondaryBtnProps } from 'types'
-import styles from './styles.module.css'
 
-const SecondaryBtn = ({ handleClick, text, color }: SecondaryBtnProps) => {
+const SecondaryBtn = ({ handleClick, text, color, loading, disabled }: SecondaryBtnProps) => {
   // console.log('SecondaryBtn color is', color)
 
   useEffect(() => {}, [color])
@@ -28,36 +27,47 @@ const SecondaryBtn = ({ handleClick, text, color }: SecondaryBtnProps) => {
           color: '#fff',
         },
       }}
+      disabled={disabled || loading ? true : false}
       disableElevation
       disableFocusRipple
       disableRipple
     >
-      <Typography
-        onClick={handleClick}
-        sx={{
-          color: color,
-          cursor: 'pointer',
-          textTransform: 'capitalize',
-          position: 'relative',
-          width: 'fit-content',
-          '::after': {
-            content: '""',
-            position: 'absolute',
-            bottom: '2px',
-            left: '0',
-            width: '100%',
-            height: '1px',
-            backgroundColor: color,
-          },
-          '&:hover': {
-            scale: 1.25,
-            transition: 'all 300ms ease-in-out',
-          },
-        }}
-        variant='body2'
-      >
-        {text}
-      </Typography>
+      {loading ? (
+        <CircularProgress
+          sx={{
+            color: 'grey',
+            width: '20px !important',
+            height: '20px !important',
+          }}
+        />
+      ) : (
+        <Typography
+          onClick={handleClick}
+          sx={{
+            color: color,
+            cursor: 'pointer',
+            textTransform: 'capitalize',
+            position: 'relative',
+            width: 'fit-content',
+            '::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: '2px',
+              left: '0',
+              width: '100%',
+              height: '1px',
+              backgroundColor: color,
+            },
+            '&:hover': {
+              scale: 1.25,
+              transition: 'all 300ms ease-in-out',
+            },
+          }}
+          variant='body2'
+        >
+          {text}
+        </Typography>
+      )}
     </Button>
   )
 }
