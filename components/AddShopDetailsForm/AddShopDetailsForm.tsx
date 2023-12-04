@@ -11,7 +11,7 @@ import useCreateShop from 'hooks/shop/useCreateShop'
 import useUpdateShop from 'hooks/shop/useUpdateShop'
 import { withApollo } from 'lib/apollo/withApollo'
 import useStores from 'hooks/useStores'
-import { AddShopDetailsFormProps } from 'types'
+// import { AddShopDetailsFormProps } from 'types'
 import useFileUpload from 'hooks/fileUpload/useFileUpload'
 import CustomAutocomplete from '../CustomAutocomplete'
 import { getCitiesApi, getStatesApi } from 'helpers/apis'
@@ -21,7 +21,7 @@ import useCreateFlatRateFulfillmentMethod from 'hooks/shop/useCreateFlatRateFulf
 import useCreateConnectedAccount from 'hooks/shop/useCreateConnectedAccount'
 import useViewer from 'hooks/viewer/useViewer'
 
-const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
+const AddShopDetailsForm = () => {
   // auth store
   //@ts-ignore
   const { authStore } = useStores()
@@ -172,6 +172,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       }
     } catch (err: any) {
       console.log('err', err)
+      setError(err.message)
     }
   }
 
@@ -205,50 +206,50 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       }
     } catch (err: any) {
       console.log('err', err)
+      setError(err.message)
     }
   }
 
   const handleUpdateShop = async (shopId: string) => {
-    const shopUpdated = await updateShop({
-      variables: {
-        input: {
-          shopId,
-          shopLogoUrls: {
-            primaryShopLogoUrl: logoImageUrl,
-          },
-          featuredShopImages: {
-            URLs: {
-              thumbnail: featuredImageUrl?.thumbnail,
-              medium: featuredImageUrl?.medium,
-              large: featuredImageUrl?.large,
-              small: featuredImageUrl?.small,
-              original: featuredImageUrl?.original,
+    try {
+      const shopUpdated = await updateShop({
+        variables: {
+          input: {
+            shopId,
+            shopLogoUrls: {
+              primaryShopLogoUrl: logoImageUrl,
             },
-            priority: 1,
-          },
-          isPickup: pickupService,
-          categories: whatWeOffer?.map((item) => item.title),
-          addressBook: {
-            fullName: account?.firstName ? account?.firstName : 'N/A',
-            phone: phone ? phone : 'N/A',
-            postal: '12345',
-            address1: 'sample address',
-            city,
-            region: state,
-            country: 'USA',
-            isCommercial: false,
+            featuredShopImages: {
+              URLs: {
+                thumbnail: featuredImageUrl?.thumbnail,
+                medium: featuredImageUrl?.medium,
+                large: featuredImageUrl?.large,
+                small: featuredImageUrl?.small,
+                original: featuredImageUrl?.original,
+              },
+              priority: 1,
+            },
+            isPickup: pickupService,
+            categories: whatWeOffer?.map((item) => item.title),
+            addressBook: {
+              fullName: account?.firstName ? account?.firstName : 'N/A',
+              phone: phone ? phone : 'N/A',
+              postal: '12345',
+              address1: 'sample address',
+              city,
+              region: state,
+              country: 'USA',
+              isCommercial: false,
+            },
           },
         },
-      },
-    })
-    // console.log('updated shop is ', shopUpdated)
-    const shopId2 = shopUpdated?.data?.updateShop?.shop?._id
-    if (shopId2) {
-      localStorage.setItem('shopId', shopId2)
-      handleCreateTaxRate(shopId2)
-    }
-
-    try {
+      })
+      // console.log('updated shop is ', shopUpdated)
+      const shopId2 = shopUpdated?.data?.updateShop?.shop?._id
+      if (shopId2) {
+        localStorage.setItem('shopId', shopId2)
+        handleCreateTaxRate(shopId2)
+      }
     } catch (err: any) {
       setError(err.message)
     }
@@ -288,6 +289,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
         handleEnablePayment(shopId)
       }
     } catch (err: any) {
+      setError(err.message)
       console.log('err', err)
     }
   }
@@ -306,7 +308,10 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       }
       // console.log('shop created is ', shop)
     } catch (err: any) {
-      setError(err.message)
+      console.log('err', err?.message)
+      if (err.message.includes('duplicate key error')) {
+        setError('Shop name already exists')
+      } else setError(err.message)
     }
   }
 
@@ -387,9 +392,10 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   // handleSubmit function for form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setError('')
 
     // Checks if all fields are filled
-    if (!shopName || !state || !city) {
+    if (!shopName || !state || !city || !shopTax) {
       if (!shopName) {
         setShopNameError('Shop name is required')
       }
@@ -398,6 +404,9 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       }
       if (!city) {
         setCityError('City is required')
+      }
+      if (!shopTax) {
+        setShopTaxError('Shop tax is required')
       }
       // Stops the execution of the function
       return
@@ -811,6 +820,17 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
                 <p style={{ color: 'white' }}>Loading...</p>
               </div>
             ) : null} */}
+            {error ? (
+              <Typography
+                sx={{
+                  marginTop: '10px',
+                  color: 'red',
+                  fontSize: '12px !important',
+                }}
+              >
+                {error}
+              </Typography>
+            ) : null}
 
             <div className='mt-[24px] md:mt-[23px]'>
               <PrimaryBtn

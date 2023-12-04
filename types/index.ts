@@ -151,11 +151,11 @@ interface Tokens {
   refreshToken: string
 }
 export interface OTPFormProps {
-  closeOtp: () => void
+  closeOtp?: () => void
   type: string
-  email: string
+  email?: string
   tokens: Tokens
-  setStep: (step: number) => void
+  // setStep?: (step: number) => void
 }
 
 export interface SectionheadingProps {

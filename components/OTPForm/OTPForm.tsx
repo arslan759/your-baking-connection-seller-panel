@@ -10,7 +10,7 @@ import { withApollo } from 'lib/apollo/withApollo'
 import { useRouter } from 'next/navigation'
 import useForgotPasswordUser from '../../hooks/Authentication/ForgotPassword/useForgotPasswordUser'
 
-const OTPForm = ({ closeOtp, type, email, tokens, setStep }: OTPFormProps) => {
+const OTPForm = ({ closeOtp, type, email, tokens }: OTPFormProps) => {
   const [otp, setOtp] = useState('')
 
   const [verifyOtp, loadingVerifyOtp] = useOtpUser()
@@ -46,11 +46,13 @@ const OTPForm = ({ closeOtp, type, email, tokens, setStep }: OTPFormProps) => {
         if (res?.data?.verifyOTPSignUp) {
           const { accessToken, refreshToken } = tokens
           console.log('true step')
-          setStep(2)
+
+          console.log('tokens are', tokens)
           localStorage.setItem('accounts:accessToken', accessToken)
           localStorage.setItem('accounts:refreshToken', refreshToken)
+          // setStep ? setStep(2) : router.push('/create-shop')
 
-          // router.replace('/signin')
+          router.push('/create-shop')
         }
       } catch (err) {
         return err
