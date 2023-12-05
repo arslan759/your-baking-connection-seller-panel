@@ -33,6 +33,8 @@ const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarPro
 
   console.log('viewer', viewer)
 
+  useEffect(() => {}, [viewer, loading])
+
   const pathName = usePathname()
 
   const StyledToolbar = styled(Toolbar)({

@@ -9,8 +9,8 @@ import viewerQuery from './validateViewer.gql'
  * @returns {Array} the viewer's data
  */
 export default function useViewer() {
-  const { authStore } = useStores()
-  const { account, setAccount } = authStore
+  // const { authStore } = useStores()
+  // const { account, setAccount } = authStore
   const authToken =
     typeof window !== 'undefined' ? window.localStorage.getItem('accounts:accessToken') : ''
 
@@ -21,12 +21,12 @@ export default function useViewer() {
     refetch()
   }, [authToken])
 
-  useEffect(() => {
-    if (loading) {
-      return
-    }
-    setAccount(viewer)
-  }, [viewer])
+  // useEffect(() => {
+  //   if (loading) {
+  //     return
+  //   }
+  //   // setAccount(viewer)
+  // }, [viewer])
 
-  return [account, loading, refetch]
+  return [viewer, loading, refetch]
 }
