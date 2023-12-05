@@ -5,7 +5,6 @@ import { useRouter, usePathname } from 'next/navigation'
 import useValidateViewer from '../hooks/viewer/useValidateViewer'
 import { withApollo } from 'lib/apollo/withApollo'
 import Loader from '@/components/Loader/Loader'
-import path from 'path'
 
 const withAuth = (WrappedComponent) => {
   const AuthRedirect = (props) => {
@@ -19,100 +18,70 @@ const withAuth = (WrappedComponent) => {
     // List of routes that require the user to be logged in
     const protectedRoutes = ['/profile', '/baker', '/membership', '/create-shop']
 
-    // const validateViewer = async () => {
-    //   if (!viewer?._id) {
-    //     console.log('before return loading')
-    //     return
-    //   }
+    // Check weather any of the protected routes string is present in the current path
+    const isProtectedRoute = protectedRoutes.some((route) => pathName.includes(route))
 
-    //   // If there is no viewer, redirect to login page
-    //   if (!viewer?._id && protectedRoutes.includes(pathName)) {
-    //     router.push('/signin')
-    //     console.log('before return no viewer redirect to login page', viewer)
-    //     return
-    //   }
+    const validateViewer = async () => {
+      if (loading) {
+        console.log('before return loading')
+        const temp = protectedRoutes.includes(pathName)
+        console.log('before return isProtectedRoute is ', isProtectedRoute)
+        return
+      }
 
-    //   // if user is logged in and has already created a shop, redirect to home page
-    //   if (viewer?._id && viewer?.adminUIShops?.length > 0 && pathName.includes('/create-shop')) {
-    //     router.push('/')
-    //     console.log('before return create-shop redirect to home page', viewer)
-    //     return
-    //   }
+      // If there is no viewer and page is protected, redirect to login page
+      if (!viewer?._id && isProtectedRoute) {
+        router.push('/signin')
+        console.log('before return no viewer redirect to login page', viewer)
+        console.log('before return isProtectedRoute is ', isProtectedRoute)
+        return
+      }
 
-    //   // // If the route is protected and the user is not logged in, redirect to login page
-    //   // if (
-    //   //   !viewer?._id &&
-    //   //   protectedRoutes.includes(pathName) &&
-    //   //   pathName !== '/signin' &&
-    //   //   pathName !== '/signup'
-    //   //   // !loading
-    //   // ) {
-    //   //   router.push('/signin')
-    //   //   console.log('before return protectedRoutes redirect to login page', viewer)
-    //   //   return
-    //   // }
+      // If there is no viewer and page is signin or signup, return
+      if (!viewer?._id && (pathName === '/signin' || pathName === '/signup')) {
+        console.log('before return no viewer signin or signup', viewer)
+        return
+      }
 
-    //   // If user is logged in and tries to access signin or signup page, redirect to home page
-    //   if (viewer?._id && (pathName === '/signin' || pathName === '/signup')) {
-    //     router.push('/')
-    //     console.log('before return consolidated condition redirect to home page', viewer)
-    //     return
-    //   }
+      // If the user is logged in and page is signin or signup, redirect to home page
+      if (viewer?._id && (pathName === '/signin' || pathName === '/signup')) {
+        router.push('/')
+        console.log('before return viewer signin or signup redirect to home page', viewer)
+        return
+      }
 
-    //   // If the user is logged in and validStripeConnect is false, redirect to profile page
-    //   if (viewer?._id && !viewer?.validStripeConnect && !pathName.includes('/profile')) {
-    //     router.push('/profile')
-    //     console.log('before return validStripeConnect redirect to profile page', viewer)
-    //     return
-    //   }
-    // }
+      // if user is logged in and has already created a shop and page is create-shop, redirect to home page
+      if (viewer?._id && viewer?.adminUIShops?.length > 0 && pathName.includes('/create-shop')) {
+        router.push('/')
+        console.log('before return viewer create-shop redirect to home page', viewer)
+        return
+      }
 
-    // useLayoutEffect(() => {
-    //   console.log('loading viewer is ', loading)
+      // if the user is logged in and has not created a shop and page is not create-shop, redirect to create-shop page
+      if (viewer?._id && viewer?.adminUIShops?.length === 0 && !pathName.includes('/create-shop')) {
+        router.push('/create-shop')
+        console.log('before return viewer no create-shop redirect to create-shop page', viewer)
+        return
+      }
 
-    //   validateViewer()
-    //   // if (loading) {
-    //   //   return // No need to perform further checks while loading
-    //   // }
+      // If the user is logged in and validStripeConnect is false and have created a shop, redirect to profile page
+      if (
+        viewer?._id &&
+        !viewer?.validStripeConnect &&
+        !pathName.includes('/profile') &&
+        viewer?.adminUIShops?.length > 0
+      ) {
+        router.push('/profile')
+        console.log('before return validStripeConnect redirect to profile page', viewer)
+        return
+      }
+    }
 
-    //   // // If there is no viewer, redirect to login page
-    //   // if (!viewer?._id && pathName !== '/signin' && pathName !== '/signup') {
-    //   //   router.push('/signin')
-    //   //   return
-    //   // }
+    useLayoutEffect(() => {
+      console.log('loading viewer is ', loading)
 
-    //   // // If the route is protected and the user is not logged in, redirect to login page
-    //   // if (
-    //   //   !viewer?._id &&
-    //   //   protectedRoutes.includes(pathName) &&
-    //   //   pathName !== '/signin' &&
-    //   //   pathName !== '/signup'
-    //   // ) {
-    //   //   router.push('/signin')
-    //   //   return
-    //   // }
-
-    //   // // Consolidated condition to handle redirects
-    //   // if (
-    //   //   viewer?._id &&
-    //   //   (pathName === '/signin' || pathName === '/signup') &&
-    //   //   viewer?.adminUIShops?.length > 0
-    //   // ) {
-    //   //   router.push('/')
-    //   //   return
-    //   // }
-
-    //   // // If the user is logged in and validStripeConnect is false, redirect to profile page
-    //   // if (
-    //   //   viewer?._id &&
-    //   //   !viewer?.validStripeConnect &&
-    //   //   pathName !== '/profile'
-    //   //   // viewer?.adminUIShops?.length > 0
-    //   // ) {
-    //   //   router.push('/profile')
-    //   //   return
-    //   // }
-    // }, [loading, viewer?._id, pathName])
+      validateViewer()
+    }, [loading, viewer?._id, pathName])
 
     // if (
     //   (!viewer?._id && pathName === '/signin' && !loading) ||
@@ -125,20 +94,24 @@ const withAuth = (WrappedComponent) => {
     //   )
     // }
 
-    // if (
-    //   loading ||
-    //   (!viewer?._id && protectedRoutes.includes(pathName)) ||
-    //   (viewer?._id && viewer?.adminUIShops?.length > 0 && pathName.includes('/create-shop')) ||
-    //   (viewer?._id && (pathName === '/signin' || pathName === '/signup')) ||
-    //   (viewer?._id && !viewer?.validStripeConnect && !pathName.includes('/profile'))
-    // ) {
-    //   console.log('loading is ', loading)
-    //   return (
-    //     <>
-    //       <Loader />
-    //     </>
-    //   )
-    // }
+    if (
+      loading ||
+      (!viewer?._id && isProtectedRoute) ||
+      // (!viewer?._id && (pathName === '/signin' || pathName === '/signup')) ||
+      (viewer?._id && (pathName === '/signin' || pathName === '/signup')) ||
+      (viewer?._id && viewer?.adminUIShops?.length > 0 && pathName.includes('/create-shop')) ||
+      (viewer?._id &&
+        !viewer?.validStripeConnect &&
+        !pathName.includes('/profile') &&
+        viewer?.adminUIShops?.length > 0)
+    ) {
+      console.log('loading is ', loading)
+      return (
+        <>
+          <Loader />
+        </>
+      )
+    }
 
     console.log('loading is wrapped ', props)
 
