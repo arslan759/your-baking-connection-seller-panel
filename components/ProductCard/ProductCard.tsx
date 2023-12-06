@@ -5,6 +5,8 @@ import GalleryProductCardMenu from '../ProductCardMenu/ProductCardMenu'
 import { PrimaryBtn } from '../Buttons'
 // import { useRouter } from 'next/navigation'
 import { usePathname, useRouter } from 'next/navigation'
+import Link from 'next/link'
+import MoreDetails from '../MoreDetails'
 
 const ProductCard = ({
   product,
@@ -14,7 +16,7 @@ const ProductCard = ({
   // title,
   // description,
   // category,
-  // slug,
+  slug,
   // oldPrice,
   // newPrice,
   width,
@@ -55,7 +57,7 @@ ProductCardProps) => {
     // console.log('slug', `/product/${slug}`)
 
     // router.push(`/product/${product?.slug}`)
-    router.push(`${pathname}/product/${product?.slug}`)
+    // router.push(`${pathname}/product/${product?.slug}`)
   }
 
   // console.log('isDetailsVisible', isDetailsVisible)
@@ -128,7 +130,9 @@ ProductCardProps) => {
               transform: 'translate(-50%, -50%)',
             }}
           >
-            <PrimaryBtn text='More details' handleClick={handleMoreDetailsClick} />
+            <Link href={`${pathname}/product/${slug}`}>
+              <PrimaryBtn text='More details' />
+            </Link>
           </div>
         )}
 
@@ -190,7 +194,17 @@ ProductCardProps) => {
             },
           }}
         >
-          {product?.description}
+          <Link href={`${pathname}/product/${slug}`}>
+            <MoreDetails
+              lineHeight='normal'
+              color='#090909'
+              fontFamily='Open Sans'
+              fontWeight={400}
+              fontSize={12}
+              text={product?.description}
+              words={100}
+            />
+          </Link>
         </Typography>
         <div className='flex gap-x-[14px] items-center'>
           {variants?.pricing[0]?.compareAtPrice?.amount ? (
@@ -204,7 +218,7 @@ ProductCardProps) => {
                 textDecoration: 'line-through',
               }}
             >
-              ${parseInt(variants?.pricing[0]?.compareAtPrice?.amount)}
+              ${parseFloat(variants?.pricing[0]?.compareAtPrice?.amount).toFixed(2)}
             </Typography>
           ) : null}
           <Typography
@@ -216,7 +230,7 @@ ProductCardProps) => {
               fontFamily: 'Open Sans',
             }}
           >
-            ${parseInt(variants?.pricing[0].price)}
+            ${parseFloat(variants?.pricing[0].price).toFixed(2)}
           </Typography>
         </div>
       </CardContent>

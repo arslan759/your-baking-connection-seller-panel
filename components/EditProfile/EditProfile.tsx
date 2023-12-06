@@ -1,4 +1,4 @@
-import { Modal, Typography } from '@mui/material'
+import { CircularProgress, Modal, Typography } from '@mui/material'
 
 import React, { useEffect, useRef, useState } from 'react'
 import InputField from '../InputField/InputField'
@@ -13,7 +13,7 @@ import useUpdateAccount from 'hooks/Profile/useUpdateAccount'
 
 const EditProfile = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [viewer, loadingViewer] = useViewer()
+  const [viewer, loadingViewer, refetchViewer] = useViewer()
 
   //@ts-ignore
   const [updateAccount, loadingUpdateAccount] = useUpdateAccount()
@@ -33,6 +33,10 @@ const EditProfile = () => {
 
   const [uploadFile, loadingUploadFile] = useUploadFile()
 
+  const populateCity = (state: string, city: string) => {
+    getCitiesApi(state, setCities, setIsLoadingCities, city, setCity)
+  }
+
   // set current viewer data in fields
   useEffect(() => {
     setFirstName(viewer?.firstName)
@@ -42,6 +46,9 @@ const EditProfile = () => {
     setPicture(viewer?.picture)
     setPhone(viewer?.phone)
     setEmail(viewer?.primaryEmailAddress)
+    setAddress(viewer?.currentAddress)
+
+    populateCity(viewer?.state, viewer?.city)
   }, [viewer])
 
   // Edit Button Modal State
@@ -59,7 +66,7 @@ const EditProfile = () => {
 
   // handleEditUserProfile function for edit button
   const handleEditUserProfile = () => {
-    console.log('edit button clicked')
+    // console.log('edit button clicked')
     setIsEdited(!isEdited)
   }
 
@@ -104,46 +111,56 @@ const EditProfile = () => {
     }
   }
 
+  const [loadingImage, setLoadingImage] = useState(false)
+
   // handlePictureChange function for picture upload
   const handlePictureChange = async (e: any) => {
-    const file = e.target.files[0]
+    try {
+      setLoadingImage(true)
 
-    console.log('files are ', e.target.files)
-    console.log('picture is ', file?.name)
+      const file = e.target.files[0]
 
-    if (file.size > 1024 * 1024 * 1) {
-      setPictureError('Picture size should be less than 1MB')
-      return
+      // console.log('files are ', e.target.files)
+      // console.log('picture is ', file?.name)
+
+      if (file.size > 1024 * 1024 * 1) {
+        setPictureError('Picture size should be less than 1MB')
+        return
+      }
+
+      if (file.type === 'application/pdf') {
+        setPictureError('Selected file must be an image')
+        return
+      }
+
+      //@ts-ignore
+      const uploadRes = await uploadFile(file, '/profile-images')
+
+      // console.log('uploadRes is ', uploadRes)
+
+      if (uploadRes.result.status) {
+        setPicture(uploadRes.result.data[0].availableSizes.thumbnail)
+      }
+
+      setPictureError('')
+      setLoadingImage(false)
+    } catch (error) {
+      console.log(error)
+      setLoadingImage(false)
     }
-
-    if (file.type === 'application/pdf') {
-      setPictureError('Selected file must be an image')
-      return
-    }
-
-    //@ts-ignore
-    const uploadRes = await uploadFile(file, '/profile-images')
-
-    console.log('uploadRes is ', uploadRes)
-
-    if (uploadRes.result.status) {
-      setPicture(uploadRes.result.data[0].availableSizes.thumbnail)
-    }
-
-    setPictureError('')
   }
 
   //reset states
-  const resetStates = () => {
-    // Resets the form fields
-    setFirstName('')
-    setLastName('')
-    setEmail('')
-    setPhone('')
-    setState('')
-    setCity('')
-    setAddress('')
-  }
+  // const resetStates = () => {
+  //   // Resets the form fields
+  //   setFirstName('')
+  //   setLastName('')
+  //   setEmail('')
+  //   setPhone('')
+  //   setState('')
+  //   setCity('')
+  //   setAddress('')
+  // }
 
   // Resets the error states
   const resetErrorStates = () => {
@@ -164,7 +181,7 @@ const EditProfile = () => {
 
     if (email) {
       const isEmailValid = validateEmail(email)
-      console.log('if email check')
+      // console.log('if email check')
       if (!isEmailValid) {
         setEmailError('Email is not valid')
         return
@@ -178,27 +195,29 @@ const EditProfile = () => {
         picture,
         state,
         city,
+        currentAddress: address,
       },
     })
 
-    console.log('updated account is ', account)
+    // console.log('updated account is ', account)
 
     if (account?.data?.updateAccount?.account?._id) {
-      console.log('updated successfully')
+      // console.log('updated successfully')
       setIsEdited(false)
-      resetStates()
+      refetchViewer()
+      // resetStates()
     }
 
     // Logs the form data
-    console.log('form submitted')
-    console.log('firstname is ', firstName)
-    console.log('lastname is ', lastName)
-    console.log('email is ', email)
-    console.log('phone is ', phone)
-    console.log('state is ', state)
-    console.log('city is ', city)
-    console.log('address is ', address)
-    console.log('picture')
+    // console.log('form submitted')
+    // console.log('firstname is ', firstName)
+    // console.log('lastname is ', lastName)
+    // console.log('email is ', email)
+    // console.log('phone is ', phone)
+    // console.log('state is ', state)
+    // console.log('city is ', city)
+    // console.log('address is ', address)
+    // console.log('picture')
   }
   useEffect(() => {
     getStatesApi(setStates, setIsLoadingStates)
@@ -256,11 +275,25 @@ const EditProfile = () => {
           />
 
           <div className='w-full flex justify-center mt-[0px] md:mt-[-100px] rounded-full overflow-hidden relative'>
-            <img
-              src={picture ? picture : ''}
-              alt=''
-              className='w-[129px] h-[129px] rounded-full object-cover'
-            />
+            {loadingImage ? (
+              <div
+                className={`w-[129px] h-[129px] rounded-full bg-[#fff] flex items-center justify-center`}
+              >
+                <CircularProgress
+                  sx={{
+                    color: '#7DDEC1',
+                    height: '20px !important',
+                    width: '20px !important',
+                  }}
+                />
+              </div>
+            ) : (
+              <img
+                src={picture ? picture : '/Images/DefaultAvatar.jpg'}
+                alt=''
+                className='w-[129px] h-[129px] rounded-full object-cover'
+              />
+            )}
           </div>
           <div className='w-full flex gap-[12px] justify-center items-center mt-[8px]'>
             <Typography

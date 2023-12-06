@@ -1,4 +1,4 @@
-import { Chip, Radio, Typography } from '@mui/material'
+import { Chip, CircularProgress, Radio, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import InputField from '../InputField/InputField'
 import DropdownField from '../DropdownField/DropdownField'
@@ -11,13 +11,17 @@ import useCreateShop from 'hooks/shop/useCreateShop'
 import useUpdateShop from 'hooks/shop/useUpdateShop'
 import { withApollo } from 'lib/apollo/withApollo'
 import useStores from 'hooks/useStores'
-import { AddShopDetailsFormProps } from 'types'
+// import { AddShopDetailsFormProps } from 'types'
 import useFileUpload from 'hooks/fileUpload/useFileUpload'
 import CustomAutocomplete from '../CustomAutocomplete'
 import { getCitiesApi, getStatesApi } from 'helpers/apis'
-
+import useEnablePaymentMethodForShop from 'hooks/shop/useEnablePaymentMethodForShop'
 import useCreateTaxRate from 'hooks/shop/useCreateTaxRate'
-const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
+import useCreateFlatRateFulfillmentMethod from 'hooks/shop/useCreateFlatRateFulfillmentMethod'
+import useCreateConnectedAccount from 'hooks/shop/useCreateConnectedAccount'
+import useViewer from 'hooks/viewer/useViewer'
+
+const AddShopDetailsForm = () => {
   // auth store
   //@ts-ignore
   const { authStore } = useStores()
@@ -32,7 +36,7 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   const [featuredImage, setFeaturedImage] = useState<File | null>(null)
 
   useEffect(() => {
-    console.log('logo is ', logo)
+    // console.log('logo is ', logo)
   }, [logo])
 
   const [states, setStates] = useState<any>([])
@@ -59,10 +63,18 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
   //phone number state for shop creation/updation
   const [phone, setPhone] = useState<string>()
 
+  const populateCity = (state: string, city: string) => {
+    getCitiesApi(state, setCities, setIsLoadingCities, city, setCity)
+  }
+
   useEffect(() => {
+    console.log('account is ', account)
+
     setPhone(account?.phone)
     setState(account?.state)
     setCity(account?.city)
+
+    populateCity(account?.state, account?.city)
   }, [account])
 
   // const [cities, setCities] = useState([])
@@ -123,57 +135,144 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
 
   const [error, setError] = useState<string>()
 
+  const [viewer, loadingViewer, refetchViewer] = useViewer()
+
   const [createShop, loadingCreateShop] = useCreateShop()
   const [updateShop, loadingUpdateShop] = useUpdateShop()
 
   const [createTax, loadingCreateTaxRate] = useCreateTaxRate()
+  const [enablePayment, loadingEnablePayment] = useEnablePaymentMethodForShop()
 
-  const handleUpdateShop = async (shopId: string) => {
-    const shopUpdated = await updateShop({
-      variables: {
-        input: {
-          shopId,
-          shopLogoUrls: {
-            primaryShopLogoUrl: logoImageUrl,
-          },
-          featuredShopImages: {
-            URLs: {
-              large: featuredImageUrl?.large,
-              medium: featuredImageUrl?.medium,
-              original: featuredImageUrl?.large,
-              small: featuredImageUrl?.small,
-              thumbnail: featuredImageUrl?.thumbnail,
-            },
-            priority: 1,
-          },
-          isPickup: pickupService,
-          categories: whatWeOffer?.map((item) => item.title),
-          addressBook: {
-            fullName: account?.firstName ? account?.firstName : 'N/A',
-            phone: phone ? phone : 'N/A',
-            postal: '12345',
-            address1: 'sample address',
-            city,
-            region: state,
-            country: 'USA',
-            isCommercial: false,
-          },
+  const [createFlatRate, loadingCreateFlatRate] = useCreateFlatRateFulfillmentMethod()
+  const [createConnectAccount, loadingCreateConnectAccount] = useCreateConnectedAccount()
+
+  console.log('viewer is ', viewer)
+
+  const handleCreateConnectAccount = async (email: string) => {
+    try {
+      const input = {
+        businessType: 'individual',
+        country: 'USA',
+        email: email,
+        type: 'express',
+      }
+
+      // @ts-ignore
+      const connectAccount = await createConnectAccount({
+        variables: {
+          input,
         },
+      })
+
+      console.log('connectAccount', connectAccount)
+
+      if (connectAccount?.data?.createConnectedAccount) {
+        const url = connectAccount.data.createConnectedAccount
+        window.location.href = url
+      }
+    } catch (err: any) {
+      console.log('err', err)
+      setError(err.message)
+    }
+  }
+
+  const handleCreateFlatRate = async (shopId: string) => {
+    const input = {
+      method: {
+        cost: 0,
+        fulfillmentTypes: 'shipping',
+        handling: 0,
+        isEnabled: true,
+        label: 'test',
+        name: 'shipping-test',
+        rate: 0,
+        group: 'free-shipping',
       },
-    })
-    console.log('updated shop is ', shopUpdated)
-    const shopId2 = shopUpdated?.data?.updateShop?.shop?._id
-    if (shopId2) {
-      localStorage.setItem('shopId', shopId2)
-      handleCreateTaxRate(shopId2)
+      shopId,
     }
 
     try {
+      // @ts-ignore
+      const flatRate = await createFlatRate({
+        variables: {
+          input,
+        },
+      })
+      console.log('flat rate is ', flatRate)
+
+      if (flatRate?.data?.createFlatRateFulfillmentMethod?.method?._id) {
+        // openSuccess()
+        handleCreateConnectAccount(viewer?.primaryEmailAddress)
+      }
+    } catch (err: any) {
+      console.log('err', err)
+      setError(err.message)
+    }
+  }
+
+  const handleUpdateShop = async (shopId: string) => {
+    try {
+      const shopUpdated = await updateShop({
+        variables: {
+          input: {
+            shopId,
+            shopLogoUrls: {
+              primaryShopLogoUrl: logoImageUrl,
+            },
+            featuredShopImages: {
+              URLs: {
+                thumbnail: featuredImageUrl?.thumbnail,
+                medium: featuredImageUrl?.medium,
+                large: featuredImageUrl?.large,
+                small: featuredImageUrl?.small,
+                original: featuredImageUrl?.original,
+              },
+              priority: 1,
+            },
+            isPickup: pickupService,
+            categories: whatWeOffer?.map((item) => item.title),
+            addressBook: {
+              fullName: account?.firstName ? account?.firstName : 'N/A',
+              phone: phone ? phone : 'N/A',
+              postal: '12345',
+              address1: 'sample address',
+              city,
+              region: state,
+              country: 'USA',
+              isCommercial: false,
+            },
+          },
+        },
+      })
+      // console.log('updated shop is ', shopUpdated)
+      const shopId2 = shopUpdated?.data?.updateShop?.shop?._id
+      if (shopId2) {
+        localStorage.setItem('shopId', shopId2)
+        handleCreateTaxRate(shopId2)
+      }
     } catch (err: any) {
       setError(err.message)
     }
   }
 
+  const handleEnablePayment = async (shopId: string) => {
+    try {
+      const enabledPayment = await enablePayment({
+        variables: {
+          shopId,
+          paymentMethodName: 'iou_example',
+          isEnabled: true,
+        },
+      })
+
+      console.log('enablePayment', enabledPayment)
+      if (enabledPayment) {
+        handleCreateFlatRate(shopId)
+      }
+    } catch (err: any) {
+      setError(err.message)
+    }
+  }
   const handleCreateTaxRate = async (shopId: string) => {
     try {
       const taxRate = await createTax({
@@ -187,9 +286,10 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       console.log('tax rate is ', taxRate)
 
       if (taxRate?.data?.createTaxRate?.taxRate?._id) {
-        openSuccess()
+        handleEnablePayment(shopId)
       }
     } catch (err: any) {
+      setError(err.message)
       console.log('err', err)
     }
   }
@@ -206,15 +306,20 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       if (shopId) {
         handleUpdateShop(shopId)
       }
-      console.log('shop created is ', shop)
+      // console.log('shop created is ', shop)
     } catch (err: any) {
-      setError(err.message)
+      console.log('err', err?.message)
+      if (err.message.includes('duplicate key error')) {
+        setError('Shop name already exists')
+      } else setError(err.message)
     }
   }
 
   const [uploadFile, loadingUploadFile] = useFileUpload()
   const [logoImageUrl, setLogoImageUrl] = useState<string>()
+  const [isLoadingLogo, setIsLoadingLogo] = useState(false)
   const [featuredImageUrl, setFeaturedImageUrl] = useState<any>()
+  const [isLoadingFeaturedImage, setIsLoadingFeaturedImage] = useState(false)
 
   //handle logo image
   async function handleUploadLogo(e: any) {
@@ -224,50 +329,73 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       return
     }
 
-    if (logoImage.type !== 'image/jpeg' && logoImage.type !== 'image/png') {
+    if (logoImage?.type !== 'image/jpeg' && logoImage?.type !== 'image/png') {
       setLogoError('Selected file must be an image')
       return
     }
 
+    setIsLoadingLogo(true)
     //@ts-ignore
     const uploadRes = await uploadFile(logoImage, '/profile-images')
 
-    if (uploadRes.result.status) {
-      setLogoImageUrl(uploadRes.result.data[0].url[0])
+    if (uploadRes?.result?.status) {
+      const availableSizes = uploadRes?.result?.data[0]?.availableSizes
+      availableSizes['original'] = availableSizes?.large
+      availableSizes['small'] = availableSizes?.thumbnail
+
+      // console.log('available sizes are ', availableSizes)
+
+      setLogoImageUrl(availableSizes?.medium)
+      setIsLoadingLogo(false)
+
+      // setLogoImageUrl(uploadRes.result.data[0].url[0])
     }
+
+    setIsLoadingLogo(false)
   }
 
   async function handleUploadFeatureImage(e: any) {
     const featuredImage = e.target.files[0]
-    if (featuredImage.size > 1024 * 1024 * 1) {
+    if (featuredImage?.size > 1024 * 1024 * 1) {
       setFeaturedImageError('Picture size should be less than 1MB')
       return
     }
 
-    if (featuredImage.type !== 'image/jpeg' && featuredImage.type !== 'image/png') {
+    if (featuredImage?.type !== 'image/jpeg' && featuredImage?.type !== 'image/png') {
       setFeaturedImageError('Selected file must be an image')
       return
     }
 
+    setIsLoadingFeaturedImage(true)
     //@ts-ignore
     const uploadRes = await uploadFile(featuredImage, '/profile-images')
 
-    console.log(
-      'uploadRes.result.data[0].url.availableSizes',
-      uploadRes.result.data[0].availableSizes,
-    )
+    // console.log(
+    //   'uploadRes.result.data[0].url.availableSizes',
+    //   uploadRes?.result?.data[0]?.availableSizes,
+    // )
 
-    if (uploadRes.result.status) {
-      setFeaturedImageUrl(uploadRes.result.data[0].availableSizes)
+    if (uploadRes?.result?.status) {
+      const availableSizes = uploadRes?.result?.data[0]?.availableSizes
+      availableSizes['original'] = availableSizes?.large
+      availableSizes['small'] = availableSizes?.thumbnail
+
+      // console.log('available sizes are ', availableSizes)
+
+      setIsLoadingFeaturedImage(false)
+      setFeaturedImageUrl(availableSizes)
+      // setFeaturedImageUrl(uploadRes.result.data[0].availableSizes)
     }
+    setIsLoadingFeaturedImage(false)
   }
 
   // handleSubmit function for form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setError('')
 
     // Checks if all fields are filled
-    if (!shopName || !state || !city) {
+    if (!shopName || !state || !city || !shopTax) {
       if (!shopName) {
         setShopNameError('Shop name is required')
       }
@@ -277,6 +405,9 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
       if (!city) {
         setCityError('City is required')
       }
+      if (!shopTax) {
+        setShopTaxError('Shop tax is required')
+      }
       // Stops the execution of the function
       return
     }
@@ -284,15 +415,15 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
     await handleCreateShop()
 
     // Logs the form data
-    console.log('form submitted')
-    console.log('shop name is ', shopName)
-    console.log('shop description is ', shopDescription)
-    console.log('logo is ', logo)
-    console.log('featured image is ', featuredImage)
-    console.log('state is ', state)
-    console.log('city is ', city)
-    console.log('what we offer is ', whatWeOffer)
-    console.log('pickup service is ', pickupService)
+    // console.log('form submitted')
+    // console.log('shop name is ', shopName)
+    // console.log('shop description is ', shopDescription)
+    // console.log('logo is ', logo)
+    // console.log('featured image is ', featuredImage)
+    // console.log('state is ', state)
+    // console.log('city is ', city)
+    // console.log('what we offer is ', whatWeOffer)
+    // console.log('pickup service is ', pickupService)
 
     // // Resets the form fields
     // setShopName('')
@@ -366,13 +497,13 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
             </Typography>
           </div>
         </div>
-        <Image
+        {/* <Image
           src='/Images/x-square.svg'
           alt='x-square'
           width={24}
           height={24}
           className='absolute top-[20px] right-[20px] cursor-pointer'
-        />
+        /> */}
         {/* </div> */}
         <div className='mt-[24px] md:mt-[42px]'>
           <form onSubmit={handleSubmit}>
@@ -488,27 +619,69 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
                   label='upload logo'
                   inputColor='white'
                   name='logo'
-                  value={logo}
-                  errorText={logoError}
+                  // value={logo}
+                  // errorText={logoError}
                   required={false}
-                  onChange={handleChange}
-                />
-
-                <input type='file' onChange={handleUploadLogo} />
+                  // onChange={handleChange}
+                >
+                  <input
+                    className='w-full bg-transparent'
+                    type='file'
+                    onChange={handleUploadLogo}
+                  />
+                </UploadInputField>
               </div>
+              {isLoadingLogo ? (
+                <div>
+                  <CircularProgress
+                    sx={{
+                      color: '#7DDEC1',
+                      height: '20px !important',
+                      width: '20px !important',
+                    }}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <img style={{ height: '80px', borderRadius: '10px' }} src={logoImageUrl} />
+                </div>
+              )}
 
               <div className='w-full md:w-[45%]'>
                 <UploadInputField
                   label='featured image'
                   inputColor='white'
                   name='featuredImage'
-                  value={featuredImage}
-                  errorText={featuredImageError}
+                  // value={featuredImage}
+                  // errorText={featuredImageError}
                   required={false}
-                  onChange={handleChange}
-                />
-                <input type='file' onChange={handleUploadFeatureImage} />
+                  // onChange={handleChange}
+                >
+                  <input
+                    className='w-full bg-transparent'
+                    type='file'
+                    onChange={handleUploadFeatureImage}
+                  />
+                </UploadInputField>
               </div>
+              {isLoadingFeaturedImage ? (
+                <div>
+                  <CircularProgress
+                    sx={{
+                      color: '#7DDEC1',
+                      height: '20px !important',
+                      width: '20px !important',
+                    }}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <img
+                    style={{ height: '80px', borderRadius: '10px' }}
+                    src={featuredImageUrl?.thumbnail}
+                  />
+                </div>
+              )}
 
               <div className='w-full md:w-[45%]'>
                 <div className='flex flex-col capitalize'>
@@ -597,9 +770,9 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
                   setValue={setWhatWeOffer}
                 />
 
-                {whatWeOffer.length > 0 && (
+                {whatWeOffer?.length > 0 && (
                   <div className='flex flex-wrap gap-x-[24px] gap-y-[10px] mt-[15px]'>
-                    {whatWeOffer.map((chip, index) => (
+                    {whatWeOffer?.map((chip, index) => (
                       <Chip
                         key={index}
                         label={chip.title}
@@ -642,17 +815,28 @@ const AddShopDetailsForm = ({ openSuccess }: AddShopDetailsFormProps) => {
               </div>
             </div>
 
-            {loadingCreateShop || loadingUpdateShop ? (
+            {/* {loadingCreateShop || loadingUpdateShop ? (
               <div className='mt-[10px]'>
                 <p style={{ color: 'white' }}>Loading...</p>
               </div>
+            ) : null} */}
+            {error ? (
+              <Typography
+                sx={{
+                  marginTop: '10px',
+                  color: 'red',
+                  fontSize: '12px !important',
+                }}
+              >
+                {error}
+              </Typography>
             ) : null}
 
             <div className='mt-[24px] md:mt-[23px]'>
               <PrimaryBtn
                 text='Save and Continue'
                 type='submit'
-                disabled={loadingCreateShop || loadingUpdateShop}
+                loading={loadingCreateShop || loadingUpdateShop}
               />
             </div>
           </form>

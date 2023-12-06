@@ -8,12 +8,13 @@ import useUpdateProduct from 'hooks/product/useUpdateProduct'
 import useUpdateProductVariant from 'hooks/product/useUpdateProductVariant'
 import useUpdateSimpleInventory from 'hooks/product/useUpdateSimpleInventory'
 import useUpdatePublishProduct from 'hooks/product/usePublishProduct'
-
+import toast from 'react-hot-toast'
 import { withApollo } from 'lib/apollo/withApollo'
 import { ProductMediaInterface } from 'types'
 import { useRouter } from 'next/navigation'
 import CustomBuilder from '../CustomBuilder'
 import { validateDates } from 'helpers/validations'
+import EditBakerProductImages from '../EditBakerProductImages'
 
 interface EditBakerProductModalProps {
   product: any
@@ -110,17 +111,19 @@ const EditBakerProductModal = ({
 
   //test effect remove later
   useEffect(() => {
-    console.log('product in edit product modal is ', product)
-    console.log('variant in edit product modal is ', variants)
+    // console.log('product in edit product modal is ', product)
+    // console.log('variant in edit product modal is ', variants)
 
+    // console.log('media is', product?.media)
     const updatedMedia = filterMedia(product?.media)
     const updatedAttributes = filterAttributes(product?.productAttributes)
 
     setProductMedia(updatedMedia)
     setProductAttributes(updatedAttributes)
+    // setMediaPriority(updatedMedia.length + 1)
 
-    console.log('updated media is ', updatedMedia)
-    console.log('updated attributes is ', updatedAttributes)
+    // console.log('updated media is ', updatedMedia)
+    // console.log('updated attributes is ', updatedAttributes)
   }, [product, variants])
 
   // error states
@@ -167,6 +170,32 @@ const EditBakerProductModal = ({
     loadingPublishProduct,
   ])
 
+  function ensureUniquePriorities(arr: any) {
+    // Create an object to keep track of existing priorities
+    const priorityCounts = {} as any
+
+    // Loop through the array and check for duplicate priorities
+    for (const item of arr) {
+      if (item.priority in priorityCounts) {
+        // Priority is not unique, generate a random number from 1 to 10
+        let randomPriority
+        do {
+          randomPriority = Math.floor(Math.random() * 10) + 1
+        } while (randomPriority in priorityCounts)
+
+        // Update the item's priority and priorityCounts
+        item.priority = randomPriority
+        priorityCounts[randomPriority] = true
+      } else {
+        // Priority is unique, add it to priorityCounts
+        priorityCounts[item.priority] = true
+      }
+    }
+
+    setProductMedia(arr)
+    return arr
+  }
+
   //step 1: update Product
   const updateProduct = async () => {
     try {
@@ -188,7 +217,7 @@ const EditBakerProductModal = ({
       }
       const updatedProduct = await updateProductFunction({ variables })
 
-      console.log('updated product is', updatedProduct)
+      // console.log('updated product is', updatedProduct)
 
       //@ts-ignore
       const productId = updatedProduct?.data?.updateProduct?.product?._id
@@ -196,11 +225,12 @@ const EditBakerProductModal = ({
       const variantId = updatedProduct?.data?.updateProduct?.product?.variants[0]?._id
 
       if (productId) {
-        console.log('product Id', productId)
+        // console.log('product Id', productId)
         await updateProductVariant(productId, variantId)
       }
-    } catch (err) {
-      console.log('updateproduct error', err)
+    } catch (err: any) {
+      toast.error(`Error is ', ${err?.message}`)
+      // console.log('updateproduct error', err)
     }
   }
 
@@ -222,13 +252,14 @@ const EditBakerProductModal = ({
 
       const updatedProductVariant = await updateProductVariantFunction({ variables })
 
-      console.log('updated product variant is ', updatedProductVariant)
+      // console.log('updated product variant is ', updatedProductVariant)
 
       if (updatedProductVariant?.data?.updateProductVariant?.variant?._id) {
         await publishProduct([productId], variantId)
       }
-    } catch (err) {
-      console.log('error in updating variant', err)
+    } catch (err: any) {
+      toast.error(`Error is ', ${err?.message}`)
+      // console.log('error in updating variant', err)
     }
   }
 
@@ -246,9 +277,10 @@ const EditBakerProductModal = ({
       }
       const updatedInventory = await updateSimpleInventoryFunction({ variables })
 
-      console.log('updated Inventory is ', updatedInventory)
-    } catch (err) {
-      console.log('updating inventory error ', err)
+      // console.log('updated Inventory is ', updatedInventory)
+    } catch (err: any) {
+      toast.error(`Error is ', ${err?.message}`)
+      // console.log('updating inventory error ', err)
     }
   }
 
@@ -267,13 +299,15 @@ const EditBakerProductModal = ({
         },
       })
       if (publish.data.publishProductsToCatalog[0]._id) {
-        console.log('coming to this condition')
+        // console.log('coming to this condition')
         window.location.reload()
         onClose()
       }
-      console.log('publish product success', publish)
-    } catch (err) {
-      console.log('error publishing product', err)
+      toast.success('Updated successfully')
+      // console.log('publish product success', publish)
+    } catch (err: any) {
+      toast.error(`Error is ', ${err?.message}`)
+      // console.log('error publishing product', err)
     }
   }
 
@@ -330,25 +364,32 @@ const EditBakerProductModal = ({
 
   //update product images
 
-  const handleUpdateProductMedia = (image: string) => {
-    console.log('image in parent is ', image)
+  const handleUpdateProductMedia = (image: any) => {
+    // console.log('image in parent is ', image)
 
     setMediaPriority((prev) => prev + 1)
 
-    setProductMedia([
+    // console.log('before updated media ', [
+    //   ...productMedia,
+    //   {
+    //     productId: '',
+    //     URLs: image,
+    //     priority: mediaPriority,
+    //   },
+    // ])
+
+    const updatedProductMedia = ensureUniquePriorities([
       ...productMedia,
       {
         productId: '',
-        URLs: {
-          large: image,
-          medium: image,
-          original: image,
-          small: image,
-          thumbnail: image,
-        },
+        URLs: image,
         priority: mediaPriority,
       },
     ])
+
+    // console.log('updated product media is ', updatedProductMedia)
+
+    setProductMedia(updatedProductMedia)
   }
 
   const validateProductAttributes = () => {
@@ -435,6 +476,10 @@ const EditBakerProductModal = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    // console.log('product media is ', productMedia)
+
+    // return
+
     if (
       !productTitle ||
       !productDescription ||
@@ -456,18 +501,14 @@ const EditBakerProductModal = ({
       setProductListingError,
     )
 
-    console.log('listing start date is ', listingStartDate)
-    console.log('listing end date is ', listingEndDate)
-    console.log('fullfillment date is ', fulfillmentDate)
+    // console.log('listing start date is ', listingStartDate)
+    // console.log('listing end date is ', listingEndDate)
+    // console.log('fullfillment date is ', fulfillmentDate)
 
     // return
 
     const isValidFulfillmentDate = validateDates(fulfillmentDate, '', setFulfillmentDateError)
     const isValidAttributes = validateProductAttributes()
-
-    console.log('is valid listing dates ', isValidListingDates)
-    console.log('is valid fulfillment date ', isValidFulfillmentDate)
-    console.log('is valid attributes ', isValidAttributes)
 
     if (!isValidListingDates || !isValidFulfillmentDate || !isValidAttributes) {
       return
@@ -485,12 +526,12 @@ const EditBakerProductModal = ({
     // console.log('listing end date is ', listingEndDate)
     // console.log('fulfillment date is ', fulfillmentDate)
 
-    console.log('add product form submitted')
+    // console.log('add product form submitted')
   }
 
   useEffect(() => {
-    console.log('product attributes are ', productAttributes)
-    console.log('show check', showPriceFields)
+    // console.log('product attributes are ', productAttributes)
+    // console.log('show check', showPriceFields)
   }, [productAttributes, showPriceFields])
   return (
     <Modal
@@ -590,11 +631,17 @@ const EditBakerProductModal = ({
               </div>
 
               <div className='w-full'>
-                <AddBakerProductImages
+                {/* <AddBakerProductImages
+                  productMedia={productMedia}
+                  handleUpdateProductMedia={handleUpdateProductMedia}
+                  setProductMedia={setProductMedia}
+                /> */}
+                <EditBakerProductImages
                   productMedia={productMedia}
                   handleUpdateProductMedia={handleUpdateProductMedia}
                   setProductMedia={setProductMedia}
                 />
+
                 {productImagesError && (
                   <span className='text-red-500 text-xs'>{productImagesError}</span>
                 )}

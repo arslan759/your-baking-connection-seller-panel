@@ -7,26 +7,33 @@ import styles from './styles.module.css'
 import ToggleNavBar from '../ToggleNavBar/ToggleNavBar'
 import { NavBarProps } from 'types'
 import AccountDropdown from '../AccountDropdown/AccountDropdown'
+import useViewer from 'hooks/viewer/useViewer'
 import { withApollo } from 'lib/apollo/withApollo'
-import { useSession } from 'next-auth/react'
+// import { useSession } from 'next-auth/react'
 
 const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarProps) => {
-  const { data: session, status } = useSession()
-  const token = localStorage.getItem('accounts:accessToken')
+  // const { data: session, status } = useSession()
+  // const token = localStorage.getItem('accounts:accessToken')
+  // const shopId = localStorage.getItem('shopId')
+
+  // console.log('session', session)
+
+  // if (status === 'authenticated' && token !== session?.user?.loginResult?.tokens?.accessToken) {
+  //   localStorage.setItem('accounts:accessToken', session?.user?.loginResult?.tokens?.accessToken)
+  //   localStorage.setItem('accounts:refreshToken', session?.user?.loginResult?.tokens?.refreshToken)
+  // }
+
+  // if (status === 'authenticated' && shopId !== session?.user?.shopId) {
+  //   localStorage.setItem('shopId', session?.user?.shopId)
+  // }
+
   const shopId = localStorage.getItem('shopId')
 
-  console.log('session', session)
+  const [viewer, loading, refetch] = useViewer()
 
-  if (status === 'authenticated' && token !== session?.user?.loginResult?.tokens?.accessToken) {
-    localStorage.setItem('accounts:accessToken', session?.user?.loginResult?.tokens?.accessToken)
-    localStorage.setItem('accounts:refreshToken', session?.user?.loginResult?.tokens?.refreshToken)
-  }
+  console.log('viewer', viewer)
 
-  if (status === 'authenticated' && shopId !== session?.user?.shopId) {
-    localStorage.setItem('shopId', session?.user?.shopId)
-  }
-
-  // const shopId = localStorage.getItem('shopId')
+  useEffect(() => {}, [viewer, loading])
 
   const pathName = usePathname()
 
@@ -41,10 +48,10 @@ const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarPro
   })
   const MenuItems = [
     { name: 'HOME', path: '/' },
-    { name: 'ABOUT BAKERS', path: '/about-bakers' },
+    { name: 'ABOUT BAKERS', path: `${process.env.NEXT_PUBLIC_BLOG_URL}/about-the-bakers/` },
     { name: 'MEMBERSHIP', path: '/membership' },
     // { name: 'GALLERY', path: '/gallery' },
-    { name: 'BAKER', path: `/baker/${session?.user?.shopId}` },
+    { name: 'BAKER', path: `/baker/${shopId}` },
   ]
 
   return (
@@ -103,7 +110,7 @@ const Navbar = ({ itemsColor = 'black', activeItemColor = '#7DDEC1' }: NavBarPro
             //   <p style={{ color: 'black' }}>loading...</p>
             // ) : (
             <Grid>
-              {status === 'unauthenticated' ? (
+              {!viewer?._id ? (
                 <Box
                   sx={{
                     display: 'flex',

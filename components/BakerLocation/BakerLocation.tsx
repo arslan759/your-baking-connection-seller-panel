@@ -24,10 +24,10 @@ const BakerLocation = () => {
             },
           }}
         >
-          {`OUR LOCATION`}
+          {`BAKERY INFO`}
         </Typography>
         <div className='mt-[28px] lg:mt-[24px] flex flex-col gap-y-[12px] w-[82%] lg:w-full'>
-          <div className='flex gap-x-[12px] items-center'>
+          {/* <div className='flex gap-x-[12px] items-center'>
             <img src='/Images/location-icon.svg' alt='location' className='h-[24px] w-[24px]' />
             <Typography
               sx={{
@@ -44,7 +44,7 @@ const BakerLocation = () => {
             >
               {` 8141 Lakewood Main St, Bradenton, FL 34202`}
             </Typography>
-          </div>
+          </div> */}
           <div className='flex gap-x-[12px] items-center'>
             <img src='/Images/truck.svg' alt='location' className='h-[24px] w-[24px]' />
             <Typography

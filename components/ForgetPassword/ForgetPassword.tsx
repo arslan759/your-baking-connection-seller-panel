@@ -5,7 +5,7 @@ import ForgotPasswordForm from '../ForgotPasswordForm/ForgotPasswordForm'
 import OTPForm from '../OTPForm/OTPForm'
 
 export default function ForgetPassword() {
-  const [isOtp, setIsOtp] = useState(true)
+  const [isOtp, setIsOtp] = useState(false)
 
   const [email, setEmail] = useState<string>('')
 

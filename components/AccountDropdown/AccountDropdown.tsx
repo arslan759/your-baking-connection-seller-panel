@@ -11,7 +11,8 @@ import Settings from '@mui/icons-material/Settings'
 import Logout from '@mui/icons-material/Logout'
 import { useRouter } from 'next/navigation'
 import { Typography } from '@mui/material'
-import { signOut } from 'next-auth/react'
+// import { signOut } from 'next-auth/react'
+import Link from 'next/link'
 
 const AccountDropdown = () => {
   const router = useRouter()
@@ -27,8 +28,8 @@ const AccountDropdown = () => {
 
   const handleLogOut = async () => {
     localStorage.clear()
-    await signOut()
-    // router.push('/signin')
+    // await signOut()
+    router.push('/signin')
   }
 
   // console.log('account in dropdown is ', account?.firstName)
@@ -85,51 +86,55 @@ const AccountDropdown = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-          onClick={() => router.push(`/profile`)}
-        >
-          <Avatar />
-          {/* {account?.firstName?.charAt(0)} */}
-          {/* </Avatar> */}
-          <Typography
+        <Link href={'/profile'}>
+          <MenuItem
             sx={{
-              fontSize: '16px !important',
-              fontFamily: 'Open Sans',
-              lineHeight: 'normal',
-              fontWeight: '400 !important',
-              color: '#000',
-              '@media (max-width: 767px)': {
-                fontSize: '14px !important',
-              },
+              display: 'flex',
+              alignItems: 'center',
             }}
+            // onClick={() => router.push(`/profile`)}
           >
-            Profile
-          </Typography>
-        </MenuItem>
+            <Avatar />
+            {/* {account?.firstName?.charAt(0)} */}
+            {/* </Avatar> */}
+            <Typography
+              sx={{
+                fontSize: '16px !important',
+                fontFamily: 'Open Sans',
+                lineHeight: 'normal',
+                fontWeight: '400 !important',
+                color: '#000',
+                '@media (max-width: 767px)': {
+                  fontSize: '14px !important',
+                },
+              }}
+            >
+              Profile
+            </Typography>
+          </MenuItem>
+        </Link>
         <Divider />
-        <MenuItem onClick={() => router.push('/profile/settings')}>
-          <ListItemIcon>
-            <Settings fontSize='small' />
-          </ListItemIcon>
-          <Typography
-            sx={{
-              fontSize: '16px !important',
-              fontFamily: 'Open Sans',
-              lineHeight: 'normal',
-              fontWeight: '400 !important',
-              color: '#000',
-              '@media (max-width: 767px)': {
-                fontSize: '14px !important',
-              },
-            }}
-          >
-            Settings
-          </Typography>
-        </MenuItem>
+        <Link href={'/profile/settings'}>
+          <MenuItem>
+            <ListItemIcon>
+              <Settings fontSize='small' />
+            </ListItemIcon>
+            <Typography
+              sx={{
+                fontSize: '16px !important',
+                fontFamily: 'Open Sans',
+                lineHeight: 'normal',
+                fontWeight: '400 !important',
+                color: '#000',
+                '@media (max-width: 767px)': {
+                  fontSize: '14px !important',
+                },
+              }}
+            >
+              Settings
+            </Typography>
+          </MenuItem>
+        </Link>
         <MenuItem onClick={handleLogOut}>
           <ListItemIcon>
             <Logout fontSize='small' />

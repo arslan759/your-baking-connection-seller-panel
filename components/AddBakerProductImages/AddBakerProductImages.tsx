@@ -1,9 +1,9 @@
-import React, { useState, useEffect, ChangeEvent, useRef } from 'react'
+import { useState, useEffect, ChangeEvent, useRef } from 'react'
 import { CircularProgress, Typography } from '@mui/material'
 import useFileUpload from 'hooks/fileUpload/useFileUpload'
 import DeleteIcon from '@mui/icons-material/Delete'
-
 import { AddBakerProductImagesProps } from 'types'
+import FileDropzone from '../FileDropzone'
 
 const AddBakerProductImages = ({
   productMedia,
@@ -32,9 +32,9 @@ const AddBakerProductImages = ({
       setImageUploadCounter(0)
     }
 
-    console.log('product media in addproductImages is ', productMedia)
-    console.log('image loading is ', imageLoading)
-    console.log('image upload counter is ', imageUploadCounter)
+    // console.log('product media in addproductImages is ', productMedia)
+    // console.log('image loading is ', imageLoading)
+    // console.log('image upload counter is ', imageUploadCounter)
   }, [productMedia])
 
   const [uploadFile, loadingUploadFile] = useFileUpload()
@@ -51,7 +51,7 @@ const AddBakerProductImages = ({
       }
     })
 
-    console.log('updated image loading is ', updatedLoading)
+    // console.log('updated image loading is ', updatedLoading)
 
     updatedImages.splice(index, 1)
     setImages(updatedImages)
@@ -60,11 +60,14 @@ const AddBakerProductImages = ({
     setImageUploadCounter(imageUploadCounter - 1)
   }
 
-  async function handleFileUpload(e: ChangeEvent<HTMLInputElement>) {
+  // async function handleFileUpload(e: ChangeEvent<HTMLInputElement>) {
+  async function handleFileUpload(file: any) {
     try {
       setUploadError('')
       //@ts-ignore
-      const image = e.target.files[0]
+      // const image = e.target.files[0]
+
+      const image = file[0]
 
       console.log('image is ', image)
 
@@ -98,10 +101,13 @@ const AddBakerProductImages = ({
 
       //@ts-ignore
       const uploadRes = await uploadFile(image, '/product-images')
+
+      console.log('upload res is ', uploadRes)
       if (uploadRes.result.status) {
-        console.log('setting product media', uploadRes.result.data[0].availableSizes)
+        // console.log('setting product media', uploadRes.result.data[0].availableSizes)
         const availableSizes = uploadRes.result.data[0].availableSizes
         availableSizes['original'] = availableSizes.large
+        availableSizes['small'] = availableSizes.thumbnail
 
         const { image, ...rest } = availableSizes
 
@@ -160,8 +166,15 @@ const AddBakerProductImages = ({
             </Typography>
           )}
         </div>
+
         <div className='w-full flex flex-col items-center justify-center md:w-[48%] h-[225px] p-[8px] border-dashed rounded-[4px] border-[0.5px] border-[#888]'>
-          <Typography
+          <FileDropzone
+            handleFileUpload={handleFileUpload}
+            handleImageUploadClick={handleImageUploadClick}
+            imageUploadRef={imageUploadRef}
+            uploadError={uploadError}
+          />
+          {/* <Typography
             sx={{
               fontSize: '14px !important',
               fontFamily: 'Open Sans',
@@ -197,7 +210,7 @@ const AddBakerProductImages = ({
             />
 
             <span style={{ color: 'red' }}>{uploadError}</span>
-          </Typography>
+          </Typography> */}
         </div>
         <div className='w-full md:w-[48%] flex flex-col gap-y-[12px]'>
           {images?.map((image: any, index: any) => (

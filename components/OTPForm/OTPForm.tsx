@@ -10,7 +10,7 @@ import { withApollo } from 'lib/apollo/withApollo'
 import { useRouter } from 'next/navigation'
 import useForgotPasswordUser from '../../hooks/Authentication/ForgotPassword/useForgotPasswordUser'
 
-const OTPForm = ({ closeOtp, type, email, tokens, setStep }: OTPFormProps) => {
+const OTPForm = ({ closeOtp, type, email, tokens }: OTPFormProps) => {
   const [otp, setOtp] = useState('')
 
   const [verifyOtp, loadingVerifyOtp] = useOtpUser()
@@ -24,7 +24,7 @@ const OTPForm = ({ closeOtp, type, email, tokens, setStep }: OTPFormProps) => {
     const userId = localStorage.getItem('userId')
     e.preventDefault()
 
-    console.log('testtesttest')
+    // console.log('testtesttest')
 
     // Checks if email is empty or Less than 4 characters
     if (!otp || otp.length !== 4) {
@@ -46,17 +46,19 @@ const OTPForm = ({ closeOtp, type, email, tokens, setStep }: OTPFormProps) => {
         if (res?.data?.verifyOTPSignUp) {
           const { accessToken, refreshToken } = tokens
           console.log('true step')
-          setStep(2)
+
+          console.log('tokens are', tokens)
           localStorage.setItem('accounts:accessToken', accessToken)
           localStorage.setItem('accounts:refreshToken', refreshToken)
+          // setStep ? setStep(2) : router.push('/create-shop')
 
-          // router.replace('/signin')
+          router.push('/create-shop')
         }
       } catch (err) {
         return err
       }
     } else if (type === 'forgotPassword') {
-      console.log('firing otp function', email)
+      // console.log('firing otp function', email)
 
       const res = await verifyOtp({
         variables: {
@@ -172,13 +174,13 @@ const OTPForm = ({ closeOtp, type, email, tokens, setStep }: OTPFormProps) => {
               />
             </div>
 
-            {loadingVerifyOtp && (
+            {/* {loadingVerifyOtp && (
               <div className={'mt-[10px]'}>
                 <p style={{ color: 'white' }}>Loading...</p>
               </div>
-            )}
+            )} */}
             <div className='mt-[36px] md:mt-[40px]'>
-              <PrimaryBtn text='Enter verification code' type='submit' />
+              <PrimaryBtn text='Enter verification code' type='submit' loading={loadingVerifyOtp} />
             </div>
 
             <div className='w-full flex justify-center mt-[12px] md:mt-[24px]'>

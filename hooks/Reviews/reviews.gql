@@ -1,0 +1,34 @@
+query reviews(
+  $shopId: ID!
+  $productId: ID
+  $first: ConnectionLimitInt
+  $offset: Int
+  $sortBy: CatalogItemSortByField
+  $sortOrder: SortOrder
+) {
+  reviews(
+    first: $first
+    offset: $offset
+    sortBy: $sortBy
+    sortOrder: $sortOrder
+    shopId: $shopId
+    productId: $productId
+  ) {
+    totalCount
+    nodes {
+      _id
+      shopId
+      reviewByInfo {
+        _id
+        firstName
+        lastName
+        picture
+      }
+      createdAt
+      updatedAt
+      rating
+      title
+      description
+    }
+  }
+}

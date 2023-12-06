@@ -33,18 +33,6 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [checked, setChecked] = useState(false)
-
-  // useEffect(() => {
-  //   getStatesApi(setStates)
-  // }, [])
-
-  // useEffect(() => {
-  //   setCities([])
-  //   setCity('')
-  //   getCitiesApi(state, setCities)
-  // }, [state])
-
-  // Error states
   const [firstNameError, setFirstNameError] = useState('')
   const [lastNameError, setLastNameError] = useState('')
   const [emailError, setEmailError] = useState('')
@@ -54,6 +42,7 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
   const [passwordError, setPasswordError] = useState('')
   const [confirmPasswordError, setConfirmPasswordError] = useState('')
   const [checkedError, setCheckedError] = useState('')
+  const [finalError, setFinalError] = useState<any>('')
 
   // handleChange function for input fields
   const handleChange = (name: string, value: string) => {
@@ -192,6 +181,7 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
     console.log('password is ', password)
     console.log('confirm password is ', confirmPassword)
     console.log('checked is ', checked)
+    console.log('finalError is ', finalError)
 
     // Resets the form fields
     // setFirstName('')
@@ -234,7 +224,7 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
       const accessToken = result?.data?.bakerRegistration?.loginResult?.tokens?.accessToken
       const refreshToken = result?.data?.bakerRegistration?.loginResult?.tokens?.refreshToken
 
-      console.log('access token and refresh token in signup', accessToken, refreshToken)
+      // console.log('access token and refresh token in signup', accessToken, refreshToken)
 
       if (userId && accessToken) {
         localStorage.setItem('userId', userId)
@@ -242,8 +232,10 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
         openOtp()
         setTokens(accessToken, refreshToken)
       }
-    } catch (err) {
-      console.log(err)
+    } catch (err: any) {
+      setFinalError(err?.message)
+      // console.log('clicked yes')
+      // console.log(err)
     }
   }
 
@@ -307,13 +299,13 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
               Sign up
             </Typography>
           </div>
-          <Image
+          {/* <Image
             src='/Images/x-square.svg'
             alt='x-square'
             width={24}
             height={24}
             className='absolute top-[20px] right-[20px] cursor-pointer'
-          />
+          /> */}
         </div>
         <div className='mt-[24px] md:mt-[42px]'>
           <form onSubmit={handleSubmit}>
@@ -469,13 +461,15 @@ const SignupForm = ({ openOtp, setTokens }: SignUpFormProps) => {
               </FormControl>
             </div>
 
-            {loadingSignUp && (
+            {/* {loadingSignUp && (
               <div className='mt-[10px]'>
                 <p style={{ color: 'white' }}>Loading...</p>
               </div>
-            )}
+            )} */}
+
             <div className='mt-[24px] md:mt-[23px]'>
-              <PrimaryBtn text='Register' type='submit' />
+              <PrimaryBtn text='Register' type='submit' loading={loadingSignUp} />
+              <div className='text-sm text-[#d32f2f] w-full h-full '>{finalError}</div>
             </div>
 
             <div className='w-full flex justify-center mt-[8px] md:mt-[12px]'>

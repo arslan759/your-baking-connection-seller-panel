@@ -7,25 +7,41 @@ interface ShowMoreProps {
   textAlign?: string
   color?: string
   showMoreColor?: string
+  fontSize?: number
+  fontWeight?: number
+  fontFamily?: string
+  lineHeight?: string
+  textTransform?: string
 }
 
-const ShowMore = ({ text, words, textAlign, color, showMoreColor }: ShowMoreProps) => {
+const ShowMore = ({
+  text,
+  words,
+  textAlign,
+  color,
+  showMoreColor,
+  fontSize = 18,
+  fontWeight = 600,
+  fontFamily = 'Josefin Sans',
+  lineHeight = '28px !important',
+  textTransform = 'none',
+}: ShowMoreProps) => {
   const [showAll, setShowAll] = useState(false)
 
   const toggleShowAll = () => {
     setShowAll(!showAll)
   }
 
-  const displayText = showAll ? text : text.slice(0, words)
+  const displayText = showAll ? text : text?.slice(0, words)
   return (
     <>
       <Typography
         sx={{
-          fontSize: '18px !important',
-          fontWeight: '600 !important',
-          lineHeight: '28px',
-          fontFamily: 'Josefin Sans',
-          textTransform: 'none',
+          fontSize: `${fontSize}px !important`,
+          fontWeight: `${fontWeight} !important`,
+          lineHeight: lineHeight,
+          fontFamily: fontFamily,
+          textTransform: textTransform,
           textAlign: textAlign ? textAlign : 'justify',
           color: color ? color : '#888',
           fontFeatureSettings: "'clig' off, 'liga' off",
@@ -35,8 +51,8 @@ const ShowMore = ({ text, words, textAlign, color, showMoreColor }: ShowMoreProp
           },
         }}
       >
-        {displayText} {!showAll && text.length > words && '...'} {` `}
-        {!showAll && text.length > words && (
+        {displayText} {!showAll && text?.length > words && '...'} {` `}
+        {!showAll && text?.length > words && (
           <span
             style={{
               color: showMoreColor ? showMoreColor : '#7DDEC1',

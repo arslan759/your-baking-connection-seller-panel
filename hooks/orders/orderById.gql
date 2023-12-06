@@ -1,0 +1,20 @@
+query orderByIdQuery($shopId: ID!, $id: ID!) {
+  orderById(shopId: $shopId, id: $id) {
+    id
+    shopId
+    userId
+    status
+    total
+    createdAt
+    updatedAt
+    orderItems {
+      id
+      orderId
+      productId
+      quantity
+      price
+      createdAt
+      updatedAt
+    }
+  }
+}

@@ -17,7 +17,18 @@ export interface FooterLinksProps {
   title3?: string
   link3?: string
 }
-
+export interface DropdownAttributeProps {
+  name: string
+  label?: string
+  placeholder?: string
+  required: boolean
+  error?: boolean
+  options: any[]
+  errorText?: string
+  inputColor?: string
+  value: any
+  onChange: (attribute: string, optionLabel: string, price: string) => void
+}
 export interface PrimaryBtnProps {
   text: string
   type?: 'button' | 'submit' | 'reset'
@@ -44,6 +55,8 @@ export interface SecondaryBtnProps {
   text: string
   color: string
   handleClick: MouseEventHandler<HTMLDivElement>
+  loading?: boolean
+  disabled?: boolean
 }
 export interface InputFieldProps {
   type: string
@@ -71,7 +84,7 @@ export interface UploadInputFieldProps {
   required: boolean
   placeholder?: string
   value?: File | null
-  onChange: (name: string, value: string) => void
+  children?: React.ReactNode
 }
 
 export interface PasswordFieldProps {
@@ -80,7 +93,7 @@ export interface PasswordFieldProps {
   errorText?: string
   inputColor?: string
   label: string
-  required: boolean
+  required?: boolean
   placeholder?: string
   value: string
   onChange: (name: string, value: string) => void
@@ -138,11 +151,11 @@ interface Tokens {
   refreshToken: string
 }
 export interface OTPFormProps {
-  closeOtp: () => void
+  closeOtp?: () => void
   type: string
-  email: string
+  email?: string
   tokens: Tokens
-  setStep: (step: number) => void
+  // setStep?: (step: number) => void
 }
 
 export interface SectionheadingProps {
@@ -201,7 +214,7 @@ export interface ProductCardProps {
   category: string
   // image: string
   // title: string
-  // slug: string
+  slug: string
   // description: string
   // category: string
   // oldPrice: string
@@ -277,7 +290,11 @@ export interface ProductDetailMainContentProps {
   newPrice: number
   reviews: number
   description: string
+  shopId: any
   rating: number
+  productAttributes: any[]
+  productId: string
+  productVariantId: string
 }
 
 export interface AccountDropdownProps {

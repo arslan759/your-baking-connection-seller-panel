@@ -63,7 +63,7 @@ const BakerAvailableProducts = () => {
                   product={product}
                   variants={variants[0]}
                   category={category}
-                  // slug={product?.slug}
+                  slug={product?.slug}
                   // image={product?.media[0]?.URLs?.thumbnail}
                   // title={product?.title}
                   // description={product?.description}

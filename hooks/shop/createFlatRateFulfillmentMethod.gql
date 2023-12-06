@@ -1,0 +1,8 @@
+mutation createFlatRateFulfillmentMethod($input: CreateFlatRateFulfillmentMethodInput!) {
+  createFlatRateFulfillmentMethod(input: $input) {
+    method {
+      _id
+      rate
+    }
+  }
+}

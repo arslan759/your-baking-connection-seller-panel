@@ -4,6 +4,7 @@ query viewer {
     phone
     state
     city
+    validStripeConnect
     adminUIShops {
       _id
     }
@@ -34,5 +35,6 @@ query viewer {
     name
     picture
     primaryEmailAddress
+    currentAddress
   }
 }

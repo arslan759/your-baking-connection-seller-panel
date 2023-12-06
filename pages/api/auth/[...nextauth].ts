@@ -48,6 +48,8 @@ export const authOptions: NextAuthOptions = {
           },
         }
 
+        console.log('variables', variables)
+
         //  graphql request body
         const requestBody = {
           query: mutation,
@@ -63,7 +65,7 @@ export const authOptions: NextAuthOptions = {
           body: JSON.stringify(requestBody),
         })
 
-        console.log('res', res)
+        console.log('sign in res', res)
 
         //  graphql response
         const user = await res.json()
