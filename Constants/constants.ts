@@ -102,32 +102,32 @@ export const galleryImages = [
   {
     id: 1,
     title: 'Image 1',
-    url: 'https://static.toiimg.com/thumb/53110049.cms?width=1200&height=900',
+    url: '/Images/1.png',
   },
   {
     id: 2,
     title: 'Image 2',
-    url: 'https://www.noracooks.com/wp-content/uploads/2023/04/veggie-burgers-1-2.jpg',
+    url: '/Images/2.png',
   },
   {
     id: 3,
     title: 'Image 3',
-    url: 'https://food.fnr.sndimg.com/content/dam/images/food/fullset/2021/02/05/Baked-Feta-Pasta-4_s4x3.jpg.rend.hgtvcom.616.493.suffix/1615916524567.jpeg',
+    url: '/Images/3.png',
   },
   {
     id: 4,
     title: 'Image 4',
-    url: 'https://img.freepik.com/free-photo/grilled-sandwich-with-bacon-fried-egg-tomato-lettuce-served-wooden-cutting-board_1150-42571.jpg?w=2000',
+    url: '/Images/4.png',
   },
   {
     id: 5,
     title: 'Image 5',
-    url: 'https://cafedelites.com/wp-content/uploads/2018/01/Mamas-Best-Lasagna-IMAGE-43.jpg',
+    url: '/Images/5.png',
   },
   {
     id: 6,
     title: 'Image 6',
-    url: 'https://liliebakery.fr/wp-content/uploads/2021/03/Recette-donuts-Lilie-Bakery.jpg',
+    url: '/Images/6.png',
   },
 ]
 
